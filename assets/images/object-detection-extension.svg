@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#06202a"/>
+      <stop offset="1" stop-color="#07253a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#g)" rx="18"/>
+  <g font-family="Poppins, Arial, sans-serif" fill="#cfeff3">
+    <text x="48" y="120" font-size="44" font-weight="700">Object Detection Extension</text>
+    <text x="48" y="180" font-size="20" fill="#9aa4b2"></text>
+  </g>
+</svg>

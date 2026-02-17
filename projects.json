@@ -1,0 +1,212 @@
+[
+  {
+    "title": "Annotation Transfer Tool",
+    "summary": "● ● ● ● ● ● ● ● 🔹  High-level overview (start here) This project is an Annotation Transfer Tool that significantly reduces manual  labeling effort by automatically transferring annotations from previously  human-labeled images to new images using deep image similarity. In short: 👉  Find similar images → reuse their annotations → verify visually →  export back to CVAT 🔹  What problem does it solve?",
+    "pdf": "assets/projects/annotation-transfer-tool.pdf",
+    "original_filename": "Annotation Transfer Tool.pdf",
+    "impact": "High-level overview (start here) This project is an Annotation Transfer Tool that significantly reduces manual labeling effort by automatically transferring annotations from previously human-labeled images to new images using deep image similarity.",
+    "bullets": [
+      "In short: 👉 Find similar images → reuse their annotations → verify visually → export back to CVAT What problem does it solve?"
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/annotation-transfer-tool.svg",
+    "featured": true
+  },
+  {
+    "title": "Bus Reservation And Ticketing System",
+    "summary": "● ● ○ ○ ● ● ● ● ● 1⃣  One-line project summary (start with this) “I built a console-based Bus Reservation and Ticketing System in Java that  allows seat management, passenger booking, billing with discounts, and  transaction tracking using structured input validation and in-memory data  storage. ” 2⃣  Problem statement (what you were solving) Manual ticket booking is error-prone and slow.",
+    "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf",
+    "original_filename": "Bus Reservation and Ticketing System.pdf",
+    "impact": "Built a console-based Bus Reservation & Ticketing system in Java supporting seat management, booking, billing with discounts and transaction tracking.",
+    "bullets": [
+      "Problem: manual ticket booking is error-prone and slow.",
+      "Approach: implemented seat management, validation and in-memory transaction handling in Java.",
+      "Result: reliable booking flow and structured transaction tracking (console app)."
+    ],
+    "techs": [
+      "Java"
+    ],
+    "thumbnail": "assets/images/bus-reservation-and-ticketing-system.svg",
+    "featured": false
+  },
+  {
+    "title": "C7336090 Aiyshwaryaaruchamy Engineerii",
+    "summary": "Full Name: Aiyshwarya Aruchamy Amex Contractor ID: C7336090 AMEX Designation (as per AMEX role qualification): Amex Role – Engineer II Education qualification: highest degree completion - along with specialization Integrated Master’s Degree in Data Science Year of completion for the highest degree with month: Highest Degree completion with year and month University name: Amrita Vishwa Vidyapeetham Total work experience (Overall experience - in months): 14 months (Aug 2023 – Present) Skill set: Technical skillset  Strong experience in Python for data engineering, machine learning, and backend development.  Hands-on experience with Java for object- oriented programming and application development.",
+    "pdf": "assets/projects/c7336090_aiyshwaryaaruchamy_engineerii.pdf",
+    "original_filename": "C7336090_AiyshwaryaAruchamy_EngineerII.pdf",
+    "impact": "Engineer II — 14 months experience in Python for data engineering and ML; experienced in Java and production ML systems.",
+    "bullets": [
+      "14 months professional experience (Aug 2023 – Present) working on ML and data engineering projects.",
+      "Core skills: Python, data pipelines, machine learning model development; additional Java experience for application development."
+    ],
+    "techs": [
+      "Python",
+      "Java"
+    ],
+    "thumbnail": "assets/images/c7336090-aiyshwaryaaruchamy-engineerii.svg",
+    "featured": false
+  },
+  {
+    "title": "Cover Letter",
+    "summary": "Dear Hiring Manager, I am writing to express my interest in the AI/ML role at your organization. in Data Science and have 2.5 years of hands-on experience  building and deploying machine learning systems across computer vision and  generative AI applications.",
+    "pdf": "assets/projects/cover-letter.pdf",
+    "original_filename": "Cover Letter.pdf",
+    "impact": "Dear Hiring Manager, I am writing to express my interest in the AI/ML role at your organization.",
+    "bullets": [
+      "in Data Science and have 2.5 years of hands-on experience building and deploying machine learning systems across computer vision and generative AI applications."
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/cover-letter.svg",
+    "featured": false
+  },
+  {
+    "title": "Facial Emotion Recognition",
+    "summary": "🔹  Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data  dataset, which contains grayscale facial images labeled with seven emotion  classes. The objective was to compare traditional machine learning models with  a deep learning approach to identify the most effective method for emotion  classification.",
+    "pdf": "assets/projects/facial-emotion-recognition.pdf",
+    "original_filename": "Facial Emotion Recognition.pdf",
+    "impact": "Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data dataset, which contains grayscale facial images labeled with seven emotion classes.",
+    "bullets": [
+      "Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data dataset, which contains grayscale facial images labeled with seven emotio...",
+      "The objective was to compare traditional machine learning models with a deep learning approach to identify the most effective method for emotion classification."
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/facial-emotion-recognition.svg",
+    "featured": true
+  },
+  {
+    "title": "Hybrid Search & Retrieval Poc",
+    "summary": "● ● ● ● ● ● ● Elevator pitch  🎯 This repo is a small production-style hybrid search pipeline for PDFs/ DOCX: it ingests files, extracts text (OCR fallback), deduplicates,  token-chunks documents, precomputes multilingual embeddings,  builds FAISS ANN indexes, and serves a hybrid search that combines  BM25 (OpenSearch) + ANN (FAISS) to rank whole documents with  snippet-level evidence. One-minute explanation (what to say first in an interview)  🕒 “We built a hybrid retrieval pipeline where BM25 provides precise  lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides  semantic recall.",
+    "pdf": "assets/projects/hybrid-search--retrieval-poc.pdf",
+    "original_filename": "Hybrid Search & Retrieval POC.pdf",
+    "impact": "One-minute explanation (what to say first in an interview) 🕒 “We built a hybrid retrieval pipeline where BM25 provides precise lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides semantic recall.",
+    "bullets": [
+      "Elevator pitch 🎯 This repo is a small production-style hybrid search pipeline for PDFs/ DOCX: it ingests files, extracts text (OCR fallback), deduplicates, token-chunks documents, precomputes multi...",
+      "One-minute explanation (what to say first in an interview) 🕒 “We built a hybrid retrieval pipeline where BM25 provides precise lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides s..."
+    ],
+    "techs": [
+      "FAISS",
+      "BM25",
+      "OpenSearch",
+      "HNSW"
+    ],
+    "thumbnail": "assets/images/hybrid-search--retrieval-poc.svg",
+    "featured": true
+  },
+  {
+    "title": "Image Classification Extension",
+    "summary": "● ● ○ ○ ○ ○ ○ ○ ○ ● ● ● ○ ○ ○ ○ ○ ● ● ● ● ○ ○ ● ● ● ● 1. Image Classification Extension Problem Statement In real-world scenarios, image datasets vary significantly in size, quality, and  domain.",
+    "pdf": "assets/projects/image-classification-extension.pdf",
+    "original_filename": "Image Classification Extension.pdf",
+    "impact": "Extended image-classification pipelines to improve robustness across varying dataset sizes, quality and domain shifts.",
+    "bullets": [
+      "Problem: dataset variability and domain shift reduce model performance.",
+      "Approach: applied augmentation, cross-domain evaluation and robustness techniques.",
+      "Result: improved generalization and stability across multiple datasets."
+    ],
+    "techs": [
+      "Python",
+      "Deep Learning",
+      "Computer Vision"
+    ],
+    "thumbnail": "assets/images/image-classification-extension.svg",
+    "featured": false
+  },
+  {
+    "title": "Mammalia Raccoon Proximity Network Analysis",
+    "summary": "● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● Mammalia Raccoon Proximity Network Analysis – Project  Explanation Project Overview This project analyzes social interaction patterns among urban raccoons  using network analysis to understand how rabies and other pathogens can  spread within raccoon populations. Since raccoons are a major vector of rabies, studying how often and how  closely they interact helps estimate disease transmission risk and supports  better public health and wildlife management strategies.",
+    "pdf": "assets/projects/mammalia-raccoon-proximity-network-analysis.pdf",
+    "original_filename": "Mammalia Raccoon Proximity Network Analysis.pdf",
+    "impact": "Mammalia Raccoon Proximity Network Analysis – Project Explanation Project Overview This project analyzes social interaction patterns among urban raccoons using network analysis to understand how rabies and other pathogens can spread within raccoon populations.",
+    "bullets": [
+      "Mammalia Raccoon Proximity Network Analysis – Project Explanation Project Overview This project analyzes social interaction patterns among urban raccoons using network analysis to understand how ra...",
+      "Since raccoons are a major vector of rabies, studying how often and how closely they interact helps estimate disease transmission risk and supports better public health and wildlife management stra..."
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/mammalia-raccoon-proximity-network-analysis.svg",
+    "featured": false
+  },
+  {
+    "title": "Object Detection Extension",
+    "summary": "● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ○ ○ ● ○ ○ ○ ● ● ○ ○ ● ● ● ● ● 2. Object Detection Extension Problem Statement Different object detection use cases require different trade-offs between  accuracy, speed, and computational cost.",
+    "pdf": "assets/projects/object-detection-extension.pdf",
+    "original_filename": "Object Detection Extension.pdf",
+    "impact": "Implemented object-detection extensions that enable configurable accuracy–speed trade-offs for different deployment scenarios.",
+    "bullets": [
+      "Problem: different detection use-cases require different trade-offs between accuracy, speed, and computational cost.",
+      "Approach: designed configurable models and lightweight optimizations for low-latency inference.",
+      "Result: flexible detection models that can be tuned for target latency or accuracy."
+    ],
+    "techs": [
+      "Python",
+      "Computer Vision",
+      "Deep Learning"
+    ],
+    "thumbnail": "assets/images/object-detection-extension.svg",
+    "featured": true
+  },
+  {
+    "title": "Online Event Management System",
+    "summary": "● ● ● ● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ● ● ● ● Online Event Management System – Project Explanation This project is a database-driven Online Event Management System  designed to help users register, browse, and book events online, while  allowing admins to manage events, users, discounts, and payments  efficiently. Problem it Solves Managing events manually is time-consuming and error-prone—especially  when handling: Multiple event types User registrations Discounts and special preferences Payments and bookings This system provides a centralized, structured database that automates all  these processes.",
+    "pdf": "assets/projects/online-event-management-system.pdf",
+    "original_filename": "Online Event Management System.pdf",
+    "impact": "Online Event Management System – Project Explanation This project is a database-driven Online Event Management System designed to help users register, browse, and book events online, while allowing admins to manage events, users, discounts, and payments efficiently.",
+    "bullets": [
+      "Problem it Solves Managing events manually is time-consuming and error-prone—especially when handling: Multiple event types User registrations Discounts and special preferences Payments and booking..."
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/online-event-management-system.svg",
+    "featured": false
+  },
+  {
+    "title": "Sentiment Analysis Extension",
+    "summary": "● ○ ○ ● ○ ○ ○ ● ● ● ○ ○ ● ● ● ● ● ● ● ○ ○ ○ ● ● ● ● ● ● Sentiment Analysis Extension Problem Statement Understanding customer opinions and emotional tone from text data is crucial  for decision-making in domains like customer feedback, reviews, and social  media. Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification into: Positive Negative Neutral sentiments Methodology Text data is cleaned and vectorized Models are trained or fine-tuned on labeled sentiment datasets Predictions include: Sentiment label Confidence score Applications Customer feedback analysis Product review monitoring Social media sentiment tracking Deployment Entire system deployed through AI-Hub using RapidMiner Images and data stored in AWS S3 Inference handled via automated workflows Supports: Real-time predictions Error handling Scalable deployment Conclusion This project delivers a complete AI ecosystem for: Image Classification Object Detection Sentiment Analysis The key strength lies in its flexibility, modularity, and deployability, allowing  users to: Choose models based on requirements Fine-tune on custom datasets Deploy seamlessly in production environments It bridges the gap between research-level models and real-world industrial  applications.",
+    "pdf": "assets/projects/sentiment-analysis-extension.pdf",
+    "original_filename": "Sentiment Analysis Extension.pdf",
+    "impact": "Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification into: Positive Negative Neutral sentiments Methodology Text data is cleaned and vectorized Models are trained or fine-tuned on labeled sentiment datasets Predictions include: Sentiment label Confidence score Applications Customer feedback analysis Product review monitoring Social media sentiment tracking Deployment Entire system deployed through AI-Hub using RapidMiner Images and data stored in AWS S3 Inference handled via automated workflows Supports: Real-time predictions Error handling Scalable deployment Conclusion This project delivers a complete AI ecosystem for: Image Classification Object Detection Sentiment Analysis The key strength lies in its flexibility, modularity, and deployability, allowing users to: Choose models based on requirements Fine-tune on custom datasets Deploy seamlessly in production environments It bridges the gap between research-level models and real-world industrial applications.",
+    "bullets": [
+      "Sentiment Analysis Extension Problem Statement Understanding customer opinions and emotional tone from text data is crucial for decision-making in domains like customer feedback, reviews, and socia...",
+      "Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification..."
+    ],
+    "techs": [
+      "AWS S3",
+      "AWS",
+      "S3",
+      "Hugging Face",
+      "RapidMiner"
+    ],
+    "thumbnail": "assets/images/sentiment-analysis-extension.svg",
+    "featured": false
+  },
+  {
+    "title": "Synthetic Image Generation",
+    "summary": "● ● ● ● ● ● ● ● ● ● 🔹  High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic  images for object detection. The goal is to address limited or imbalanced real- world data by synthesizing new training images using real object crops and  annotations.",
+    "pdf": "assets/projects/synthetic-image-generation.pdf",
+    "original_filename": "Synthetic Image Generation.pdf",
+    "impact": "High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic images for object detection.",
+    "bullets": [
+      "High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic images for object detection."
+    ],
+    "techs": [],
+    "thumbnail": "assets/images/synthetic-image-generation.svg",
+    "featured": true
+  },
+  {
+    "title": "Video Rag Retrieval Project",
+    "summary": "● ● ● ● ○ 1⃣  One-line summary (start with this) “I built a Visual Retrieval-Augmented Generation (RAG) system that retrieves  relevant video scenes based on a user’s text prompt by combining vision  models and vector similarity search.” 2⃣  Problem statement (why this project) “Searching videos using text is hard because video content is unstructured. Traditional keyword search doesn’t understand what’s actually happening  inside a video.",
+    "pdf": "assets/projects/video-rag-retrieval-project.pdf",
+    "original_filename": "Video RAG Retrieval Project.pdf",
+    "impact": "Built a Visual Retrieval-Augmented Generation (RAG) system to retrieve relevant video scenes from text prompts using vision encoders and vector similarity search.",
+    "bullets": [
+      "Problem: searching unstructured video content with keywords is ineffective.",
+      "Approach: extract scene embeddings, index with vector search and integrate into a RAG pipeline for retrieval-augmented answers.",
+      "Result: accurate text-to-scene retrieval enabling scene-level search and downstream QA."
+    ],
+    "techs": [
+      "Python",
+      "Vector Search",
+      "RAG"
+    ],
+    "thumbnail": "assets/images/video-rag-retrieval-project.svg",
+    "featured": true
+  }
+]

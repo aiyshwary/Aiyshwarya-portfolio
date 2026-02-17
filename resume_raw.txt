@@ -1,0 +1,104 @@
+-
+Programming & Data: Python, SQL (PostgreSQL, MySQL), Java, Linux.
+Machine Learning: Supervised & Unsupervised Learning, Predictive Modeling, Forecasting, Feature Engineering, EDA.
+Generative AI & NLP: Large Language Models (LLMs), Transformers, SentenceTransformers, Retrieval-Augmented Generation (RAG), Prompt
+Engineering, LangChain, Hugging Face.
+Computer Vision: OpenCV, YOLO, Faster R-CNN, FCOS, SSD, Vision Transformers, GANs.
+Frameworks & Libraries: PyTorch, TensorFlow, Keras, Scikit-learn, Pandas, NumPy, Matplotlib.
+Cloud & Data Systems: AWS (EC2, S3), Azure, GCP, Spark, Hadoop.
+-
+-
+-
+-
+aiyshwarya2002@gmail.com
+India
+https://www.linkedin.com/in/aiyshwarya-
+aruchamy-22478b21a
+8754720162
+https://github.com/aiyshwary
+Aiyshwarya aruchamy
+Computer Vision Engineer
+EDUCATION
+Integrated M.Sc. in Data Science Jul '19 Jun '24
+Amrita Vishwa Vidyapeetham Coimbatore, Tamil Nadu
+KEY SKILLS
+PROFESSIONAL EXPERIENCE
+Technology Analyst / Engineer Nov '25 Jan '26
+Infosys Ltd. – Client: American Express Bengaluru,
+Built and validated a GenAI-ready hybrid search & retrieval system combining BM25 lexical search with semantic vector embeddings (FAISS) 
+to support relevance ranking and prediction use cases over millions of records.
+•
+Developed efficient, reusable Python pipelines for data ingestion, cleansing, embedding generation, and integration across structured and 
+unstructured data sources.
+•
+Computer Vision Engineer Nov '24 Nov '25
+Wastefull Insights Vadodara,Gujarat
+Designed, trained, and deployed YOLO-based object detection models for real-time industrial vision use cases, achieving ~90% production 
+accuracy.
+•
+Built end-to-end real-time video analytics pipelines, including preprocessing, augmentation, inference, and post-processing.•
+Optimized inference using TensorRT, reducing end-to-end latency by ~30%, enabling deployment under real-time constraints.•
+Fine-tuned CNN-based detection models on custom annotated datasets, following full ML model development lifecycle.•
+Collaborated with cross-functional teams to communicate model trade-offs, performance benchmarks, and deployment constraints.•
+Led dataset annotation efforts and validation workflows to improve model robustness and consistency.•
+Data analysis/AIOT-Support Intern Aug '23 Jul '24
+Altair Engineering India Private Limited Bangalore, India
+Developed and evaluated object detection models (Faster R-CNN, FCOS, Vision Transformers) on large-scale image and video datasets.•
+Built real-time defect detection systems, improving automated quality inspection accuracy.•
+Supported GPU-accelerated deployment pipelines using CUDA and TensorRT.•
+Contributed to video-based analytics pipelines, integrating vision models into production workflows.•
+INTERNSHIP
+Data Analyst Intern Jun '21 Sep '21
+Shape AI
+Developed time series forecasting models (ARIMA, Exponential Smoothing), improving forecast accuracy by 30%.•
+Aug '22
+-
+Hybrid Search & Retrieval POC |(Nov 2025 - Dec 2025) Python, SQL, OpenSearch (BM25), FAISS, SentenceTransformers, NLP, AWS| 
+Designed and implemented a production-style multilingual hybrid search engine for Indian-language documents, combining lexical search (BM25 
+via OpenSearch) with semantic vector search (FAISS IVF-PQ).
+Generative AI – Video-Based Sentiment Analysis |( Jul 2021 - Dec 2021) Python, AWS, Speech-to-Text, NLP, LLMs | 
+Built an end-to-end NLP pipeline using LLM-based speech-to-text and sentiment models to predict trends and extract insights from video data; 
+deployed on AWS for scalable processing.
+Video Retrieval-Augmented Generation (RAG) Project |(06/2021 - 10/2021) Python, LangChain, RAG, Docker, Kubernetes, AWS |  
+Designed a GenAI POC using LangChain and Hugging Face to enable enterprise document retrieval and summarization, containerized with 
+Docker and orchestrated using Kubernetes.
+Facial Emotion Detection(02/2023 - 07/2023) Python, Tensorflow, Power BI| 
+Developed a transfer learning pipeline for facial emotion detection, leveraging augmentation and visualization methods to improve adaptability 
+and interpretability of recognition models.
+Image Classification Extension(09/2023 - 11/2023) Python, Keras, Rapid Miner | 
+Created a custom image classification operator with augmentation techniques (rotation, scaling, flipping), achieving a 15% accuracy boost and 
+integrating into RapidMiner workflows for enterprise-scale deployment.
+Object Detection and Image Segmentation Extension(12/2023 - 03/2024) Python, PyTorch, GANs, TensorRT, RapidMiner| 
+Engineered real-time detection and segmentation models (Faster R-CNN, SSD, GANs) optimized for edge computing using TensorRT, reducing 
+latency while maintaining high accuracy.
+Synthetic Waste Image Generation(07/2024 - 08/2024) Python, OpenCV, PyTorch,Docker, AWS S3| 
+Automated a synthetic data generation pipeline for waste images, containerized with Docker and integrated with AWS S3, enabling large-scale 
+dataset augmentation for training deep learning models.
+Annotation Transfer Tool(10/2024 - 11/2024) Python, VGG, CNN, ResNet, PCA, SVD, Cosine Similarity, Euclidean Distance, CVAT | 
+Built an automated annotation transfer tool using VGG/CNN feature extraction and similarity measures (PCA, SVD, Cosine Distance), reducing 
+manual labeling effort by over 50% with CVAT validation support.
+Raccoon Network Analysis(06/2022 - 08/2022) Python, Pandas, NetworkX, Matplotlib, Seaborn | 
+Modeled zoonotic disease spread in raccoon populations using network analytics, applying clustering and centrality metrics to identify high-risk 
+transmission nodes for targeted intervention.
+Bus Reservation and Ticketing System(02/2021 - 04/2021) Java, MySQL | 
+Developed a Java-based reservation and billing system with discount logic, improving ticketing efficiency and passenger management workflows.
+Artificial Intelligence Intern Jun '22
+Teachnook
+Built CNN-based image classification models using transfer learning and augmentation.•
+Focused on model interpretability and robustness, aligning with real-world deployment needs.•
+PROJECTS
+Github_Link
+Github Link
+Github_Link
+Github_Link
+Github_Link
+Github Link
+Github_Link
+Github_Link
+Github_Link
+Github_Link
+CERTIFICATES
+Web Development Using Java Script | Shape AI Bootcamp | May '21 •
+Basic Web Development using HTML,CSS,JS| Devtown | Jan'22 - Mar 22 •
+Machine Learning: Python & R in Data Science | Udemy | Dec '23 - Mar '24 •
+AWS Cloud Practitioner Essentials | Coursera | Jun'24 - Aug'24•

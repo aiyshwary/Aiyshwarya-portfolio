@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Aiyshwarya Aruchamy — Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      /* small resume-specific tweaks */
+      .resume-hero{display:flex;gap:18px;align-items:center;margin-top:18px}
+      .resume-avatar{width:92px;height:92px;border-radius:14px;background:linear-gradient(135deg,#08303a,#06303a);display:flex;align-items:center;justify-content:center;color:#8eeaf1;font-weight:700;font-size:26px}
+      .resume-grid{display:grid;grid-template-columns:1fr 320px;gap:28px}
+      .resume-card{background:transparent;padding:0}
+      .section-title{font-size:16px;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+      .contact-list{display:flex;flex-direction:column;gap:6px}
+      .contact-list a{color:var(--muted);text-decoration:none}
+      .skill-pill{display:inline-block;background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:999px;color:var(--muted);margin:6px 6px 0 0;font-size:13px}
+      .exp-item{margin-bottom:14px}
+      .exp-item .role{font-weight:700}
+      .exp-item .meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+      .print-cta{margin-top:12px}
+      @media(max-width:880px){.resume-grid{grid-template-columns:1fr}.resume-hero{flex-direction:row}}
+      /* print-friendly */
+      @media print{body{background:white;color:#111} .site-header,.filters,.modal,.site-footer{display:none} .container{max-width:900px}}
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand"> <strong>Aiyshwarya Aruchamy</strong><span class="muted"> · Engineer II</span></div>
+        <nav>
+          <a href="index.html">About</a>
+          <a href="resume.html">Resume</a>
+          <a href="projects.html">Projects</a>
+          <a href="contact.html">Contact</a>
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Download PDF</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="resume-hero">
+        <div class="resume-avatar">AA</div>
+        <div>
+          <h1 style="margin:0">Aiyshwarya Aruchamy</h1>
+          <div style="color:var(--muted);margin-top:6px">Computer Vision Engineer — building production CV & ML systems, retrieval, and GenAI pipelines</div>
+          <div class="print-cta"><a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Download PDF</a></div>
+        </div>
+      </section>
+
+      <div class="resume-grid">
+        <div>
+          <section style="margin-top:18px">
+            <div class="section-title">Contact</div>
+            <div class="contact-list">
+              <div><strong>Email</strong>: <a href="mailto:aiyshwarya2002@gmail.com">aiyshwarya2002@gmail.com</a></div>
+              <div><strong>Phone</strong>: 8754720162</div>
+              <div><strong>Location</strong>: India</div>
+              <div><strong>LinkedIn</strong>: <a href="https://www.linkedin.com/in/aiyshwarya-aruchamy-22478b21a/" target="_blank" rel="noopener">aiyshwarya-aruchamy</a></div>
+              <div><strong>GitHub</strong>: <a href="https://github.com/aiyshwary" target="_blank" rel="noopener">aiyshwary</a></div>
+            </div>
+          </section>
+
+          <section style="margin-top:18px">
+            <div class="section-title">Experience</div>
+
+            <div class="exp-item">
+              <div class="role">Technology Analyst / Engineer — Infosys (AMEX client)</div>
+              <div class="meta">Built a GenAI-ready hybrid search & retrieval system; developed Python pipelines for ingestion, embedding generation and indexing (FAISS, BM25)</div>
+              <ul>
+                <li>Designed hybrid BM25 + vector retrieval pipelines for large-scale document search</li>
+                <li>Built reusable ingestion and embedding workflows for structured & unstructured data</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <div class="role">Computer Vision Engineer — Wastefull Insights</div>
+              <div class="meta">Designed, trained and deployed YOLO-based object detection systems for real-time video analytics</div>
+              <ul>
+                <li>Achieved ~90% production accuracy for deployed pipelines</li>
+                <li>Optimized inference with TensorRT to cut latency ~30%</li>
+                <li>Led dataset annotation and model validation workflows</li>
+              </ul>
+            </div>
+
+            <div class="exp-item">
+              <div class="role">Data analysis / AIoT Support Intern — Altair Engineering</div>
+              <div class="meta">Built and evaluated detection & video analytics models; supported GPU-accelerated deployment</div>
+            </div>
+
+            <div class="exp-item">
+              <div class="role">Data Analyst Intern — Shape AI</div>
+              <div class="meta">Developed time-series forecasting models (ARIMA, Exponential Smoothing)</div>
+              <ul><li>Improved forecast accuracy by 30% (as measured during internship)</li></ul>
+            </div>
+          </section>
+
+          <section style="margin-top:18px">
+            <div class="section-title">Education</div>
+            <div><strong>Integrated M.Sc. in Data Science</strong> — Amrita Vishwa Vidyapeetham (Jul '19 – Jun '24)</div>
+          </section>
+
+          <section style="margin-top:18px">
+            <div class="section-title">Certificates</div>
+            <ul>
+              <li>Machine Learning: Python & R in Data Science — Udemy</li>
+              <li>AWS Cloud Practitioner Essentials — Coursera</li>
+              <li>Web Development (HTML/CSS/JS) — Shape AI / Devtown</li>
+            </ul>
+          </section>
+        </div>
+
+        <aside class="resume-card">
+          <section>
+            <div class="section-title">Key Skills</div>
+            <div>
+              <span class="skill-pill">Python</span>
+              <span class="skill-pill">PyTorch</span>
+              <span class="skill-pill">TensorFlow</span>
+              <span class="skill-pill">OpenCV</span>
+              <span class="skill-pill">FAISS</span>
+              <span class="skill-pill">RAG / LangChain</span>
+              <span class="skill-pill">AWS</span>
+              <span class="skill-pill">SQL</span>
+              <span class="skill-pill">Docker / Kubernetes</span>
+            </div>
+          </section>
+
+          <section style="margin-top:18px">
+            <div class="section-title">Projects (highlights)</div>
+            <ul>
+              <li><a href="assets/projects/hybrid-search--retrieval-poc.pdf" target="_blank">Hybrid Search & Retrieval POC</a> — BM25 + FAISS hybrid retrieval</li>
+              <li><a href="assets/projects/video-rag-retrieval-project.pdf" target="_blank">Video RAG Retrieval</a> — text→scene retrieval</li>
+              <li><a href="assets/projects/synthetic-image-generation.pdf" target="_blank">Synthetic Image Generation</a></li>
+              <li><a href="assets/projects/annotation-transfer-tool.pdf" target="_blank">Annotation Transfer Tool</a></li>
+              <li><a href="assets/projects/facial-emotion-recognition.pdf" target="_blank">Facial Emotion Recognition</a></li>
+            </ul>
+          </section>
+
+          <section style="margin-top:18px">
+            <div class="section-title">Languages & Tools</div>
+            <div style="color:var(--muted);font-size:14px;line-height:1.6">
+              Python • Java • SQL • PyTorch • TensorFlow • OpenCV • FAISS • Hugging Face • Docker • AWS • Git
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <hr>
+
+      <section id="contact">
+        <h2>Contact</h2>
+        <p>If you'd like to get in touch, email me at <a href="mailto:aiyshwarya2002@gmail.com">aiyshwarya2002@gmail.com</a> or connect on <a href="https://www.linkedin.com/in/aiyshwarya-aruchamy-22478b21a/" target="_blank" rel="noopener">LinkedIn</a>.</p>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">Built with ❤️ — edit `resume.html` to tweak content.</div>
+    </footer>
+  </body>
+</html>

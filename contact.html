@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Contact — Aiyshwarya Aruchamy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand"> <strong>Aiyshwarya Aruchamy</strong><span class="muted"> · Engineer II</span></div>
+        <nav>
+          <a href="index.html">About</a>
+          <a href="resume.html">Resume</a>
+          <a href="projects.html">Projects</a>
+          <a href="contact.html">Contact</a>
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="contact-page">
+        <h1>Contact</h1>
+        <p class="lead">Choose the easiest way to reach me — I usually reply within 24–48 hours.</p>
+
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:18px">
+          <div class="card" style="flex:1;min-width:260px">
+            <h3>Email</h3>
+            <p class="muted">Direct email (fastest)</p>
+            <a href="mailto:aiyshwarya2002@gmail.com" class="btn">Email me</a>
+          </div>
+
+          <div class="card" style="flex:1;min-width:260px">
+            <h3>LinkedIn</h3>
+            <p class="muted">Connect or message me on LinkedIn</p>
+            <a href="https://www.linkedin.com/in/aiyshwarya-aruchamy-22478b21a/" target="_blank" rel="noopener" class="btn">LinkedIn</a>
+          </div>
+
+          <div class="card" style="flex:1;min-width:260px">
+            <h3>GitHub</h3>
+            <p class="muted">View code & projects</p>
+            <a href="https://github.com/aiyshwary" target="_blank" rel="noopener" class="btn">GitHub</a>
+          </div>
+        </div>
+
+        <hr style="margin-top:20px">
+
+        <h3>Quick message</h3>
+        <p class="muted">(optional) — this opens your email client with a prefilled subject.</p>
+        <form onsubmit="window.location.href = 'mailto:aiyshwarya2002@gmail.com?subject=' + encodeURIComponent(document.getElementById('msg-subj').value) + '&body=' + encodeURIComponent(document.getElementById('msg-body').value); return false;" style="max-width:720px">
+          <div style="display:flex;gap:8px;flex-direction:column">
+            <input id="msg-subj" placeholder="Subject" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit">
+            <textarea id="msg-body" rows="5" placeholder="Message" style="padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit"></textarea>
+            <div style="display:flex;gap:8px">
+              <button class="btn" type="submit">Send (opens email)</button>
+              <a class="btn-ghost" href="mailto:aiyshwarya2002@gmail.com">Or open email client</a>
+            </div>
+          </div>
+        </form>
+
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">Built with ❤️ — edit `contact.html` to customize.</div>
+    </footer>
+  </body>
+</html>

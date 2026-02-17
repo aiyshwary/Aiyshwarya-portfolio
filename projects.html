@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Projects — Aiyshwarya Aruchamy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="brand"> <strong>Aiyshwarya Aruchamy</strong><span class="muted"> · Engineer II</span></div>
+        <nav>
+          <a href="index.html">About</a>
+          <a href="resume.html">Resume</a>
+          <a href="projects.html">Projects</a>
+          <a href="contact.html">Contact</a>
+          <a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Download Resume</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section id="projects-page">
+        <h1>Projects</h1>
+        <p class="lead" style="max-width:60ch">A curated list of projects — click any card to read a short case study, view the PDF, or contact me for details.</p>
+
+        <div class="filters" id="project-filters">
+          <button class="filter active" data-filter="all">All</button>
+          <button class="filter" data-filter="featured">Featured</button>
+          <button class="filter" data-filter="computer vision">Computer Vision</button>
+          <button class="filter" data-filter="nlp">NLP</button>
+          <button class="filter" data-filter="retrieval">Retrieval</button>
+          <button class="filter" data-filter="web app">Web / App</button>
+          <button class="filter" data-filter="other">Other</button>
+        </div>
+
+        <div id="projects-grid" class="projects-grid"></div>
+
+        <!-- modal is injected here to work with script.js -->
+        <div id="project-modal" class="modal" aria-hidden="true">
+          <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <button class="modal-close" aria-label="Close">&times;</button>
+            <h3 id="modal-title"></h3>
+            <p id="modal-techs" class="muted small"></p>
+            <div id="modal-body"></div>
+            <div class="modal-actions">
+              <a id="modal-pdf" class="btn-ghost" href="#" target="_blank" rel="noopener">Open PDF</a>
+              <a class="btn" href="contact.html">Contact about this</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">Built with ❤️ — edit the site files to customize.</div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
