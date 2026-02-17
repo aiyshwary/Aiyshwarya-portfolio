@@ -9,18 +9,36 @@
     <style>
       /* small resume-specific tweaks */
       .resume-hero{display:flex;gap:18px;align-items:center;margin-top:18px}
-      .resume-avatar{width:92px;height:92px;border-radius:14px;background:linear-gradient(135deg,#08303a,#06303a);display:flex;align-items:center;justify-content:center;color:#8eeaf1;font-weight:700;font-size:26px}
-      .resume-grid{display:grid;grid-template-columns:1fr 320px;gap:28px}
+      .resume-avatar{width:100px;height:100px;border-radius:18px;overflow:hidden;box-shadow:0 12px 30px rgba(2,6,23,0.6);border:4px solid rgba(255,255,255,0.02)}
+      .resume-grid{display:grid;grid-template-columns:1fr 360px;gap:32px;margin-top:18px}
       .resume-card{background:transparent;padding:0}
-      .section-title{font-size:16px;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+      .section-title{font-size:14px;margin-bottom:8px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
       .contact-list{display:flex;flex-direction:column;gap:6px}
       .contact-list a{color:var(--muted);text-decoration:none}
       .skill-pill{display:inline-block;background:rgba(255,255,255,0.02);padding:6px 8px;border-radius:999px;color:var(--muted);margin:6px 6px 0 0;font-size:13px}
-      .exp-item{margin-bottom:14px}
-      .exp-item .role{font-weight:700}
-      .exp-item .meta{color:var(--muted);font-size:13px;margin-bottom:6px}
       .print-cta{margin-top:12px}
-      @media(max-width:880px){.resume-grid{grid-template-columns:1fr}.resume-hero{flex-direction:row}}
+
+      /* timeline */
+      .timeline-wrap{padding:18px 6px}
+      .timeline{display:flex;gap:18px;align-items:flex-start;position:relative;justify-content:space-between}
+      .timeline::before{content:'';position:absolute;left:6%;right:6%;top:34px;height:4px;background:linear-gradient(90deg,rgba(255,255,255,0.03),rgba(255,255,255,0.02));border-radius:4px}
+      .milestone{width:22%;text-align:left;position:relative;padding-top:6px}
+      .milestone .dot{width:14px;height:14px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#7c3aed);box-shadow:0 6px 20px rgba(2,6,23,0.6);border:3px solid rgba(0,0,0,0.25);margin-bottom:8px}
+      .milestone .year{font-weight:700;margin-bottom:6px}
+      .milestone .card{background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02));padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(2,6,23,0.55)}
+      .milestone.featured .card{border-color:rgba(6,182,212,0.14);box-shadow:0 18px 40px rgba(6,182,212,0.06)}
+      .milestone .role{font-weight:700}
+      .milestone .meta{color:var(--muted);font-size:13px;margin-bottom:6px}
+      .small.muted{color:var(--muted);font-size:13px}
+
+      /* skill bars */
+      .skill-bars{display:flex;flex-direction:column;gap:10px}
+      .skill-row{display:flex;gap:12px;align-items:center}
+      .skill-name{width:120px;color:var(--muted);font-size:13px}
+      .bar{flex:1;background:rgba(255,255,255,0.03);height:12px;border-radius:999px;overflow:hidden}
+      .bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);border-radius:999px;transition:width 900ms cubic-bezier(.2,.9,.2,1)}
+
+      @media(max-width:980px){.resume-grid{grid-template-columns:1fr}.timeline{flex-direction:column}.timeline::before{display:none}.milestone{width:100%}}
       /* print-friendly */
       @media print{body{background:white;color:#111} .site-header,.filters,.modal,.site-footer{display:none} .container{max-width:900px}}
     </style>
@@ -28,7 +46,7 @@
   <body>
     <header class="site-header">
       <div class="container header-inner">
-        <div class="brand"> <strong>Aiyshwarya Aruchamy</strong><span class="muted"> · Engineer II</span></div>
+        <div class="brand"> <strong>Aiyshwarya Aruchamy</strong><span class="muted"> · AI/ML Engineer</span></div>
         <nav>
           <a href="index.html">About</a>
           <a href="resume.html">Resume</a>
@@ -44,56 +62,62 @@
         <div class="resume-avatar">AA</div>
         <div>
           <h1 style="margin:0">Aiyshwarya Aruchamy</h1>
-          <div style="color:var(--muted);margin-top:6px">Computer Vision Engineer — building production CV & ML systems, retrieval, and GenAI pipelines</div>
+          <div style="color:var(--muted);margin-top:6px">AI/ML Engineer — building production machine learning, retrieval and GenAI systems that ship to production.</div>
           <div class="print-cta"><a class="btn" href="assets/resume.pdf" target="_blank" rel="noopener">Download PDF</a></div>
+          <div style="margin-top:10px;color:var(--muted);font-size:14px">14 months professional experience • Specialties: Computer Vision, Retrieval, RAG, Production ML</div>
         </div>
       </section>
 
       <div class="resume-grid">
         <div>
-          <section style="margin-top:18px">
-            <div class="section-title">Contact</div>
-            <div class="contact-list">
-              <div><strong>Email</strong>: <a href="mailto:aiyshwarya2002@gmail.com">aiyshwarya2002@gmail.com</a></div>
-              <div><strong>Phone</strong>: 8754720162</div>
-              <div><strong>Location</strong>: India</div>
-              <div><strong>LinkedIn</strong>: <a href="https://www.linkedin.com/in/aiyshwarya-aruchamy-22478b21a/" target="_blank" rel="noopener">aiyshwarya-aruchamy</a></div>
-              <div><strong>GitHub</strong>: <a href="https://github.com/aiyshwary" target="_blank" rel="noopener">aiyshwary</a></div>
-            </div>
-          </section>
+
 
           <section style="margin-top:18px">
             <div class="section-title">Experience</div>
 
-            <div class="exp-item">
-              <div class="role">Technology Analyst / Engineer — Infosys (AMEX client)</div>
-              <div class="meta">Built a GenAI-ready hybrid search & retrieval system; developed Python pipelines for ingestion, embedding generation and indexing (FAISS, BM25)</div>
-              <ul>
-                <li>Designed hybrid BM25 + vector retrieval pipelines for large-scale document search</li>
-                <li>Built reusable ingestion and embedding workflows for structured & unstructured data</li>
-              </ul>
-            </div>
+          <div class="timeline-wrap">
+            <div class="timeline">
+              <div class="milestone">
+                <div class="dot"></div>
+                <div class="year">2021</div>
+                <div class="card">
+                  <div class="role">Data Analyst Intern — Shape AI</div>
+                  <div class="meta">Jun 2021 — Sep 2021</div>
+                  <div class="small muted">Developed time-series forecasting models; improved forecast accuracy by ~30%.</div>
+                </div>
+              </div>
 
-            <div class="exp-item">
-              <div class="role">Computer Vision Engineer — Wastefull Insights</div>
-              <div class="meta">Designed, trained and deployed YOLO-based object detection systems for real-time video analytics</div>
-              <ul>
-                <li>Achieved ~90% production accuracy for deployed pipelines</li>
-                <li>Optimized inference with TensorRT to cut latency ~30%</li>
-                <li>Led dataset annotation and model validation workflows</li>
-              </ul>
-            </div>
+              <div class="milestone">
+                <div class="dot"></div>
+                <div class="year">2023</div>
+                <div class="card">
+                  <div class="role">Data analysis / AIoT Support Intern — Altair</div>
+                  <div class="meta">Aug 2023 — Jul 2024</div>
+                  <div class="small muted">Built detection models, video analytics and GPU-accelerated pipelines.</div>
+                </div>
+              </div>
 
-            <div class="exp-item">
-              <div class="role">Data analysis / AIoT Support Intern — Altair Engineering</div>
-              <div class="meta">Built and evaluated detection & video analytics models; supported GPU-accelerated deployment</div>
-            </div>
+              <div class="milestone">
+                <div class="dot"></div>
+                <div class="year">2024</div>
+                <div class="card">
+                  <div class="role">Computer Vision Engineer — Wastefull Insights</div>
+                  <div class="meta">Nov 2024 — Nov 2025</div>
+                  <div class="small muted">Designed & deployed YOLO-based real-time systems; optimized inference (TensorRT).</div>
+                </div>
+              </div>
 
-            <div class="exp-item">
-              <div class="role">Data Analyst Intern — Shape AI</div>
-              <div class="meta">Developed time-series forecasting models (ARIMA, Exponential Smoothing)</div>
-              <ul><li>Improved forecast accuracy by 30% (as measured during internship)</li></ul>
+              <div class="milestone featured">
+                <div class="dot"></div>
+                <div class="year">2025 — Present</div>
+                <div class="card">
+                  <div class="role">Technology Analyst / Engineer — Infosys (AMEX)</div>
+                  <div class="meta">Nov 2025 — Present</div>
+                  <div class="small muted">Built GenAI-ready hybrid search (BM25 + FAISS) and production ML pipelines for enterprise retrieval.</div>
+                </div>
+              </div>
             </div>
+          </div>
           </section>
 
           <section style="margin-top:18px">
@@ -114,16 +138,12 @@
         <aside class="resume-card">
           <section>
             <div class="section-title">Key Skills</div>
-            <div>
-              <span class="skill-pill">Python</span>
-              <span class="skill-pill">PyTorch</span>
-              <span class="skill-pill">TensorFlow</span>
-              <span class="skill-pill">OpenCV</span>
-              <span class="skill-pill">FAISS</span>
-              <span class="skill-pill">RAG / LangChain</span>
-              <span class="skill-pill">AWS</span>
-              <span class="skill-pill">SQL</span>
-              <span class="skill-pill">Docker / Kubernetes</span>
+            <div class="skill-bars">
+              <div class="skill-row"><div class="skill-name">Python</div><div class="bar"><div class="fill" style="width:95%"></div></div></div>
+              <div class="skill-row"><div class="skill-name">Machine Learning</div><div class="bar"><div class="fill" style="width:92%"></div></div></div>
+              <div class="skill-row"><div class="skill-name">Computer Vision</div><div class="bar"><div class="fill" style="width:90%"></div></div></div>
+              <div class="skill-row"><div class="skill-name">RAG & Retrieval</div><div class="bar"><div class="fill" style="width:86%"></div></div></div>
+              <div class="skill-row"><div class="skill-name">Cloud / DevOps</div><div class="bar"><div class="fill" style="width:78%"></div></div></div>
             </div>
           </section>
 
@@ -147,17 +167,21 @@
         </aside>
       </div>
 
-      <hr>
-
-      <section id="contact">
-        <h2>Contact</h2>
-        <p>If you'd like to get in touch, email me at <a href="mailto:aiyshwarya2002@gmail.com">aiyshwarya2002@gmail.com</a> or connect on <a href="https://www.linkedin.com/in/aiyshwarya-aruchamy-22478b21a/" target="_blank" rel="noopener">LinkedIn</a>.</p>
-      </section>
-
     </main>
 
     <footer class="site-footer">
       <div class="container">Built with ❤️ — edit `resume.html` to tweak content.</div>
     </footer>
+
+    <script>
+      // animate skill bars on load
+      document.addEventListener('DOMContentLoaded', ()=>{
+        document.querySelectorAll('.bar .fill').forEach(el => {
+          const w = el.style.width || '0%';
+          el.style.width = '0%';
+          requestAnimationFrame(()=> setTimeout(()=> el.style.width = w, 80));
+        });
+      });
+    </script>
   </body>
 </html>
