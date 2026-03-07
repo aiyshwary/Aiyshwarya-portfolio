@@ -8,6 +8,6 @@
   <rect width="1200" height="675" fill="url(#g)" rx="18"/>
   <g font-family="Poppins, Arial, sans-serif" fill="#cfeff3">
     <text x="48" y="120" font-size="44" font-weight="700">Hybrid Search &amp; Retrieval Poc</text>
-    <text x="48" y="180" font-size="20" fill="#9aa4b2">FAISS, BM25, OpenSearch</text>
+    <text x="48" y="180" font-size="20" fill="#9aa4b2">BM25 + FAISS hybrid search for PDFs</text>
   </g>
 </svg>
