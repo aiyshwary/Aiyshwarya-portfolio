@@ -88,6 +88,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // helper to create URL-safe slug from title
     function slugify(t){ return t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+    function makeThumb(title){
+      const safe = (title || 'Project').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1220" />
+      <stop offset="100%" stop-color="#081226" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#7c3aed" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" fill="url(#bg)" />
+  <rect x="50" y="60" width="700" height="360" rx="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" />
+  <text x="80" y="180" font-family="Poppins, Arial, sans-serif" font-size="26" fill="#e6eef6" font-weight="600">${safe}</text>
+  <rect x="80" y="230" width="200" height="10" rx="5" fill="url(#accent)" opacity="0.9" />
+  <rect x="80" y="255" width="320" height="10" rx="5" fill="rgba(255,255,255,0.12)" />
+  <rect x="80" y="280" width="280" height="10" rx="5" fill="rgba(255,255,255,0.10)" />
+</svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
 
     projects.forEach(p => {
       const tags = inferTags(p.title, p.summary);
@@ -106,11 +128,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techHtml = techs.map(t=>`<span class="tag tech">${t}</span>`).join(' ');
       const tagsHtml = tags.map(t=>`<span class="tag">${t}</span>`).join(' ');
 
-      const thumb = p.thumbnail || 'assets/images/default.svg';
+      const fallbackThumb = makeThumb(p.title);
+      const thumb = p.thumbnail || fallbackThumb;
       const impact = p.impact ? p.impact : brief;
 
       card.innerHTML = `
-        <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" onerror="this.src='assets/images/default.svg'">
+        <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">
         <div class="card-head">
           <h4>${p.title} ${isFeatured?'<span class="badge-featured">Featured</span>':''}</h4>
           <div class="meta">${techHtml}</div>
@@ -162,7 +185,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techList = (p.techs && p.techs.length) ? p.techs : techs;
       modalTechs.textContent = (techList && techList.length) ? 'Tech: ' + techList.join(' · ') : 'Tags: ' + tags.join(' · ');
 
-      const imgHtml = p.thumbnail ? `<img class="modal-thumb" src="${p.thumbnail}" alt="${p.title}" onerror="this.src='assets/images/default.svg'">` : '';
+      const imgHtml = p.thumbnail ? `<img class="modal-thumb" src="${p.thumbnail}" alt="${p.title}" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">` : '';
       const bullets = (p.bullets && p.bullets.length) ? `<ul class="project-bullets">${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : `<pre class="project-full">${cleanText(p.summary)}</pre>`;
 
       modalBody.innerHTML = imgHtml + bullets + `<div style="margin-top:12px;color:var(--muted)">${cleanText(p.summary)}</div>`;

@@ -142,10 +142,10 @@
   },
   {
     "title": "Sentiment Analysis Extension",
-    "summary": "Built a sentiment analysis extension that cleans and vectorizes text, applies pretrained NLP models, and outputs positive/neutral/negative labels with confidence scores for reviews and social data.",
+    "summary": "Built a sentiment analysis extension that cleans and vectorizes text, applies pretrained NLP models, and outputs positive/neutral/negative labels with confidence scores. It’s designed for reviews, customer feedback, and social media monitoring.",
     "pdf": "assets/projects/sentiment-analysis-extension.pdf",
     "original_filename": "Sentiment Analysis Extension.pdf",
-    "impact": "Delivered a compact NLP pipeline for sentiment classification with confidence scores, suitable for feedback, reviews, and social media monitoring.",
+    "impact": "Delivered a compact NLP pipeline for sentiment classification with confidence scores. Suitable for feedback, reviews, and social media monitoring.",
     "bullets": [
       "NLP preprocessing + pretrained models for sentiment classification.",
       "Outputs positive/neutral/negative labels with confidence scores."
