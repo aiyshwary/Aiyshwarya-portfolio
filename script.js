@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const impact = p.impact ? p.impact : brief;
 
       card.innerHTML = `
-        <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail">
+        <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" onerror="this.src='assets/images/default.svg'">
         <div class="card-head">
           <h4>${p.title} ${isFeatured?'<span class="badge-featured">Featured</span>':''}</h4>
           <div class="meta">${techHtml}</div>
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techList = (p.techs && p.techs.length) ? p.techs : techs;
       modalTechs.textContent = (techList && techList.length) ? 'Tech: ' + techList.join(' · ') : 'Tags: ' + tags.join(' · ');
 
-      const imgHtml = p.thumbnail ? `<img class="modal-thumb" src="${p.thumbnail}" alt="${p.title}">` : '';
+      const imgHtml = p.thumbnail ? `<img class="modal-thumb" src="${p.thumbnail}" alt="${p.title}" onerror="this.src='assets/images/default.svg'">` : '';
       const bullets = (p.bullets && p.bullets.length) ? `<ul class="project-bullets">${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : `<pre class="project-full">${cleanText(p.summary)}</pre>`;
 
       modalBody.innerHTML = imgHtml + bullets + `<div style="margin-top:12px;color:var(--muted)">${cleanText(p.summary)}</div>`;
