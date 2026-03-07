@@ -82,10 +82,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(!grid) return; // nothing to do on other pages
 
     const basePath = (location.pathname || '').replace(/[^/]*$/, '');
-    let res = await fetch(basePath + 'projects.json', { cache: 'no-store' });
-    if(!res.ok){
-      res = await fetch('projects.json', { cache: 'no-store' });
-    }
+    const absolutePath = location.origin + basePath + 'projects.json';
+    const repoPath = location.origin + '/Aiyshwarya-portfolio/projects.json';
+    let res = await fetch(absolutePath, { cache: 'no-store' });
+    if(!res.ok){ res = await fetch(basePath + 'projects.json', { cache: 'no-store' }); }
+    if(!res.ok){ res = await fetch('projects.json', { cache: 'no-store' }); }
+    if(!res.ok){ res = await fetch(repoPath, { cache: 'no-store' }); }
     if(!res.ok){ throw new Error('projects.json not found'); }
     const projects = await res.json();
     grid.innerHTML = '';
@@ -93,8 +95,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // helper to create URL-safe slug from title
     function slugify(t){ return t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
-    function makeThumb(title){
+    function makeThumb(title, subtitle){
       const safe = (title || 'Project').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const sub = (subtitle || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
@@ -108,10 +111,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   </defs>
   <rect width="800" height="480" fill="url(#bg)" />
   <rect x="50" y="60" width="700" height="360" rx="18" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.06)" />
-  <text x="80" y="180" font-family="Poppins, Arial, sans-serif" font-size="26" fill="#e6eef6" font-weight="600">${safe}</text>
-  <rect x="80" y="230" width="200" height="10" rx="5" fill="url(#accent)" opacity="0.9" />
-  <rect x="80" y="255" width="320" height="10" rx="5" fill="rgba(255,255,255,0.12)" />
-  <rect x="80" y="280" width="280" height="10" rx="5" fill="rgba(255,255,255,0.10)" />
+  <text x="80" y="170" font-family="Poppins, Arial, sans-serif" font-size="26" fill="#e6eef6" font-weight="600">${safe}</text>
+  <text x="80" y="205" font-family="Poppins, Arial, sans-serif" font-size="14" fill="#9aa4b2">${sub}</text>
+  <rect x="80" y="235" width="200" height="10" rx="5" fill="url(#accent)" opacity="0.9" />
+  <rect x="80" y="260" width="320" height="10" rx="5" fill="rgba(255,255,255,0.12)" />
+  <rect x="80" y="285" width="280" height="10" rx="5" fill="rgba(255,255,255,0.10)" />
 </svg>`;
       return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
     }
@@ -133,8 +137,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techHtml = techs.map(t=>`<span class="tag tech">${t}</span>`).join(' ');
       const tagsHtml = tags.map(t=>`<span class="tag">${t}</span>`).join(' ');
 
-      const fallbackThumb = makeThumb(p.title);
-      const thumb = p.thumbnail || fallbackThumb;
+      const summaryLine = truncate(cleanText(p.summary || ''), 72);
+      const fallbackThumb = makeThumb(p.title, summaryLine);
+      const thumb = fallbackThumb;
       const impact = p.impact ? p.impact : brief;
 
       card.innerHTML = `
@@ -190,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techList = (p.techs && p.techs.length) ? p.techs : techs;
       modalTechs.textContent = (techList && techList.length) ? 'Tech: ' + techList.join(' · ') : 'Tags: ' + tags.join(' · ');
 
-      const imgHtml = p.thumbnail ? `<img class="modal-thumb" src="${p.thumbnail}" alt="${p.title}" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">` : '';
+      const imgHtml = `<img class="modal-thumb" src="${thumb}" alt="${p.title}" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">`;
       const bullets = (p.bullets && p.bullets.length) ? `<ul class="project-bullets">${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : `<pre class="project-full">${cleanText(p.summary)}</pre>`;
 
       modalBody.innerHTML = imgHtml + bullets + `<div style="margin-top:12px;color:var(--muted)">${cleanText(p.summary)}</div>`;
@@ -214,6 +219,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   }catch(err){
     console.error(err);
-    const gridEl = document.getElementById('projects-grid'); if(gridEl) gridEl.innerHTML = '<p>Unable to load projects.json</p>';
+    const gridEl = document.getElementById('projects-grid');
+    if(gridEl) gridEl.innerHTML = '<p>Unable to load projects.json. Please refresh or clear cache.</p>';
   }
 });
