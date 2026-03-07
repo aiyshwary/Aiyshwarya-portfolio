@@ -1,4 +1,17 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  // highlight active nav link (adds `active` + aria-current)
+  (function(){
+    const current = (location.pathname || '').split('/').pop() || 'index.html';
+    document.querySelectorAll('.site-header nav a').forEach(a => {
+      const href = a.getAttribute('href');
+      if(!href) return;
+      if(href === current || (href === 'index.html' && current === '') || (href === '' && current === 'index.html')){
+        a.classList.add('active');
+        a.setAttribute('aria-current','page');
+      }
+    });
+  })();
+
   // Basic skills (edit in the file)
   const skills = ['Python','Machine Learning','Computer Vision','Deep Learning','React','SQL'];
   const skillsEl = document.getElementById('skills-list');
@@ -107,7 +120,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div class="actions">
           <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
           <button class="btn-ghost btn-details">Details</button>
-          <a class="btn" href="contact.html">Contact</a>
+          <a class="btn" href="contact.html">Discuss</a>
           <a class="btn-ghost" href="projects.html#${slug}" style="margin-left:8px">Link</a>
         </div>
       `;
