@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const summaryLine = truncate(cleanText(p.summary || ''), 72);
       const fallbackThumb = makeThumb(p.title, summaryLine);
-      const thumb = fallbackThumb;
+      const thumb = p.thumbnail || fallbackThumb;
       const impact = p.impact ? p.impact : brief;
 
       card.innerHTML = `
