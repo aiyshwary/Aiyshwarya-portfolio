@@ -92,7 +92,7 @@
       "Since raccoons are a major vector of rabies, studying how often and how closely they interact helps estimate disease transmission risk and supports better public health and wildlife management stra..."
     ],
     "techs": [],
-    "thumbnail": "assets/images/mammalia-raccoon-proximity-network-analysis.svg",
+    "thumbnail": "assets/images/Raccoon Network Analysis.png",
     "featured": false
   },
   {
@@ -157,7 +157,7 @@
       "High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic images for object detection."
     ],
     "techs": [],
-    "thumbnail": "assets/images/synthetic-image-generation.svg",
+    "thumbnail": "assets/images/Synthetic Image Generation.png",
     "featured": true
   },
   {
