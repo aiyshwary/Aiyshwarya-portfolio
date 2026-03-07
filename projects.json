@@ -40,7 +40,7 @@
       "The objective was to compare traditional machine learning models with a deep learning approach to identify the most effective method for emotion classification."
     ],
     "techs": [],
-    "thumbnail": "assets/images/facial-emotion-recognition.svg",
+    "thumbnail": "assets/images/thumbnail.png",
     "featured": true
   },
   {
@@ -124,7 +124,7 @@
       "Problem it Solves Managing events manually is time-consuming and error-prone—especially when handling: Multiple event types User registrations Discounts and special preferences Payments and booking..."
     ],
     "techs": [],
-    "thumbnail": "assets/images/thumbnail.png",
+    "thumbnail": "assets/images/Online Event Management System.png",
     "featured": false
   },
   {
