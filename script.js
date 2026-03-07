@@ -81,7 +81,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const grid = document.getElementById('projects-grid');
     if(!grid) return; // nothing to do on other pages
 
-    const res = await fetch('projects.json');
+    const basePath = (location.pathname || '').replace(/[^/]*$/, '');
+    let res = await fetch(basePath + 'projects.json', { cache: 'no-store' });
+    if(!res.ok){
+      res = await fetch('projects.json', { cache: 'no-store' });
+    }
+    if(!res.ok){ throw new Error('projects.json not found'); }
     const projects = await res.json();
     grid.innerHTML = '';
     if(!projects.length){ grid.innerHTML = '<p>No projects found — check `projects.json`.</p>'; }
