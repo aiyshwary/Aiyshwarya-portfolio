@@ -30,23 +30,6 @@
     "featured": false
   },
   {
-    "title": "C7336090 Aiyshwaryaaruchamy Engineerii",
-    "summary": "Full Name: Aiyshwarya Aruchamy Amex Contractor ID: C7336090 AMEX Designation (as per AMEX role qualification): Amex Role – Engineer II Education qualification: highest degree completion - along with specialization Integrated Master’s Degree in Data Science Year of completion for the highest degree with month: Highest Degree completion with year and month University name: Amrita Vishwa Vidyapeetham Total work experience (Overall experience - in months): 14 months (Aug 2023 – Present) Skill set: Technical skillset  Strong experience in Python for data engineering, machine learning, and backend development.  Hands-on experience with Java for object- oriented programming and application development.",
-    "pdf": "assets/projects/c7336090_aiyshwaryaaruchamy_engineerii.pdf",
-    "original_filename": "C7336090_AiyshwaryaAruchamy_EngineerII.pdf",
-    "impact": "Engineer II — 14 months experience in Python for data engineering and ML; experienced in Java and production ML systems.",
-    "bullets": [
-      "14 months professional experience (Aug 2023 – Present) working on ML and data engineering projects.",
-      "Core skills: Python, data pipelines, machine learning model development; additional Java experience for application development."
-    ],
-    "techs": [
-      "Python",
-      "Java"
-    ],
-    "thumbnail": "assets/images/c7336090-aiyshwaryaaruchamy-engineerii.svg",
-    "featured": false
-  },
-  {
     "title": "Cover Letter",
     "summary": "Dear Hiring Manager, I am writing to express my interest in the AI/ML role at your organization. in Data Science and have 2.5 years of hands-on experience  building and deploying machine learning systems across computer vision and  generative AI applications.",
     "pdf": "assets/projects/cover-letter.pdf",
@@ -159,13 +142,13 @@
   },
   {
     "title": "Sentiment Analysis Extension",
-    "summary": "● ○ ○ ● ○ ○ ○ ● ● ● ○ ○ ● ● ● ● ● ● ● ○ ○ ○ ● ● ● ● ● ● Sentiment Analysis Extension Problem Statement Understanding customer opinions and emotional tone from text data is crucial  for decision-making in domains like customer feedback, reviews, and social  media. Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification into: Positive Negative Neutral sentiments Methodology Text data is cleaned and vectorized Models are trained or fine-tuned on labeled sentiment datasets Predictions include: Sentiment label Confidence score Applications Customer feedback analysis Product review monitoring Social media sentiment tracking Deployment Entire system deployed through AI-Hub using RapidMiner Images and data stored in AWS S3 Inference handled via automated workflows Supports: Real-time predictions Error handling Scalable deployment Conclusion This project delivers a complete AI ecosystem for: Image Classification Object Detection Sentiment Analysis The key strength lies in its flexibility, modularity, and deployability, allowing  users to: Choose models based on requirements Fine-tune on custom datasets Deploy seamlessly in production environments It bridges the gap between research-level models and real-world industrial  applications.",
+    "summary": "Built a sentiment analysis extension that cleans and vectorizes text, applies pretrained NLP models, and outputs positive/neutral/negative labels with confidence scores for reviews and social data.",
     "pdf": "assets/projects/sentiment-analysis-extension.pdf",
     "original_filename": "Sentiment Analysis Extension.pdf",
-    "impact": "Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification into: Positive Negative Neutral sentiments Methodology Text data is cleaned and vectorized Models are trained or fine-tuned on labeled sentiment datasets Predictions include: Sentiment label Confidence score Applications Customer feedback analysis Product review monitoring Social media sentiment tracking Deployment Entire system deployed through AI-Hub using RapidMiner Images and data stored in AWS S3 Inference handled via automated workflows Supports: Real-time predictions Error handling Scalable deployment Conclusion This project delivers a complete AI ecosystem for: Image Classification Object Detection Sentiment Analysis The key strength lies in its flexibility, modularity, and deployability, allowing users to: Choose models based on requirements Fine-tune on custom datasets Deploy seamlessly in production environments It bridges the gap between research-level models and real-world industrial applications.",
+    "impact": "Delivered a compact NLP pipeline for sentiment classification with confidence scores, suitable for feedback, reviews, and social media monitoring.",
     "bullets": [
-      "Sentiment Analysis Extension Problem Statement Understanding customer opinions and emotional tone from text data is crucial for decision-making in domains like customer feedback, reviews, and socia...",
-      "Approach Built a sentiment analysis pipeline using: NLP preprocessing (tokenization, cleaning, normalization) Pre-trained language models (via Hugging Face where applicable) Supports classification..."
+      "NLP preprocessing + pretrained models for sentiment classification.",
+      "Outputs positive/neutral/negative labels with confidence scores."
     ],
     "techs": [
       "AWS S3",
@@ -189,6 +172,24 @@
     "techs": [],
     "thumbnail": "assets/images/synthetic-image-generation.svg",
     "featured": true
+  },
+  {
+    "title": "Multi-Agent Architecture",
+    "summary": "Designed a multi-agent workflow with a planner, retriever, and synthesizer that coordinate tasks, call tools, and assemble final outputs for complex requests.",
+    "pdf": "assets/projects/multi-agent-architecture.pdf",
+    "original_filename": "Multi-Agent Architecture.pdf",
+    "impact": "Coordinated specialized agents to improve reasoning, retrieval, and response quality in a modular pipeline.",
+    "bullets": [
+      "Planner delegates tasks and sequences steps.",
+      "Retriever gathers context; synthesizer produces final output."
+    ],
+    "techs": [
+      "Python",
+      "Multi-Agent",
+      "RAG"
+    ],
+    "thumbnail": "assets/images/multi-agent-architecture.svg",
+    "featured": false
   },
   {
     "title": "Video Rag Retrieval Project",
