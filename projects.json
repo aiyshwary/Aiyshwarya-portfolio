@@ -59,7 +59,7 @@
       "OpenSearch",
       "HNSW"
     ],
-    "thumbnail": "assets/images/hybrid-search--retrieval-poc.svg",
+    "thumbnail": "assets/images/Hybrid Search Engine.png",
     "featured": true
   },
   {
@@ -111,7 +111,7 @@
       "Computer Vision",
       "Deep Learning"
     ],
-    "thumbnail": "assets/images/object-detection-extension.svg",
+    "thumbnail": "assets/images/object detection extension.png",
     "featured": true
   },
   {
