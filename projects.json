@@ -9,7 +9,7 @@
       "In short: 👉 Find similar images → reuse their annotations → verify visually → export back to CVAT What problem does it solve?"
     ],
     "techs": [],
-    "thumbnail": "assets/images/annotation-transfer-tool.svg",
+    "thumbnail": "assets/images/Annotation Transfer Tool.png",
     "featured": true
   },
   {
@@ -26,7 +26,7 @@
     "techs": [
       "Java"
     ],
-    "thumbnail": "assets/images/bus-reservation-and-ticketing-system.svg",
+    "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png",
     "featured": false
   },
   {
@@ -78,7 +78,7 @@
       "Deep Learning",
       "Computer Vision"
     ],
-    "thumbnail": "assets/images/image-classification-extension.svg",
+    "thumbnail": "assets/images/Image Classification Extension.png",
     "featured": false
   },
   {
@@ -144,7 +144,7 @@
       "Hugging Face",
       "RapidMiner"
     ],
-    "thumbnail": "assets/images/sentiment-analysis-extension.svg",
+    "thumbnail": "assets/images/Video-based-and-audio-based-sentiment-analysis.png",
     "featured": false
   },
   {
@@ -196,5 +196,25 @@
     ],
     "thumbnail": "assets/images/video-rag-retrieval-project.svg",
     "featured": true
+  },
+  {
+    "title": "Traffic Monitoring System",
+    "summary": "Real-time traffic monitoring system using computer vision to detect and track vehicles, analyse traffic flow, and support smart city infrastructure.",
+    "pdf": "assets/projects/traffic-monitoring-system.pdf",
+    "original_filename": "Traffic Monitoring System.pdf",
+    "impact": "Built a real-time traffic monitoring system using computer vision techniques for vehicle detection, tracking, and traffic flow analysis.",
+    "bullets": [
+      "Implemented real-time vehicle detection and counting using computer vision.",
+      "Developed traffic flow analysis to identify congestion patterns and peak-hour trends.",
+      "Designed modular pipeline for frame extraction, object detection, and result visualisation.",
+      "Applied tracking algorithms to maintain vehicle identity across consecutive frames."
+    ],
+    "techs": [
+      "Python",
+      "Computer Vision",
+      "Object Detection"
+    ],
+    "thumbnail": "assets/images/Traffic Monitoring System.png",
+    "featured": false
   }
 ]
