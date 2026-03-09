@@ -10,6 +10,7 @@
     ],
     "techs": [],
     "thumbnail": "assets/images/Annotation Transfer Tool.png",
+    "github": "https://github.com/aiyshwary/Annotation-Transfer-Tool",
     "featured": true
   },
   {
@@ -27,6 +28,7 @@
       "Java"
     ],
     "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png",
+    "github": "https://github.com/aiyshwary/Bus-Reservation-and-Ticketing-System",
     "featured": false
   },
   {
@@ -41,6 +43,7 @@
     ],
     "techs": [],
     "thumbnail": "assets/images/thumbnail.png",
+    "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
     "featured": true
   },
   {
@@ -60,6 +63,7 @@
       "HNSW"
     ],
     "thumbnail": "assets/images/Hybrid Search Engine.png",
+    "github": "https://github.com/aiyshwary/Search_Engine",
     "featured": true
   },
   {
@@ -79,6 +83,7 @@
       "Computer Vision"
     ],
     "thumbnail": "assets/images/Image Classification Extension.png",
+    "github": "https://github.com/aiyshwary/Image-Classification-Extension-in-Rapid-Miner",
     "featured": false
   },
   {
@@ -93,6 +98,7 @@
     ],
     "techs": [],
     "thumbnail": "assets/images/Raccoon Network Analysis.png",
+    "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
     "featured": false
   },
   {
@@ -112,6 +118,7 @@
       "Deep Learning"
     ],
     "thumbnail": "assets/images/object detection extension.png",
+    "github": "https://github.com/aiyshwary/Object-Detection-Extension-in-Rapid-Miner",
     "featured": true
   },
   {
@@ -125,6 +132,7 @@
     ],
     "techs": [],
     "thumbnail": "assets/images/Online Event Management System.png",
+    "github": "https://github.com/aiyshwary/Online-Event-Management-System",
     "featured": false
   },
   {
@@ -145,6 +153,7 @@
       "RapidMiner"
     ],
     "thumbnail": "assets/images/Video-based-and-audio-based-sentiment-analysis.png",
+    "github": "https://github.com/aiyshwary/Video-based-and-audio-based-sentiment-analysis",
     "featured": false
   },
   {
@@ -176,6 +185,7 @@
       "RAG"
     ],
     "thumbnail": "assets/images/multi-agent-architecture.svg",
+    "github": "https://github.com/aiyshwary/multi-agent-revenue-churn",
     "featured": false
   },
   {
@@ -195,6 +205,7 @@
       "RAG"
     ],
     "thumbnail": "assets/images/Video RAG Retrieval.png",
+    "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
     "featured": true
   },
   {
@@ -215,6 +226,7 @@
       "Object Detection"
     ],
     "thumbnail": "assets/images/Traffic Monitoring System.png",
+    "github": "https://github.com/aiyshwary/Traffic-Monitoring-System",
     "featured": false
   }
 ]

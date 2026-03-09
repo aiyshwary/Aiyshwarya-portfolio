@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
           <button class="btn-ghost btn-details">Details</button>
           <a class="btn" href="contact.html">Discuss</a>
-          <a class="btn-ghost" href="projects.html#${slug}" style="margin-left:8px">Link</a>
+          ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener" style="margin-left:8px">GitHub</a>` : ''}
         </div>
       `;
 
