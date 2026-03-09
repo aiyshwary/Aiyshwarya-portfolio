@@ -32,7 +32,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   // utility: clean extracted text for display
   function cleanText(str){
     if(!str) return '';
-    return str.replace(/[●○✔■◆•►🔹]/g,' ').replace(/[\u2460-\u24FF]/g,' ').replace(/\s+/g,' ').trim();
+    return str
+      .replace(/[●○✔■◆•►🔹🎯🕒]/g,' ')
+      .replace(/[\u2460-\u24FF]/g,' ')
+      .replace(/[\u{1F000}-\u{1FFFF}]/gu,' ')
+      .replace(/[\u2600-\u27BF]/g,' ')
+      .replace(/\s+/g,' ').trim();
   }
   function truncate(s, n=160){ return s.length>n ? s.slice(0,n).trim() + '…' : s; }
 
@@ -135,12 +140,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       if(isFeatured) card.setAttribute('data-featured','true');
 
       const techHtml = techs.map(t=>`<span class="tag tech">${t}</span>`).join(' ');
-      const tagsHtml = tags.map(t=>`<span class="tag">${t}</span>`).join(' ');
 
       const summaryLine = truncate(cleanText(p.summary || ''), 72);
       const fallbackThumb = makeThumb(p.title, summaryLine);
       const thumb = p.thumbnail || fallbackThumb;
-      const impact = p.impact ? p.impact : brief;
+      const impact = cleanText(p.impact ? p.impact : brief);
 
       card.innerHTML = `
         <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">
@@ -154,7 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
           <button class="btn-ghost btn-details">Details</button>
           <a class="btn" href="contact.html">Discuss</a>
-          ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener" style="margin-left:8px">GitHub</a>` : ''}
+          ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
         </div>
       `;
 

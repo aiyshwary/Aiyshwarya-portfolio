@@ -51,10 +51,11 @@
     "summary": "● ● ● ● ● ● ● Elevator pitch  🎯 This repo is a small production-style hybrid search pipeline for PDFs/ DOCX: it ingests files, extracts text (OCR fallback), deduplicates,  token-chunks documents, precomputes multilingual embeddings,  builds FAISS ANN indexes, and serves a hybrid search that combines  BM25 (OpenSearch) + ANN (FAISS) to rank whole documents with  snippet-level evidence. One-minute explanation (what to say first in an interview)  🕒 “We built a hybrid retrieval pipeline where BM25 provides precise  lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides  semantic recall.",
     "pdf": "assets/projects/hybrid-search--retrieval-poc.pdf",
     "original_filename": "Hybrid Search & Retrieval POC.pdf",
-    "impact": "One-minute explanation (what to say first in an interview) 🕒 “We built a hybrid retrieval pipeline where BM25 provides precise lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides semantic recall.",
+    "impact": "Built a production-style hybrid search pipeline combining BM25 lexical matching and FAISS semantic retrieval for PDFs and DOCX files.",
     "bullets": [
-      "Elevator pitch 🎯 This repo is a small production-style hybrid search pipeline for PDFs/ DOCX: it ingests files, extracts text (OCR fallback), deduplicates, token-chunks documents, precomputes multi...",
-      "One-minute explanation (what to say first in an interview) 🕒 “We built a hybrid retrieval pipeline where BM25 provides precise lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides s..."
+      "Ingests PDF/DOCX files, extracts text with OCR fallback, deduplicates and token-chunks documents.",
+      "Precomputes multilingual embeddings and builds FAISS ANN indexes (IVF+PQ with optional HNSW hot tier).",
+      "Hybrid BM25 + ANN retrieval ranks whole documents with snippet-level evidence."
     ],
     "techs": [
       "FAISS",
