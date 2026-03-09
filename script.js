@@ -199,7 +199,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       const techList = (p.techs && p.techs.length) ? p.techs : techs;
       modalTechs.textContent = (techList && techList.length) ? 'Tech: ' + techList.join(' · ') : 'Tags: ' + tags.join(' · ');
 
-      const imgHtml = `<img class="modal-thumb" src="${thumb}" alt="${p.title}" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">`;
+      const _fallback = makeThumb(p.title, truncate(cleanText(p.summary || ''), 72));
+      const _thumb = p.thumbnail || _fallback;
+      const imgHtml = `<img class="modal-thumb" src="${_thumb}" alt="${p.title}" data-fallback="${_fallback}" onerror="this.src=this.dataset.fallback">`;
       const bullets = (p.bullets && p.bullets.length) ? `<ul class="project-bullets">${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : `<pre class="project-full">${cleanText(p.summary)}</pre>`;
 
       modalBody.innerHTML = imgHtml + bullets + `<div style="margin-top:12px;color:var(--muted)">${cleanText(p.summary)}</div>`;
@@ -222,8 +224,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
   }catch(err){
-    console.error(err);
+    console.error('Portfolio error:', err);
     const gridEl = document.getElementById('projects-grid');
-    if(gridEl) gridEl.innerHTML = '<p>Unable to load projects.json. Please refresh or clear cache.</p>';
+    if(gridEl) gridEl.innerHTML = `<p style="color:var(--muted)">Something went wrong: ${err.message}. Try a hard refresh (Cmd+Shift+R).</p>`;
   }
 });
