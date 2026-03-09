@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="meta">${techHtml}</div>
         </div>
         <p class="lead-card">${impact}</p>
-        <div class="tags-row">${tagsHtml}</div>
+
         <div class="actions">
           <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
           <button class="btn-ghost btn-details">Details</button>
