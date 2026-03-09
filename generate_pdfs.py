@@ -69,11 +69,16 @@ SRC_MAP = {
 }
 
 # ── Text-cleaning helpers ─────────────────────────────────────────────────────
+_NUMBERED_HDG = re.compile(r'^(\d+\.)+\s+\S')   # "1. Overview" or "4.1 Files"
+_PAGE_HDR     = re.compile(
+    r'^(page \d+|.*project documentation$)',
+    re.IGNORECASE,
+)
+_ENDS_SENT    = re.compile(r'[.!?]$')
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
+
 _VARSEL_RE   = re.compile(r'[\uFE00-\uFE0F]')
 _SYMBOL_ONLY = set('●○■◆•►✔→←—')
-
-# Lines containing any of these phrases are interview coaching → skip
 _COACHING_RE = re.compile(
     r'start with this|start here|very important.*interview|for interviewers|'
     r'this is a great interview|only if interviewer|explain this step-by-step|'
@@ -159,16 +164,29 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         cleaned = re.sub(r'^[●○■◆•►✔\-]\s+', '', cleaned).strip()
 
         if not cleaned or len(cleaned) <= 2:
+            # blank line → paragraph boundary
+            if not raw.strip():
+                items.append(('para_break', ''))
             i += 1
             continue
         if _COACHING_RE.search(cleaned):
             i += 1
             continue
+        if _PAGE_HDR.search(cleaned):
+            i += 1
+            continue
 
-        # Keep lines that are only digits or punctuation if they look like
-        # table-style data (e.g. "1. Overview" or "PHP 8.3 (server-side…)")
         orig = raw.strip()
         is_bullet = bool(re.match(r'^[●○■◆•►✔]\s', orig))
+
+        # Numbered section headings ("1. Overview" / "4.1 Files") → section item
+        if not is_bullet and _NUMBERED_HDG.match(cleaned):
+            # strip leading "N. " or "N.N. " prefix
+            heading = re.sub(r'^(\d+\.)+\s*', '', cleaned).strip()
+            if heading:
+                items.append(('section', heading))
+            i += 1
+            continue
 
         if is_bullet:
             items.append(('bullet', cleaned))
@@ -177,7 +195,38 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
 
         i += 1
 
-    return items
+    # Merge consecutive body lines into paragraphs.
+    # Flush the buffer when:
+    #   - a blank-line para_break is seen
+    #   - a non-body item (section/bullet) is seen
+    #   - the previous line ended a sentence AND the next starts with uppercase
+    merged = []
+    buf = []
+    for kind, text in items:
+        if kind == 'body':
+            flush_now = (
+                buf
+                and _ENDS_SENT.search(buf[-1])
+                and text
+                and text[0].isupper()
+            )
+            if flush_now:
+                merged.append(('body', ' '.join(buf)))
+                buf = []
+            buf.append(text)
+        elif kind == 'para_break':
+            if buf:
+                merged.append(('body', ' '.join(buf)))
+                buf = []
+        else:
+            if buf:
+                merged.append(('body', ' '.join(buf)))
+                buf = []
+            merged.append((kind, text))
+    if buf:
+        merged.append(('body', ' '.join(buf)))
+
+    return merged
 
 
 # ── Drawing utilities ─────────────────────────────────────────────────────────
@@ -202,31 +251,19 @@ class Writer:
     # ── Internal ──────────────────────────────────────────────────────────────
     def _need(self, height: float):
         """Ensure *height* pts are available; start a new page if not."""
-        if self.y - height < MB + 0.4 * cm:
-            self._footer()
+        if self.y - height < MB:
             self.c.showPage()
             self._new_page_bg()
-            self.y = PH - 1.5 * cm
+            self.y = PH - 0.8 * cm
 
     def _new_page_bg(self):
         self.c.setFillColor(C_BG)
         self.c.rect(0, 0, PW, PH, fill=1, stroke=0)
         self.c.setFillColor(C_ACCENT)
         self.c.rect(0, PH - 4, PW, 4, fill=1, stroke=0)
-        self.c.setFillColor(C_HDR)
-        self.c.rect(0, PH - 1.0 * cm, PW, 1.0 * cm, fill=1, stroke=0)
-        self.c.setFont(F, 8)
-        self.c.setFillColor(C_SUBTLE)
-        self.c.drawString(ML, PH - 0.65 * cm, self.title + " — continued")
 
     def _footer(self):
-        self.c.setFillColor(C_DIV)
-        self.c.rect(0, MB - 0.4 * cm, PW, 0.5, fill=1, stroke=0)
-        self.c.setFont(F, S_FOOTER)
-        self.c.setFillColor(C_SUBTLE)
-        self.c.drawString(ML, MB - 0.65 * cm,
-                          "Aiyshwarya Aruchamy  |  Portfolio Project")
-        self.c.drawRightString(PW - MR, MB - 0.65 * cm, "github.com/aiyshwary")
+        pass  # no footer text
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
