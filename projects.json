@@ -4,11 +4,14 @@
     "summary": "● ● ● ● ● ● ● ● 🔹  High-level overview (start here) This project is an Annotation Transfer Tool that significantly reduces manual  labeling effort by automatically transferring annotations from previously  human-labeled images to new images using deep image similarity. In short: 👉  Find similar images → reuse their annotations → verify visually →  export back to CVAT 🔹  What problem does it solve?",
     "pdf": "assets/projects/annotation-transfer-tool.pdf",
     "original_filename": "Annotation Transfer Tool.pdf",
-    "impact": "High-level overview (start here) This project is an Annotation Transfer Tool that significantly reduces manual labeling effort by automatically transferring annotations from previously human-labeled images to new images using deep image similarity.",
+    "impact": "Reduces manual labeling effort by automatically transferring annotations from previously human-labeled images to new images using deep image similarity.",
     "bullets": [
-      "In short: 👉 Find similar images → reuse their annotations → verify visually → export back to CVAT What problem does it solve?"
+      "Finds visually similar labeled images using deep feature embeddings.",
+      "Transfers existing annotations to new unlabeled images automatically.",
+      "Supports visual verification and export back to CVAT.",
+      "Includes modular pipeline with S3 sync, crop generation and similarity matching."
     ],
-    "techs": [],
+    "techs": ["Python", "Computer Vision", "S3"],
     "thumbnail": "assets/images/Annotation Transfer Tool.png",
     "github": "https://github.com/aiyshwary/Annotation-Transfer-Tool",
     "featured": true
@@ -36,12 +39,13 @@
     "summary": "🔹  Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data  dataset, which contains grayscale facial images labeled with seven emotion  classes. The objective was to compare traditional machine learning models with  a deep learning approach to identify the most effective method for emotion  classification.",
     "pdf": "assets/projects/facial-emotion-recognition.pdf",
     "original_filename": "Facial Emotion Recognition.pdf",
-    "impact": "Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data dataset, which contains grayscale facial images labeled with seven emotion classes.",
+    "impact": "Compared traditional ML models against deep learning for facial emotion classification across seven emotion classes using the icml_face_data dataset.",
     "bullets": [
-      "Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data dataset, which contains grayscale facial images labeled with seven emotio...",
-      "The objective was to compare traditional machine learning models with a deep learning approach to identify the most effective method for emotion classification."
+      "Dataset: icml_face_data with grayscale images labeled across 7 emotion classes.",
+      "Benchmarked SVM, Decision Tree and Random Forest against a CNN.",
+      "CNN outperformed traditional models in accuracy and generalization."
     ],
-    "techs": [],
+    "techs": ["Python", "Deep Learning", "CNN"],
     "thumbnail": "assets/images/thumbnail.png",
     "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
     "featured": true
@@ -92,12 +96,13 @@
     "summary": "● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● Mammalia Raccoon Proximity Network Analysis – Project  Explanation Project Overview This project analyzes social interaction patterns among urban raccoons  using network analysis to understand how rabies and other pathogens can  spread within raccoon populations. Since raccoons are a major vector of rabies, studying how often and how  closely they interact helps estimate disease transmission risk and supports  better public health and wildlife management strategies.",
     "pdf": "assets/projects/mammalia-raccoon-proximity-network-analysis.pdf",
     "original_filename": "Mammalia Raccoon Proximity Network Analysis.pdf",
-    "impact": "Mammalia Raccoon Proximity Network Analysis – Project Explanation Project Overview This project analyzes social interaction patterns among urban raccoons using network analysis to understand how rabies and other pathogens can spread within raccoon populations.",
+    "impact": "Analyzed social interaction patterns among urban raccoons using network analysis to estimate rabies transmission risk and support wildlife management strategies.",
     "bullets": [
-      "Mammalia Raccoon Proximity Network Analysis – Project Explanation Project Overview This project analyzes social interaction patterns among urban raccoons using network analysis to understand how ra...",
-      "Since raccoons are a major vector of rabies, studying how often and how closely they interact helps estimate disease transmission risk and supports better public health and wildlife management stra..."
+      "Built proximity network from raccoon interaction data to model disease spread.",
+      "Applied centrality measures (degree, betweenness, closeness) to identify high-risk individuals.",
+      "Results support targeted intervention strategies for rabies control."
     ],
-    "techs": [],
+    "techs": ["Python", "Network Analysis"],
     "thumbnail": "assets/images/Raccoon Network Analysis.png",
     "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
     "featured": false
@@ -127,11 +132,13 @@
     "summary": "● ● ● ● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ● ● ● ● Online Event Management System – Project Explanation This project is a database-driven Online Event Management System  designed to help users register, browse, and book events online, while  allowing admins to manage events, users, discounts, and payments  efficiently. Problem it Solves Managing events manually is time-consuming and error-prone—especially  when handling: Multiple event types User registrations Discounts and special preferences Payments and bookings This system provides a centralized, structured database that automates all  these processes.",
     "pdf": "assets/projects/online-event-management-system.pdf",
     "original_filename": "Online Event Management System.pdf",
-    "impact": "Online Event Management System – Project Explanation This project is a database-driven Online Event Management System designed to help users register, browse, and book events online, while allowing admins to manage events, users, discounts, and payments efficiently.",
+    "impact": "Built a database-driven Online Event Management System allowing users to register, browse and book events with discount and payment support.",
     "bullets": [
-      "Problem it Solves Managing events manually is time-consuming and error-prone—especially when handling: Multiple event types User registrations Discounts and special preferences Payments and booking..."
+      "Handles multiple event types, user registrations, discounts and payments in a centralised DB.",
+      "Admin panel to manage events, users and special preferences.",
+      "Normalized schema with both SQL and NoSQL data structures."
     ],
-    "techs": [],
+    "techs": ["SQL", "NoSQL", "Database"],
     "thumbnail": "assets/images/Online Event Management System.png",
     "github": "https://github.com/aiyshwary/Online-Event-Management-System",
     "featured": false
@@ -162,11 +169,13 @@
     "summary": "● ● ● ● ● ● ● ● ● ● 🔹  High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic  images for object detection. The goal is to address limited or imbalanced real- world data by synthesizing new training images using real object crops and  annotations.",
     "pdf": "assets/projects/synthetic-image-generation.pdf",
     "original_filename": "Synthetic Image Generation.pdf",
-    "impact": "High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic images for object detection.",
+    "impact": "Built an automated pipeline to generate high-quality synthetic images for object detection, addressing limited and imbalanced real-world training data.",
     "bullets": [
-      "High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic images for object detection."
+      "Uses real object crops and annotations to synthesise new training images.",
+      "Reduces dependency on manual data collection for detection datasets.",
+      "Improves model robustness by augmenting underrepresented classes."
     ],
-    "techs": [],
+    "techs": ["Python", "Computer Vision", "Synthetic Data"],
     "thumbnail": "assets/images/Synthetic Image Generation.png",
     "github": "https://github.com/aiyshwary/Synthetic_waste_image_generation",
     "featured": true
