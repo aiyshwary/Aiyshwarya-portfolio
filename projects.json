@@ -1,34 +1,44 @@
 [
   {
     "title": "Annotation Transfer Tool",
-    "summary": "● ● ● ● ● ● ● ● 🔹  High-level overview (start here) This project is an Annotation Transfer Tool that significantly reduces manual  labeling effort by automatically transferring annotations from previously  human-labeled images to new images using deep image similarity. In short: 👉  Find similar images → reuse their annotations → verify visually →  export back to CVAT 🔹  What problem does it solve?",
+    "summary": "A smart auto-annotation pipeline that leverages deep image similarity to transfer labels from previously human-annotated images to new unannotated ones, significantly reducing manual labeling effort in computer vision workflows.",
     "pdf": "assets/projects/annotation-transfer-tool.pdf",
     "original_filename": "Annotation Transfer Tool.pdf",
-    "impact": "Reduces manual labeling effort by automatically transferring annotations from previously human-labeled images to new images using deep image similarity.",
+    "impact": "Reduced manual annotation effort by automatically transferring labels from existing human-labeled images to new images using deep feature similarity and a modular 8-step pipeline integrated with CVAT and AWS S3.",
     "bullets": [
-      "Finds visually similar labeled images using deep feature embeddings.",
-      "Transfers existing annotations to new unlabeled images automatically.",
-      "Supports visual verification and export back to CVAT.",
-      "Includes modular pipeline with S3 sync, crop generation and similarity matching."
+      "Downloads labeled images from AWS S3 and extracts annotations from Datamaro JSON format.",
+      "Generates image crops, normalizes labels, and creates masks for each labeled region.",
+      "Uses DeepImageSearch (GPU-accelerated) to identify the most visually similar labeled images for each new image.",
+      "Transfers and corrects annotations from matched images, then exports back to CVAT-compatible JSON.",
+      "Includes normalized and denormalized visualization scripts and an interactive Jupyter demo notebook."
     ],
-    "techs": ["Python", "Computer Vision", "S3"],
+    "techs": [
+      "Python",
+      "Computer Vision",
+      "AWS S3",
+      "CVAT",
+      "PyTorch"
+    ],
     "thumbnail": "assets/images/Annotation Transfer Tool.png",
     "github": "https://github.com/aiyshwary/Annotation-Transfer-Tool",
     "featured": true
   },
   {
     "title": "Bus Reservation And Ticketing System",
-    "summary": "● ● ○ ○ ● ● ● ● ● 1⃣  One-line project summary (start with this) “I built a console-based Bus Reservation and Ticketing System in Java that  allows seat management, passenger booking, billing with discounts, and  transaction tracking using structured input validation and in-memory data  storage. ” 2⃣  Problem statement (what you were solving) Manual ticket booking is error-prone and slow.",
+    "summary": "A Java-based console application that simulates a complete bus ticket reservation and billing workflow, supporting multi-passenger booking, seat management, and discount-based billing operations.",
     "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf",
     "original_filename": "Bus Reservation and Ticketing System.pdf",
-    "impact": "Built a console-based Bus Reservation & Ticketing system in Java supporting seat management, booking, billing with discounts and transaction tracking.",
+    "impact": "Built a fully functional console-based Bus Reservation and Ticketing System in Java with structured input validation, in-memory seat management, and automated billing with passenger-type discounts.",
     "bullets": [
-      "Problem: manual ticket booking is error-prone and slow.",
-      "Approach: implemented seat management, validation and in-memory transaction handling in Java.",
-      "Result: reliable booking flow and structured transaction tracking (console app)."
+      "Implements user authentication, seat selection, and multi-passenger booking in a single session.",
+      "Handles billing logic including discount tiers for different passenger categories.",
+      "Uses structured in-memory data storage for transaction tracking without a database dependency.",
+      "Validates all inputs to prevent double-booking and illegal seat selections."
     ],
     "techs": [
-      "Java"
+      "Java",
+      "OOP",
+      "Console Application"
     ],
     "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png",
     "github": "https://github.com/aiyshwary/Bus-Reservation-and-Ticketing-System",
@@ -36,36 +46,49 @@
   },
   {
     "title": "Facial Emotion Recognition",
-    "summary": "🔹  Project Explanation: Facial Emotion Recognition This project focuses on facial emotion recognition using the icml_face_data  dataset, which contains grayscale facial images labeled with seven emotion  classes. The objective was to compare traditional machine learning models with  a deep learning approach to identify the most effective method for emotion  classification.",
+    "summary": "A comparative study of machine learning and deep learning approaches for recognizing facial emotions from grayscale images, benchmarking CNN, SVM, Random Forest, and Decision Tree models across multiple datasets.",
     "pdf": "assets/projects/facial-emotion-recognition.pdf",
     "original_filename": "Facial Emotion Recognition.pdf",
-    "impact": "Compared traditional ML models against deep learning for facial emotion classification across seven emotion classes using the icml_face_data dataset.",
+    "impact": "Implemented and benchmarked four ML/DL models for 7-class facial emotion classification. CNN achieved the best generalization at approximately 75.5% accuracy, outperforming all traditional models on unseen data.",
     "bullets": [
-      "Dataset: icml_face_data with grayscale images labeled across 7 emotion classes.",
-      "Benchmarked SVM, Decision Tree and Random Forest against a CNN.",
-      "CNN outperformed traditional models in accuracy and generalization."
+      "Trained on icml_face_data and Kaggle FER datasets with 7 emotion classes (happy, sad, angry, fear, surprise, disgust, neutral).",
+      "CNN with data augmentation and stratified cross-validation achieved approximately 75.5% validation accuracy.",
+      "Random Forest reduced overfitting vs Decision Tree, achieving approximately 89.2% on ICML dataset.",
+      "SVM with PCA preprocessing achieved approximately 55% accuracy — lowest among all models on high-dimensional pixel data.",
+      "Concluded CNNs are best suited for FER due to hierarchical spatial feature extraction."
     ],
-    "techs": ["Python", "Deep Learning", "CNN"],
+    "techs": [
+      "Python",
+      "CNN",
+      "SVM",
+      "Random Forest",
+      "TensorFlow",
+      "Jupyter"
+    ],
     "thumbnail": "assets/images/thumbnail.png",
     "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
     "featured": true
   },
   {
-    "title": "Hybrid Search & Retrieval Poc",
-    "summary": "● ● ● ● ● ● ● Elevator pitch  🎯 This repo is a small production-style hybrid search pipeline for PDFs/ DOCX: it ingests files, extracts text (OCR fallback), deduplicates,  token-chunks documents, precomputes multilingual embeddings,  builds FAISS ANN indexes, and serves a hybrid search that combines  BM25 (OpenSearch) + ANN (FAISS) to rank whole documents with  snippet-level evidence. One-minute explanation (what to say first in an interview)  🕒 “We built a hybrid retrieval pipeline where BM25 provides precise  lexical matches and FAISS (IVF+PQ + optional HNSW hot tier) provides  semantic recall.",
+    "title": "Hybrid Search & Retrieval POC",
+    "summary": "A production-style multilingual hybrid search engine for Indian-language documents, combining BM25 lexical search and FAISS semantic retrieval to rank documents with snippet-level evidence across Tamil, Hindi, Telugu and more.",
     "pdf": "assets/projects/hybrid-search--retrieval-poc.pdf",
     "original_filename": "Hybrid Search & Retrieval POC.pdf",
-    "impact": "Built a production-style hybrid search pipeline combining BM25 lexical matching and FAISS semantic retrieval for PDFs and DOCX files.",
+    "impact": "Built a multilingual hybrid search pipeline supporting Indian-language PDFs and DOCX files, combining BM25 (OpenSearch) and FAISS IVF-PQ for accurate document retrieval with chunk-level evidence and best-snippet selection.",
     "bullets": [
-      "Ingests PDF/DOCX files, extracts text with OCR fallback, deduplicates and token-chunks documents.",
-      "Precomputes multilingual embeddings and builds FAISS ANN indexes (IVF+PQ with optional HNSW hot tier).",
-      "Hybrid BM25 + ANN retrieval ranks whole documents with snippet-level evidence."
+      "Ingests PDF and DOCX files with digital text extraction and Tesseract OCR fallback for scanned documents.",
+      "Detects document language using FastText (LID176) across Tamil, Hindi, Telugu, Kannada, Bengali and more.",
+      "Applies SimHash near-duplicate detection and token-aware chunking with sentence-based splitting.",
+      "Generates multilingual embeddings using Sentence Transformers and indexes them in FAISS IVF-PQ.",
+      "Hybrid BM25 and ANN retrieval with document-level score aggregation and best-snippet selection per result."
     ],
     "techs": [
+      "Python",
       "FAISS",
       "BM25",
       "OpenSearch",
-      "HNSW"
+      "Sentence Transformers",
+      "Tesseract"
     ],
     "thumbnail": "assets/images/Hybrid Search Engine.png",
     "github": "https://github.com/aiyshwary/Search_Engine",
@@ -73,19 +96,23 @@
   },
   {
     "title": "Image Classification Extension",
-    "summary": "● ● ○ ○ ○ ○ ○ ○ ○ ● ● ● ○ ○ ○ ○ ○ ● ● ● ● ○ ○ ● ● ● ● 1. Image Classification Extension Problem Statement In real-world scenarios, image datasets vary significantly in size, quality, and  domain.",
+    "summary": "A RapidMiner Studio extension enabling no-code transfer learning for image classification, supporting fine-tuning of popular CNN architectures on custom datasets and ONNX-based inference without writing a single line of code.",
     "pdf": "assets/projects/image-classification-extension.pdf",
     "original_filename": "Image Classification Extension.pdf",
-    "impact": "Extended image-classification pipelines to improve robustness across varying dataset sizes, quality and domain shifts.",
+    "impact": "Developed a RapidMiner extension with two custom operators — Fine Tuning and Inference — enabling practitioners to apply transfer learning with ResNet, VGGNet, DenseNet, Inception and more using a drag-and-drop interface.",
     "bullets": [
-      "Problem: dataset variability and domain shift reduce model performance.",
-      "Approach: applied augmentation, cross-domain evaluation and robustness techniques.",
-      "Result: improved generalization and stability across multiple datasets."
+      "Fine Tuning operator accepts an image directory and hyperparameters; outputs a fine-tuned model in ONNX format.",
+      "Inference operator loads the ONNX model and outputs a prediction DataFrame with classified labels.",
+      "Supports ResNet, AlexNet, VGGNet, SqueezeNet, DenseNet, and Inception architectures.",
+      "Compatible with both CPU and GPU (CUDA) environments via configurable conda environment.",
+      "Installed as a JAR extension in RapidMiner Studio with Python Scripting backend."
     ],
     "techs": [
       "Python",
-      "Deep Learning",
-      "Computer Vision"
+      "PyTorch",
+      "ONNX",
+      "RapidMiner",
+      "Transfer Learning"
     ],
     "thumbnail": "assets/images/Image Classification Extension.png",
     "github": "https://github.com/aiyshwary/Image-Classification-Extension-in-Rapid-Miner",
@@ -93,35 +120,47 @@
   },
   {
     "title": "Mammalia Raccoon Proximity Network Analysis",
-    "summary": "● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● ● Mammalia Raccoon Proximity Network Analysis – Project  Explanation Project Overview This project analyzes social interaction patterns among urban raccoons  using network analysis to understand how rabies and other pathogens can  spread within raccoon populations. Since raccoons are a major vector of rabies, studying how often and how  closely they interact helps estimate disease transmission risk and supports  better public health and wildlife management strategies.",
+    "summary": "A graph-based epidemiological study modelling rabies transmission risk in urban raccoon populations through proximity network analysis and centrality measures, supporting public health and wildlife management decisions.",
     "pdf": "assets/projects/mammalia-raccoon-proximity-network-analysis.pdf",
     "original_filename": "Mammalia Raccoon Proximity Network Analysis.pdf",
-    "impact": "Analyzed social interaction patterns among urban raccoons using network analysis to estimate rabies transmission risk and support wildlife management strategies.",
+    "impact": "Constructed and analyzed a raccoon proximity network using real-world contact data, applying centrality measures to identify high-risk individuals and quantify potential rabies spread pathways within urban populations.",
     "bullets": [
-      "Built proximity network from raccoon interaction data to model disease spread.",
-      "Applied centrality measures (degree, betweenness, closeness) to identify high-risk individuals.",
-      "Results support targeted intervention strategies for rabies control."
+      "Built a weighted proximity network from the mammalia-raccoon-proximity dataset using Python and NetworkX.",
+      "Computed degree, betweenness, closeness, and eigenvector centrality to rank individuals by transmission risk.",
+      "Identified superspreader nodes whose removal would most disrupt disease propagation chains.",
+      "Visualized network topology and centrality distributions to communicate findings clearly.",
+      "Results provide evidence-based recommendations for targeted wildlife intervention strategies."
     ],
-    "techs": ["Python", "Network Analysis"],
+    "techs": [
+      "Python",
+      "NetworkX",
+      "Jupyter",
+      "Graph Analysis",
+      "Epidemiology"
+    ],
     "thumbnail": "assets/images/Raccoon Network Analysis.png",
     "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
     "featured": false
   },
   {
     "title": "Object Detection Extension",
-    "summary": "● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ○ ○ ● ○ ○ ○ ● ● ○ ○ ● ● ● ● ● 2. Object Detection Extension Problem Statement Different object detection use cases require different trade-offs between  accuracy, speed, and computational cost.",
+    "summary": "A RapidMiner Studio extension that brings transfer learning-based object detection into a no-code environment, supporting fine-tuning and inference with Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet models.",
     "pdf": "assets/projects/object-detection-extension.pdf",
     "original_filename": "Object Detection Extension.pdf",
-    "impact": "Implemented object-detection extensions that enable configurable accuracy–speed trade-offs for different deployment scenarios.",
+    "impact": "Developed two RapidMiner operators for object detection — FineTuneObjectDetectionModel and ObjectDetectionModelInference — enabling users to train and deploy detection models within a visual workflow without writing code.",
     "bullets": [
-      "Problem: different detection use-cases require different trade-offs between accuracy, speed, and computational cost.",
-      "Approach: designed configurable models and lightweight optimizations for low-latency inference.",
-      "Result: flexible detection models that can be tuned for target latency or accuracy."
+      "FineTuneObjectDetectionModel accepts image and annotation directories (YOLO/Pascal VOC) and outputs model weights and class list CSV.",
+      "ObjectDetectionModelInference runs predictions on new images and returns bounding boxes and class labels as a DataFrame.",
+      "Supports five architectures: Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet for varying speed-accuracy trade-offs.",
+      "Configurable for CPU-only and GPU (CUDA cu118) environments; installed as a JAR extension in RapidMiner Studio.",
+      "Enables domain-specific object detection with minimal ML expertise using a drag-and-drop process designer."
     ],
     "techs": [
       "Python",
-      "Computer Vision",
-      "Deep Learning"
+      "PyTorch",
+      "ONNX Runtime",
+      "RapidMiner",
+      "Object Detection"
     ],
     "thumbnail": "assets/images/object detection extension.png",
     "github": "https://github.com/aiyshwary/Object-Detection-Extension-in-Rapid-Miner",
@@ -129,36 +168,46 @@
   },
   {
     "title": "Online Event Management System",
-    "summary": "● ● ● ● ● ● ● ● ● ● ● ● ○ ○ ○ ○ ● ● ● ● Online Event Management System – Project Explanation This project is a database-driven Online Event Management System  designed to help users register, browse, and book events online, while  allowing admins to manage events, users, discounts, and payments  efficiently. Problem it Solves Managing events manually is time-consuming and error-prone—especially  when handling: Multiple event types User registrations Discounts and special preferences Payments and bookings This system provides a centralized, structured database that automates all  these processes.",
+    "summary": "A database-driven system for managing events end-to-end, allowing customers to register, browse and book events with discounts, while giving administrators full control over event listings, users, payments and preferences.",
     "pdf": "assets/projects/online-event-management-system.pdf",
     "original_filename": "Online Event Management System.pdf",
-    "impact": "Built a database-driven Online Event Management System allowing users to register, browse and book events with discount and payment support.",
+    "impact": "Designed and implemented a normalized relational database and NoSQL schema for an Online Event Management System, covering customer registration, booking workflows, discount management, and payment processing.",
     "bullets": [
-      "Handles multiple event types, user registrations, discounts and payments in a centralised DB.",
-      "Admin panel to manage events, users and special preferences.",
-      "Normalized schema with both SQL and NoSQL data structures."
+      "Designed a fully normalized relational schema (up to 3NF) with entities for Users, Events, Bookings, Payments, and Discounts.",
+      "Modeled equivalent NoSQL document structures for flexible event-type storage and preference handling.",
+      "Admin interface supports CRUD operations on events, user management, and discount configuration.",
+      "Customer portal enables account creation, event browsing, booking with preference selection, and payment tracking.",
+      "Schema documented with ER diagrams, normalization steps, and a detailed project report."
     ],
-    "techs": ["SQL", "NoSQL", "Database"],
+    "techs": [
+      "SQL",
+      "NoSQL",
+      "Database Design",
+      "Normalization"
+    ],
     "thumbnail": "assets/images/Online Event Management System.png",
     "github": "https://github.com/aiyshwary/Online-Event-Management-System",
     "featured": false
   },
   {
     "title": "Sentiment Analysis Extension",
-    "summary": "Built a sentiment analysis extension that cleans and vectorizes text, applies pretrained NLP models, and outputs positive/neutral/negative labels with confidence scores. It’s designed for reviews, customer feedback, and social media monitoring.",
+    "summary": "A multimodal sentiment analysis project that independently extracts and analyses sentiment from both the video (visual) and audio streams of a recording, combining insights from two separate NLP and signal processing pipelines.",
     "pdf": "assets/projects/sentiment-analysis-extension.pdf",
     "original_filename": "Sentiment Analysis Extension.pdf",
-    "impact": "Delivered a compact NLP pipeline for sentiment classification with confidence scores. Suitable for feedback, reviews, and social media monitoring.",
+    "impact": "Built a dual-stream sentiment analysis pipeline that separates video and audio from a recording and independently classifies sentiment from each modality, enabling richer multimodal emotional understanding.",
     "bullets": [
-      "NLP preprocessing + pretrained models for sentiment classification.",
-      "Outputs positive/neutral/negative labels with confidence scores."
+      "Extracts audio track from video files and applies speech-to-text followed by NLP-based sentiment classification.",
+      "Processes video frames independently to infer visual sentiment cues from facial expressions and scene context.",
+      "Outputs positive, neutral, or negative sentiment labels with confidence scores per modality.",
+      "Designed for use cases including customer feedback analysis, social media monitoring, and presentation review.",
+      "Implemented using Hugging Face pretrained models and RapidMiner for pipeline orchestration."
     ],
     "techs": [
-      "AWS S3",
-      "AWS",
-      "S3",
+      "Python",
       "Hugging Face",
-      "RapidMiner"
+      "NLP",
+      "RapidMiner",
+      "Audio Processing"
     ],
     "thumbnail": "assets/images/Video-based-and-audio-based-sentiment-analysis.png",
     "github": "https://github.com/aiyshwary/Video-based-and-audio-based-sentiment-analysis",
@@ -166,53 +215,71 @@
   },
   {
     "title": "Synthetic Image Generation",
-    "summary": "● ● ● ● ● ● ● ● ● ● 🔹  High-level explanation (start with this) This project builds an automated pipeline to generate high-quality synthetic  images for object detection. The goal is to address limited or imbalanced real- world data by synthesizing new training images using real object crops and  annotations.",
+    "summary": "An automated pipeline for generating high-quality synthetic training images for object detection, addressing class-imbalanced datasets by compositing annotated object crops onto varied backgrounds with randomized augmentations.",
     "pdf": "assets/projects/synthetic-image-generation.pdf",
     "original_filename": "Synthetic Image Generation.pdf",
-    "impact": "Built an automated pipeline to generate high-quality synthetic images for object detection, addressing limited and imbalanced real-world training data.",
+    "impact": "Built an end-to-end synthetic image generation pipeline that composites real object crops onto diverse backgrounds with randomized augmentations, producing annotated training data that reduces dependency on costly manual data collection.",
     "bullets": [
-      "Uses real object crops and annotations to synthesise new training images.",
-      "Reduces dependency on manual data collection for detection datasets.",
-      "Improves model robustness by augmenting underrepresented classes."
+      "Extracts foreground object crops from existing annotated datasets using bounding box and mask information.",
+      "Composites crops onto varied background images with randomized scale, rotation, and position transformations.",
+      "Automatically generates YOLO/Pascal VOC-compatible annotation files alongside each synthetic image.",
+      "Targets underrepresented classes to balance dataset distributions for improved model generalization.",
+      "Validated improvements in downstream detection model performance on augmented versus original-only training sets."
     ],
-    "techs": ["Python", "Computer Vision", "Synthetic Data"],
+    "techs": [
+      "Python",
+      "Computer Vision",
+      "OpenCV",
+      "Data Augmentation"
+    ],
     "thumbnail": "assets/images/Synthetic Image Generation.png",
     "github": "https://github.com/aiyshwary/Synthetic_waste_image_generation",
     "featured": true
   },
   {
     "title": "Multi-Agent Architecture",
-    "summary": "Designed a multi-agent workflow with a planner, retriever, and synthesizer that coordinate tasks, call tools, and assemble final outputs for complex requests.",
+    "summary": "A production-grade agentic pipeline that combines LLM-driven planning with deterministic Python analytics to perform revenue analysis and churn prediction, featuring an Orchestrator-Executor-Reflection loop with memory management and Docker deployment.",
     "pdf": "assets/projects/multi-agent-architecture.pdf",
     "original_filename": "Multi-Agent Architecture.pdf",
-    "impact": "Coordinated specialized agents to improve reasoning, retrieval, and response quality in a modular pipeline.",
+    "impact": "Designed and implemented a multi-agent revenue and churn analysis system where an LLM Planner coordinates an Executor, Validator, and Reflection agent, keeping LLMs focused on reasoning while Python handles all numeric computation.",
     "bullets": [
-      "Planner delegates tasks and sequences steps.",
-      "Retriever gathers context; synthesizer produces final output."
+      "Planner emits an executable plan (list or graph of nodes) from a high-level task description.",
+      "Orchestrator runs each step via the Executor, applies deterministic validators, and uses Reflection to decide retry or replan actions.",
+      "Memory Manager persists short summaries and semantic snippets for context retrieval across long pipelines.",
+      "Outputs churn_report.json, per-client quarterly revenue CSVs, and HTML/PNG visualizations per run.",
+      "Fully containerized with Docker Compose; CI/CD via GitHub Actions with pytest unit test suite."
     ],
     "techs": [
       "Python",
+      "LLM",
       "Multi-Agent",
-      "RAG"
+      "Pandas",
+      "Docker",
+      "GitHub Actions"
     ],
     "thumbnail": "assets/images/multi-agent-architecture.svg",
     "github": "https://github.com/aiyshwary/multi-agent-revenue-churn",
     "featured": false
   },
   {
-    "title": "Video Rag Retrieval Project",
-    "summary": "● ● ● ● ○ 1⃣  One-line summary (start with this) “I built a Visual Retrieval-Augmented Generation (RAG) system that retrieves  relevant video scenes based on a user’s text prompt by combining vision  models and vector similarity search.” 2⃣  Problem statement (why this project) “Searching videos using text is hard because video content is unstructured. Traditional keyword search doesn’t understand what’s actually happening  inside a video.",
+    "title": "Video RAG Retrieval Project",
+    "summary": "A semantic video search system that extracts frames, generates scene captions using ViT-GPT2, and embeds them with SentenceTransformers and OpenCLIP into a dual FAISS index, enabling natural language queries to retrieve the most relevant video scenes with timestamps.",
     "pdf": "assets/projects/video-rag-retrieval-project.pdf",
     "original_filename": "Video RAG Retrieval Project.pdf",
-    "impact": "Built a Visual Retrieval-Augmented Generation (RAG) system to retrieve relevant video scenes from text prompts using vision encoders and vector similarity search.",
+    "impact": "Built a Visual RAG system that makes unstructured video content semantically searchable: a text query retrieves the most relevant scenes with timestamps by matching against dual text and image embedding indexes via cosine similarity.",
     "bullets": [
-      "Problem: searching unstructured video content with keywords is ineffective.",
-      "Approach: extract scene embeddings, index with vector search and integrate into a RAG pipeline for retrieval-augmented answers.",
-      "Result: accurate text-to-scene retrieval enabling scene-level search and downstream QA."
+      "Extracts frames at a configurable FPS and generates natural-language scene captions using ViT-GPT2 image captioning.",
+      "Computes text embeddings with SentenceTransformers (MiniLM) and image embeddings with OpenCLIP for dual-modality indexing.",
+      "Stores embeddings and metadata in two parallel FAISS indexes supporting independent text or image-based retrieval.",
+      "Query interface accepts a natural language string and returns top-k matching scenes with frame references and timestamps.",
+      "Modular architecture (preprocessing, embeddings, storage, retrieval) designed for extension to production vector databases."
     ],
     "techs": [
       "Python",
-      "Vector Search",
+      "FAISS",
+      "OpenCLIP",
+      "ViT-GPT2",
+      "Sentence Transformers",
       "RAG"
     ],
     "thumbnail": "assets/images/Video RAG Retrieval.png",
@@ -221,20 +288,24 @@
   },
   {
     "title": "Traffic Monitoring System",
-    "summary": "Real-time traffic monitoring system using computer vision to detect and track vehicles, analyse traffic flow, and support smart city infrastructure.",
+    "summary": "A PHP and SQL-based web application that supports traffic controllers with real-time violator tracking, periodic traffic status notifications, daily reports, and transport department recommendations for infrastructure improvements.",
     "pdf": "assets/projects/traffic-monitoring-system.pdf",
     "original_filename": "Traffic Monitoring System.pdf",
-    "impact": "Built a real-time traffic monitoring system using computer vision techniques for vehicle detection, tracking, and traffic flow analysis.",
+    "impact": "Developed a multi-role Traffic Monitoring System web application with separate portals for admins, officers, and citizens, enabling automated violator tracking, fine management, road signalling status, and daily traffic reporting.",
     "bullets": [
-      "Implemented real-time vehicle detection and counting using computer vision.",
-      "Developed traffic flow analysis to identify congestion patterns and peak-hour trends.",
-      "Designed modular pipeline for frame extraction, object detection, and result visualisation.",
-      "Applied tracking algorithms to maintain vehicle identity across consecutive frames."
+      "Admin portal manages user accounts, officer assignments, road data, and signalling configurations.",
+      "Officer portal logs violators, records fines, and updates real-time road and signal status.",
+      "Citizen portal supports account registration, violation history lookup, and online fine payment.",
+      "Automated daily reports summarize traffic violations and flag roads needing infrastructure attention.",
+      "Built with PHP, MySQL (XAMPP), JavaScript, and CSS with a responsive multi-role front-end."
     ],
     "techs": [
-      "Python",
-      "Computer Vision",
-      "Object Detection"
+      "PHP",
+      "MySQL",
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "XAMPP"
     ],
     "thumbnail": "assets/images/Traffic Monitoring System.png",
     "github": "https://github.com/aiyshwary/Traffic-Monitoring-System",
