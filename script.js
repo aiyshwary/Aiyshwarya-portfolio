@@ -156,14 +156,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         <div class="actions">
           <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
-          <button class="btn-ghost btn-details">Details</button>
-          <button class="btn btn-discuss">Discuss</button>
+          <button class="btn-ghost btn-discuss">Discuss</button>
           ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
         </div>
       `;
 
-      // details modal
-      card.querySelector('.btn-details').addEventListener('click', () => { location.hash = slug; openModal(p, tags, techs); });
+      // discuss button
       card.querySelector('.btn-discuss').addEventListener('click', () => { location.href = 'contact.html'; });
       grid.appendChild(card);
     });
