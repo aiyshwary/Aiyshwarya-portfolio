@@ -88,6 +88,11 @@ _COACHING_RE = re.compile(
 )
 
 
+def _normalize_ws(text: str) -> str:
+    """Collapse repeated whitespace to single spaces for clean alignment."""
+    return re.sub(r'\s+', ' ', text).strip()
+
+
 def _strip_emojis(text: str) -> str:
     """Remove emoji codepoints and keycap/variation-selector sequences."""
     text = _KEYCAP_RE.sub('', text)
@@ -162,6 +167,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         cleaned = _strip_emojis(raw.strip())
         # Remove leading isolated bullet/symbol chars
         cleaned = re.sub(r'^[●○■◆•►✔\-]\s+', '', cleaned).strip()
+        cleaned = _normalize_ws(cleaned)
 
         if not cleaned or len(cleaned) <= 2:
             # blank line → paragraph boundary
@@ -368,12 +374,12 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # OVERVIEW
     w.section_label("Overview")
-    w.text(project["summary"])
+    w.text(_normalize_ws(project["summary"]))
     w.gap()
 
     # IMPACT
     w.section_label("Impact")
-    w.text(project["impact"])
+    w.text(_normalize_ws(project["impact"]))
     w.gap()
 
     # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
@@ -392,7 +398,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
     # KEY DETAILS (structured bullets from projects.json)
     w.section_label("Key Details")
     for bullet in project.get("bullets", []):
-        w.bullet_card(bullet)
+        w.bullet_card(_normalize_ws(bullet))
 
     w.finish()
     print(f"  Generated: {out_path}")
@@ -417,11 +423,11 @@ if __name__ == "__main__":
             for it in items:
                 if isinstance(it, dict):
                     kind = (it.get("kind") or "body").strip().lower()
-                    text = (it.get("text") or "").strip()
+                    text = _normalize_ws(it.get("text") or "")
                     if text:
                         out.append((kind, text))
                 elif isinstance(it, str):
-                    text = it.strip()
+                    text = _normalize_ws(it)
                     if text:
                         out.append(("body", text))
             return out
