@@ -237,6 +237,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if buf:
                 merged.append(('body', ' '.join(buf)))
                 buf = []
+            merged.append(('para_break', ''))
         else:
             if buf:
                 merged.append(('body', ' '.join(buf)))
@@ -245,7 +246,27 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     if buf:
         merged.append(('body', ' '.join(buf)))
 
-    return merged
+    # Convert colon-ended lines into subsection headers and bulletize following lines.
+    post = []
+    list_mode = False
+    for kind, text in merged:
+        if kind == 'para_break':
+            list_mode = False
+            continue
+        if kind in ('section', 'subsection'):
+            list_mode = False
+            post.append((kind, text))
+            continue
+        if kind == 'body' and text.endswith(':'):
+            list_mode = True
+            post.append(('subsection', text.rstrip(':').strip()))
+            continue
+        if list_mode and kind == 'body':
+            post.append(('bullet', text))
+            continue
+        post.append((kind, text))
+
+    return post
 
 
 # ── Drawing utilities ─────────────────────────────────────────────────────────
