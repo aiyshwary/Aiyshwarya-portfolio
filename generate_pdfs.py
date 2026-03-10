@@ -18,6 +18,7 @@ from reportlab.lib.colors import HexColor
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib.utils import simpleSplit
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfgen import canvas
 
 # ── Colour palette ────────────────────────────────────────────────────────────
@@ -312,8 +313,9 @@ class Writer:
 
         _rrect(self.c, ML, self.y - block_h, CW, block_h, 4, C_CARD, stroke=True)
 
-        # Baseline for first line inside the card
-        first_line_y = self.y - pad_y - (S_BODY * 0.25)
+        # Baseline for first line using font metrics for consistent alignment
+        ascent = pdfmetrics.getAscent(F, S_BODY)
+        first_line_y = self.y - pad_y - (ascent * 0.1)
 
         # Dash prefix
         self.c.setFont(FB, S_BODY)
