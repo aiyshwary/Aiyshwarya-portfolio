@@ -284,7 +284,7 @@ class Writer:
         self.c.setStrokeColor(C_DIV)
         self.c.setLineWidth(0.5)
         self.c.line(ML, self.y, PW - MR, self.y)
-        self.y -= 0.38 * cm
+        self.y -= 0.55 * cm
 
     def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
