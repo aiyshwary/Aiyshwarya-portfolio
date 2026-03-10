@@ -305,17 +305,20 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     # Convert colon-ended lines into subsection headers and bulletize following lines.
     post = []
     list_mode = False
+    expect_body_after_heading = False
     i = 0
     while i < len(merged):
         kind, text = merged[i]
         if kind == 'body' and text in _SHORT_HEADINGS:
             list_mode = text in {"In short", "This makes it"}
             post.append(('subsection', text))
+            expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"}
             i += 1
             continue
         if kind == 'body' and _QUESTION_HDG_RE.match(text):
             list_mode = False
             post.append(('subsection', text))
+            expect_body_after_heading = True
             i += 1
             continue
         if kind == 'para_break':
@@ -353,17 +356,28 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'body' and _STEP_HDG.match(text):
             list_mode = False
             post.append(('subsection', text))
+            expect_body_after_heading = False
             i += 1
             continue
         if kind == 'body':
             m = _ROMAN_BULLET_RE.match(text)
             if m:
-                post.append(('bullet', m.group('txt').strip()))
+                roman_text = m.group('txt').strip()
+                if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
+                    list_mode = roman_text in {"In short", "This makes it"}
+                    post.append(('subsection', roman_text))
+                    expect_body_after_heading = roman_text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(roman_text)
+                elif expect_body_after_heading:
+                    post.append(('body', roman_text))
+                    expect_body_after_heading = False
+                else:
+                    post.append(('bullet', roman_text))
                 i += 1
                 continue
         if kind == 'body' and text.endswith(':'):
             list_mode = True
             post.append(('subsection', text.rstrip(':').strip()))
+            expect_body_after_heading = False
             i += 1
             continue
 
@@ -388,10 +402,12 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     if t2 in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(t2):
                         list_mode = t2 in {"In short", "This makes it"}
                         post.append(('subsection', t2))
+                        expect_body_after_heading = t2 in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(t2)
                         continue
                     if t2.endswith(':'):
                         list_mode = True
                         post.append(('subsection', t2.rstrip(':').strip()))
+                        expect_body_after_heading = False
                     else:
                         post.append(('bullet', t2))
                 i = j
@@ -403,11 +419,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 list_mode = False
                 post.append(('body', text))
                 post.append(('para_break', ''))
+                expect_body_after_heading = False
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
                 list_mode = text in {"In short", "This makes it"}
                 post.append(('subsection', text))
+                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(text)
                 i += 1
                 continue
             if (
@@ -425,6 +443,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'body' and (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
             post.append(('body', text))
             post.append(('para_break', ''))
+            expect_body_after_heading = False
             i += 1
             continue
 
