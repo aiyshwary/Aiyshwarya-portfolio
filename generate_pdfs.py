@@ -376,7 +376,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
     w.text(project["impact"])
     w.gap()
 
-    # FULL TECHNICAL WALKTHROUGH (sourced from original PDF, fully cleaned)
+    # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
     if source_items:
         w.section_label("Technical Walkthrough")
         for kind, content in source_items:
@@ -409,12 +409,32 @@ if __name__ == "__main__":
     os.makedirs(out_dir, exist_ok=True)
 
     print(f"Generating {len(projects)} comprehensive PDFs...\n")
+    def _coerce_walkthrough(project: dict, source_items: list) -> list:
+        """Return structured walkthrough items from projects.json if present."""
+        items = project.get("walkthrough")
+        if isinstance(items, list) and items:
+            out = []
+            for it in items:
+                if isinstance(it, dict):
+                    kind = (it.get("kind") or "body").strip().lower()
+                    text = (it.get("text") or "").strip()
+                    if text:
+                        out.append((kind, text))
+                elif isinstance(it, str):
+                    text = it.strip()
+                    if text:
+                        out.append(("body", text))
+            return out
+        return source_items
+
     for p in projects:
         if not p.get("pdf"):
             continue
         source_items = parse_source_pdf(p["title"], base_dir)
+        source_items = _coerce_walkthrough(p, source_items)
         n = len(source_items)
-        print(f"  [{p['title']}]  {n} walkthrough items from source PDF")
+        origin = "projects.json" if p.get("walkthrough") else "source PDF"
+        print(f"  [{p['title']}]  {n} walkthrough items from {origin}")
         out_path = os.path.join(base_dir, p["pdf"])
         generate_pdf(p, source_items, out_path)
 
