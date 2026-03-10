@@ -114,6 +114,8 @@ def _is_list_like_line(text: str) -> bool:
         return False
     if text.endswith(":"):
         return True
+    if _TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text):
+        return False
     if _NUMBERED_HDG.match(text) or _STEP_HDG.match(text):
         return False
     if _ENDS_SENT.search(text):
@@ -284,7 +286,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
-            if list_mode and kind == 'section' and not _STEP_HDG.match(text) and not _NUMBERED_HDG.match(text):
+            if (
+                list_mode
+                and kind == 'section'
+                and not _STEP_HDG.match(text)
+                and not _NUMBERED_HDG.match(text)
+                and not (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text))
+            ):
                 post.append(('bullet', text))
                 i += 1
                 continue
