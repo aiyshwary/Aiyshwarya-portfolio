@@ -77,6 +77,7 @@ _PAGE_HDR     = re.compile(
 )
 _ENDS_SENT    = re.compile(r'[.!?]$')
 _TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
+_STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
 
 _VARSEL_RE   = re.compile(r'[\uFE00-\uFE0F]')
@@ -257,12 +258,23 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             list_mode = False
             post.append((kind, text))
             continue
+        if kind == 'body' and _STEP_HDG.match(text):
+            list_mode = False
+            post.append(('subsection', text))
+            continue
         if kind == 'body' and text.endswith(':'):
             list_mode = True
             post.append(('subsection', text.rstrip(':').strip()))
             continue
         if list_mode and kind == 'body':
-            post.append(('bullet', text))
+            if (
+                _STEP_HDG.match(text)
+                or (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text))
+            ):
+                list_mode = False
+                post.append(('subsection', text))
+            else:
+                post.append(('bullet', text))
             continue
         post.append((kind, text))
 
