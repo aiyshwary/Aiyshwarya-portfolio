@@ -96,6 +96,21 @@ def _normalize_ws(text: str) -> str:
     return re.sub(r'\s+', ' ', text).strip()
 
 
+def _to_roman(n: int) -> str:
+    """Convert 1..3999 to lowercase roman numerals."""
+    vals = [
+        (1000, 'm'), (900, 'cm'), (500, 'd'), (400, 'cd'),
+        (100, 'c'), (90, 'xc'), (50, 'l'), (40, 'xl'),
+        (10, 'x'), (9, 'ix'), (5, 'v'), (4, 'iv'), (1, 'i')
+    ]
+    out = []
+    for v, s in vals:
+        while n >= v:
+            out.append(s)
+            n -= v
+    return ''.join(out)
+
+
 def _strip_emojis(text: str) -> str:
     """Remove emoji codepoints and keycap/variation-selector sequences."""
     text = _KEYCAP_RE.sub('', text)
@@ -538,7 +553,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 w.heading(content)
                 num = 1
             elif kind == 'bullet':
-                w.bullet_card(content, prefix=f"{num}.")
+                w.bullet_card(content, prefix=f"{_to_roman(num)})")
                 num += 1
             else:
                 w.text(content)
