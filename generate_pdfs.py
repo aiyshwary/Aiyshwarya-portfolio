@@ -287,7 +287,7 @@ class Writer:
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
         # Avoid orphaned section labels at the bottom of a page
-        min_block = 0.9 * cm + (LH * 2)
+        min_block = 0.9 * cm + (LH * 3)
         self._need(min_block)
         self.c.setFont(FB, S_SECTION)
         self.c.setFillColor(C_ACCENT)
@@ -312,6 +312,8 @@ class Writer:
 
     def heading(self, content: str):
         """Bold sub-heading inside the walkthrough section."""
+        # Keep heading with at least one line of following text
+        self._need(LH * 2)
         self.y -= 0.08 * cm
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
@@ -348,7 +350,8 @@ class Writer:
             text.textLine(line)
         self.c.drawText(text)
 
-        self.y -= block_h + 0.18 * cm
+        # Add a clearer gap after the card
+        self.y -= block_h + 0.28 * cm
 
     def gap(self, h: float = 0.4 * cm):
         self.y -= h
