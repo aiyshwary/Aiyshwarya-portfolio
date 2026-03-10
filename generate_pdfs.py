@@ -108,6 +108,22 @@ def _strip_emojis(text: str) -> str:
     return ''.join(out)
 
 
+def _is_list_like_line(text: str) -> bool:
+    """Heuristic for short list-like lines that should not be merged."""
+    if not text:
+        return False
+    if text.endswith(":"):
+        return True
+    if _NUMBERED_HDG.match(text) or _STEP_HDG.match(text):
+        return False
+    if _ENDS_SENT.search(text):
+        return False
+    words = text.split()
+    if len(words) <= 6 and len(text) <= 48:
+        return True
+    return False
+
+
 def _is_pure_marker(raw: str) -> bool:
     """True if a line consists entirely of emoji/symbol chars (section divider)."""
     stripped = raw.strip()
@@ -224,13 +240,14 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     buf = []
     for kind, text in items:
         if kind == 'body':
+            list_break = buf and (_is_list_like_line(buf[-1]) or _is_list_like_line(text))
             flush_now = (
                 buf
                 and _ENDS_SENT.search(buf[-1])
                 and text
                 and text[0].isupper()
             )
-            if flush_now:
+            if flush_now or list_break:
                 merged.append(('body', ' '.join(buf)))
                 buf = []
             buf.append(text)
