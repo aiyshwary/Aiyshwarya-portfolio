@@ -240,6 +240,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     buf = []
     for kind, text in items:
         if kind == 'body':
+            quote_break = buf and (text.startswith('"') or text.startswith('“') or buf[-1].startswith('"') or buf[-1].startswith('“'))
+            colon_break = buf and (buf[-1].endswith(':') or text.endswith(':'))
             list_break = buf and (_is_list_like_line(buf[-1]) or _is_list_like_line(text))
             flush_now = (
                 buf
@@ -247,7 +249,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and text
                 and text[0].isupper()
             )
-            if flush_now or list_break:
+            if flush_now or list_break or quote_break or colon_break:
                 merged.append(('body', ' '.join(buf)))
                 buf = []
             buf.append(text)
