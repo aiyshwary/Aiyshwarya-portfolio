@@ -85,6 +85,7 @@ _SHORT_HEADINGS = {
     "This makes it",
     "End-to-end pipeline explanation",
     "Configuration-driven setup",
+    "One-liner summary",
 }
 _QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
@@ -312,7 +313,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'body' and text in _SHORT_HEADINGS:
             list_mode = text in {"In short", "This makes it"}
             post.append(('subsection', text))
-            expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"}
+            expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"}
             i += 1
             continue
         if kind == 'body' and _QUESTION_HDG_RE.match(text):
@@ -335,6 +336,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
                 list_mode = text in {"In short", "This makes it"}
                 post.append(('subsection', text))
+                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"} or _QUESTION_HDG_RE.match(text)
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
@@ -426,7 +428,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
                 list_mode = text in {"In short", "This makes it"}
                 post.append(('subsection', text))
-                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(text)
+                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"} or _QUESTION_HDG_RE.match(text)
                 i += 1
                 continue
             if (
