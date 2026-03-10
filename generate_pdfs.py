@@ -387,32 +387,6 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
 
-        # Auto-bulletize runs of list-like lines even without a colon heading
-        if kind == 'body' and _is_list_like_line(text):
-            run = []
-            j = i
-            while j < len(merged):
-                k2, t2 = merged[j]
-                if k2 != 'body' or not _is_list_like_line(t2):
-                    break
-                run.append(t2)
-                j += 1
-            if len(run) >= 2:
-                for t2 in run:
-                    if t2 in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(t2):
-                        list_mode = t2 in {"In short", "This makes it"}
-                        post.append(('subsection', t2))
-                        expect_body_after_heading = t2 in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(t2)
-                        continue
-                    if t2.endswith(':'):
-                        list_mode = True
-                        post.append(('subsection', t2.rstrip(':').strip()))
-                        expect_body_after_heading = False
-                    else:
-                        post.append(('bullet', t2))
-                i = j
-                continue
-
         if list_mode and kind == 'body':
             # If a quoted line appears, treat it as body and end list mode
             if (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
