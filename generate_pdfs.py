@@ -302,20 +302,34 @@ class Writer:
 
     def bullet_card(self, content: str):
         """Draws content inside a rounded card with a dash prefix."""
-        inner_w = CW - 0.9 * cm
+        pad_x = 0.4 * cm
+        pad_y = 0.32 * cm
+        dash_w = 0.45 * cm
+        inner_w = CW - (pad_x * 2 + dash_w)
         lines = simpleSplit(content, F, S_BODY, inner_w)
-        block_h = len(lines) * LH + 0.5 * cm
+        block_h = len(lines) * LH + 2 * pad_y
         self._need(block_h + 0.2 * cm)
+
         _rrect(self.c, ML, self.y - block_h, CW, block_h, 4, C_CARD, stroke=True)
+
+        # Baseline for first line inside the card
+        first_line_y = self.y - pad_y - (S_BODY * 0.25)
+
+        # Dash prefix
         self.c.setFont(FB, S_BODY)
         self.c.setFillColor(C_ACCENT)
-        self.c.drawString(ML + 0.3 * cm, self.y - 0.25 * cm - LH + 4, "-")
-        self.c.setFont(F, S_BODY)
-        self.c.setFillColor(C_BODY)
-        ty = self.y - 0.25 * cm
+        self.c.drawString(ML + pad_x, first_line_y, "-")
+
+        # Text lines
+        text = self.c.beginText()
+        text.setTextOrigin(ML + pad_x + dash_w, first_line_y)
+        text.setFont(F, S_BODY)
+        text.setFillColor(C_BODY)
+        text.setLeading(LH)
         for line in lines:
-            self.c.drawString(ML + 0.9 * cm, ty, line)
-            ty -= LH
+            text.textLine(line)
+        self.c.drawText(text)
+
         self.y -= block_h + 0.18 * cm
 
     def gap(self, h: float = 0.4 * cm):
