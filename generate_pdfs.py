@@ -78,6 +78,15 @@ _PAGE_HDR     = re.compile(
 _ENDS_SENT    = re.compile(r'[.!?]$')
 _TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
 _STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
+_LIST_VERB_RE = re.compile(
+    r'^(Measures|Search|Prevent|Accept|Compute|Mark|Displays|Shows|Uses|Loads|'
+    r'Trains|Predicts|Applies|Builds|Creates|Removes|Encodes|Benchmarks|'
+    r'Implements|Tracks|Evaluates|Concludes|Generates|Normalizes|Splits|'
+    r'Handles|Supports|Validates|Calculates|Processes|Selects|Adds|Drops|'
+    r'Converts|Groups|Compares|Finds|Provides|Ensures|Updates|Locks|Assigns|'
+    r'Stores|Downloads|Extracts|High)\b',
+    re.IGNORECASE,
+)
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
 
 _VARSEL_RE   = re.compile(r'[\uFE00-\uFE0F]')
@@ -129,7 +138,7 @@ def _is_list_like_line(text: str) -> bool:
         return False
     if text.endswith(":"):
         return True
-    if _TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text):
+    if _TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text) and not _LIST_VERB_RE.match(text):
         return False
     if _NUMBERED_HDG.match(text) or _STEP_HDG.match(text):
         return False
@@ -236,6 +245,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             and _TITLE_HDG.match(cleaned)
             and len(cleaned.split()) <= 7
             and not _ENDS_SENT.search(cleaned)
+            and not _LIST_VERB_RE.match(cleaned)
         ):
             items.append(('section', cleaned))
             i += 1
@@ -306,7 +316,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and kind == 'section'
                 and not _STEP_HDG.match(text)
                 and not _NUMBERED_HDG.match(text)
-                and not (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text))
+                and not text.lower().endswith('module')
+                and 'centrality' not in text.lower()
             ):
                 post.append(('bullet', text))
                 i += 1
@@ -326,6 +337,12 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
 
+        if kind == 'bullet' and text.endswith(':'):
+            list_mode = True
+            post.append(('subsection', text.rstrip(':').strip()))
+            i += 1
+            continue
+
         # Auto-bulletize runs of list-like lines even without a colon heading
         if kind == 'body' and _is_list_like_line(text):
             run = []
@@ -338,7 +355,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 j += 1
             if len(run) >= 2:
                 for t2 in run:
-                    post.append(('bullet', t2))
+                    if t2.endswith(':'):
+                        list_mode = True
+                        post.append(('subsection', t2.rstrip(':').strip()))
+                    else:
+                        post.append(('bullet', t2))
                 i = j
                 continue
 
@@ -352,7 +373,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 continue
             if (
                 _STEP_HDG.match(text)
-                or (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text))
+                or (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text) and not _LIST_VERB_RE.match(text))
             ):
                 list_mode = False
                 post.append(('subsection', text))
