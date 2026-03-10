@@ -302,7 +302,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     break
                 run.append(t2)
                 j += 1
-            if len(run) >= 3:
+            if len(run) >= 2:
                 for t2 in run:
                     post.append(('bullet', t2))
                 i = j
@@ -313,6 +313,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
                 list_mode = False
                 post.append(('body', text))
+                post.append(('para_break', ''))
                 i += 1
                 continue
             if (
@@ -323,6 +324,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 post.append(('subsection', text))
             else:
                 post.append(('bullet', text))
+            i += 1
+            continue
+
+        # Standalone quoted lines should be isolated from neighboring text
+        if kind == 'body' and (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
+            post.append(('body', text))
+            post.append(('para_break', ''))
             i += 1
             continue
 
