@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const impact = cleanText(p.impact ? p.impact : brief);
 
       card.innerHTML = `
-        <img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback">
+        <div class="thumb-wrap"><img class="project-thumb" src="${thumb}" alt="${p.title} thumbnail" data-fallback="${fallbackThumb}" onerror="this.src=this.dataset.fallback"></div>
         <div class="card-head">
           <h4>${p.title} ${isFeatured?'<span class="badge-featured">Featured</span>':''}</h4>
           <div class="meta">${techHtml}</div>
