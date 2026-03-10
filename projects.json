@@ -310,5 +310,26 @@
     "thumbnail": "assets/images/Traffic Monitoring System.png",
     "github": "https://github.com/aiyshwary/Traffic-Monitoring-System",
     "featured": false
+  },
+  {
+    "title": "Bengaluru House Rent Prediction",
+    "summary": "A supervised machine learning project that predicts rental prices of houses in Bengaluru using structured property data, applying extensive feature engineering, multi-stage outlier removal, and benchmarking six regression models with and without PCA-based dimensionality reduction.",
+    "pdf": "assets/projects/bengaluru-house-rent-prediction.pdf",
+    "original_filename": "Bengaluru House Rent Prediction.pdf",
+    "impact": "Built and benchmarked six regression models on the Bengaluru House Data dataset, finding that Linear Regression with PCA achieved the highest accuracy and Decision Tree Regressor performed best without dimensionality reduction, providing a deployable price prediction pipeline.",
+    "bullets": [
+      "Loaded and cleaned the Bengaluru_House_Data.csv dataset: dropped irrelevant columns (area_type, society, balcony, availability) and removed null rows.",
+      "Engineered a BHK feature from the size column and normalized the total_sqft column by converting range values (e.g. 1120-1145) to their numeric average.",
+      "Created a price_per_sqft feature for outlier detection; removed properties with less than 300 sqft per BHK and applied per-location mean±std filtering.",
+      "Removed BHK outliers by comparing price_per_sqft of each BHK tier against the tier below within the same location; removed properties where bathrooms exceeded BHK count by more than two.",
+      "Encoded the location categorical feature using one-hot (dummy) encoding, grouping rare locations with fewer than 10 listings into an 'other' category to control dimensionality.",
+      "Benchmarked Decision Tree, Linear Regression, and KNN regressors without PCA; then applied PCA (4 components) with Bagging ensembles (90 estimators) for each model.",
+      "Applied RandomizedSearchCV with 5-fold cross-validation to tune Random Forest Regressor (200 estimators) across max_depth, max_features, max_leaf_nodes, and min_samples_leaf.",
+      "Key finding: Linear Regression with PCA achieved the highest overall accuracy; Decision Tree Regressor achieved the best accuracy among non-PCA models."
+    ],
+    "techs": ["Python", "scikit-learn", "Pandas", "NumPy", "PCA", "Random Forest"],
+    "thumbnail": "assets/images/Bengaluru-House-Rent-Prediction.png",
+    "github": "https://github.com/aiyshwary/Bengaluru-House-Rent-Prediction",
+    "featured": false
   }
 ]
