@@ -267,23 +267,52 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     # Convert colon-ended lines into subsection headers and bulletize following lines.
     post = []
     list_mode = False
-    for kind, text in merged:
+    i = 0
+    while i < len(merged):
+        kind, text = merged[i]
         if kind == 'para_break':
             list_mode = False
+            i += 1
             continue
         if kind in ('section', 'subsection'):
             list_mode = False
             post.append((kind, text))
+            i += 1
             continue
         if kind == 'body' and _STEP_HDG.match(text):
             list_mode = False
             post.append(('subsection', text))
+            i += 1
             continue
         if kind == 'body' and text.endswith(':'):
             list_mode = True
             post.append(('subsection', text.rstrip(':').strip()))
+            i += 1
             continue
+
+        # Auto-bulletize runs of list-like lines even without a colon heading
+        if kind == 'body' and _is_list_like_line(text):
+            run = []
+            j = i
+            while j < len(merged):
+                k2, t2 = merged[j]
+                if k2 != 'body' or not _is_list_like_line(t2):
+                    break
+                run.append(t2)
+                j += 1
+            if len(run) >= 3:
+                for t2 in run:
+                    post.append(('bullet', t2))
+                i = j
+                continue
+
         if list_mode and kind == 'body':
+            # If a quoted line appears, treat it as body and end list mode
+            if (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
+                list_mode = False
+                post.append(('body', text))
+                i += 1
+                continue
             if (
                 _STEP_HDG.match(text)
                 or (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text))
@@ -292,8 +321,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 post.append(('subsection', text))
             else:
                 post.append(('bullet', text))
+            i += 1
             continue
+
         post.append((kind, text))
+        i += 1
 
     return post
 
