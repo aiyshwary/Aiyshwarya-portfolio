@@ -76,6 +76,7 @@ _PAGE_HDR     = re.compile(
     re.IGNORECASE,
 )
 _ENDS_SENT    = re.compile(r'[.!?]$')
+_TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
 
 _VARSEL_RE   = re.compile(r'[\uFE00-\uFE0F]')
@@ -192,6 +193,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             heading = re.sub(r'^(\d+\.)+\s*', '', cleaned).strip()
             if heading:
                 items.append(('section', heading))
+            i += 1
+            continue
+
+        # Heuristic for short title-case headings from PDFs
+        if (
+            not is_bullet
+            and _TITLE_HDG.match(cleaned)
+            and len(cleaned.split()) <= 7
+            and not _ENDS_SENT.search(cleaned)
+        ):
+            items.append(('section', cleaned))
             i += 1
             continue
 
