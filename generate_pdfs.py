@@ -527,8 +527,9 @@ class Writer:
         """Draws content inside a rounded card with a prefix (dash or number)."""
         pad_x = 0.4 * cm
         pad_y = 0.32 * cm
-        dash_w = 0.45 * cm
-        inner_w = CW - (pad_x * 2 + dash_w)
+        prefix_w = self.c.stringWidth(prefix, FB, S_BODY)
+        gap_w = 0.2 * cm
+        inner_w = CW - (pad_x * 2 + prefix_w + gap_w)
         lines = simpleSplit(content, F, S_BODY, inner_w)
         block_h = len(lines) * LH + 2 * pad_y
         self._need(block_h + 0.2 * cm)
@@ -548,7 +549,7 @@ class Writer:
 
         # Text lines
         text = self.c.beginText()
-        text.setTextOrigin(ML + pad_x + dash_w, first_line_y)
+        text.setTextOrigin(ML + pad_x + prefix_w + gap_w, first_line_y)
         text.setFont(F, S_BODY)
         text.setFillColor(C_BODY)
         text.setLeading(LH)
