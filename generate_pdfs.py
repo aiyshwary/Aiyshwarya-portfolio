@@ -518,8 +518,8 @@ class Writer:
 
     def heading(self, content: str):
         """Bold sub-heading inside the walkthrough section."""
-        # Keep heading with at least one line of following text
-        self._need(LH * 2)
+        # Keep heading with at least two lines of following text
+        self._need(LH * 3)
         self.y -= 0.08 * cm
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
