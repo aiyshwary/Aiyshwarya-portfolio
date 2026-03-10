@@ -277,6 +277,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind in ('section', 'subsection'):
+            # If a section line ends with ':', treat it as a list heading
+            if text.endswith(':'):
+                list_mode = True
+                post.append(('subsection', text.rstrip(':').strip()))
+                i += 1
+                continue
+            # If currently in list mode, convert short section items into bullets
+            if list_mode and kind == 'section' and not _STEP_HDG.match(text) and not _NUMBERED_HDG.match(text):
+                post.append(('bullet', text))
+                i += 1
+                continue
             list_mode = False
             post.append((kind, text))
             i += 1
