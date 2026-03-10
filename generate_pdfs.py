@@ -274,7 +274,9 @@ class Writer:
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
-        self._need(0.9 * cm)
+        # Avoid orphaned section labels at the bottom of a page
+        min_block = 0.9 * cm + (LH * 2)
+        self._need(min_block)
         self.c.setFont(FB, S_SECTION)
         self.c.setFillColor(C_ACCENT)
         self.c.drawString(ML, self.y, label.upper())
@@ -313,9 +315,11 @@ class Writer:
 
         _rrect(self.c, ML, self.y - block_h, CW, block_h, 4, C_CARD, stroke=True)
 
-        # Baseline for first line using font metrics for consistent alignment
+        # Center the text block vertically within the card using font metrics
         ascent = pdfmetrics.getAscent(F, S_BODY)
-        first_line_y = self.y - pad_y - (ascent * 0.1)
+        descent = abs(pdfmetrics.getDescent(F, S_BODY))
+        text_block_h = (ascent + descent) + (len(lines) - 1) * LH
+        first_line_y = self.y - ((block_h - text_block_h) / 2) - ascent
 
         # Dash prefix
         self.c.setFont(FB, S_BODY)
