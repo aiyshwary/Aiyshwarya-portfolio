@@ -420,8 +420,8 @@ class Writer:
         self.y -= 0.08 * cm
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
-    def bullet_card(self, content: str):
-        """Draws content inside a rounded card with a dash prefix."""
+    def bullet_card(self, content: str, prefix: str = "-"):
+        """Draws content inside a rounded card with a prefix (dash or number)."""
         pad_x = 0.4 * cm
         pad_y = 0.32 * cm
         dash_w = 0.45 * cm
@@ -441,7 +441,7 @@ class Writer:
         # Dash prefix
         self.c.setFont(FB, S_BODY)
         self.c.setFillColor(C_ACCENT)
-        self.c.drawString(ML + pad_x, first_line_y, "-")
+        self.c.drawString(ML + pad_x, first_line_y, prefix)
 
         # Text lines
         text = self.c.beginText()
@@ -523,20 +523,25 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
     # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
     if source_items:
         w.section_label("Technical Walkthrough")
+        num = 1
         for kind, content in source_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
+                num = 1
             elif kind == 'bullet':
-                w.bullet_card(content)
+                w.bullet_card(content, prefix=f"{num}.")
+                num += 1
             else:
                 w.text(content)
         w.gap()
 
     # KEY DETAILS (structured bullets from projects.json)
     w.section_label("Key Details")
+    num = 1
     for bullet in project.get("bullets", []):
-        w.bullet_card(_normalize_ws(bullet))
+        w.bullet_card(_normalize_ws(bullet), prefix=f"{num}.")
+        num += 1
 
     w.finish()
     print(f"  Generated: {out_path}")
