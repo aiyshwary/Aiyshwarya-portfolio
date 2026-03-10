@@ -78,6 +78,15 @@ _PAGE_HDR     = re.compile(
 _ENDS_SENT    = re.compile(r'[.!?]$')
 _TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
 _STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
+_ROMAN_BULLET_RE = re.compile(r'^(?P<r>[ivxlcdm]+)\)\s*(?P<txt>.+)$', re.IGNORECASE)
+_SHORT_HEADINGS = {
+    "In short",
+    "Core idea",
+    "This makes it",
+    "End-to-end pipeline explanation",
+    "Configuration-driven setup",
+}
+_QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
     r'^(Measures|Search|Prevent|Accept|Compute|Mark|Displays|Shows|Uses|Loads|'
     r'Trains|Predicts|Applies|Builds|Creates|Removes|Encodes|Benchmarks|'
@@ -299,6 +308,16 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     i = 0
     while i < len(merged):
         kind, text = merged[i]
+        if kind == 'body' and text in _SHORT_HEADINGS:
+            list_mode = text in {"In short", "This makes it"}
+            post.append(('subsection', text))
+            i += 1
+            continue
+        if kind == 'body' and _QUESTION_HDG_RE.match(text):
+            list_mode = False
+            post.append(('subsection', text))
+            i += 1
+            continue
         if kind == 'para_break':
             list_mode = False
             i += 1
@@ -308,6 +327,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if text.endswith(':'):
                 list_mode = True
                 post.append(('subsection', text.rstrip(':').strip()))
+                i += 1
+                continue
+            if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
+                list_mode = text in {"In short", "This makes it"}
+                post.append(('subsection', text))
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
@@ -331,6 +355,12 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             post.append(('subsection', text))
             i += 1
             continue
+        if kind == 'body':
+            m = _ROMAN_BULLET_RE.match(text)
+            if m:
+                post.append(('bullet', m.group('txt').strip()))
+                i += 1
+                continue
         if kind == 'body' and text.endswith(':'):
             list_mode = True
             post.append(('subsection', text.rstrip(':').strip()))
@@ -355,6 +385,10 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 j += 1
             if len(run) >= 2:
                 for t2 in run:
+                    if t2 in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(t2):
+                        list_mode = t2 in {"In short", "This makes it"}
+                        post.append(('subsection', t2))
+                        continue
                     if t2.endswith(':'):
                         list_mode = True
                         post.append(('subsection', t2.rstrip(':').strip()))
@@ -369,6 +403,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 list_mode = False
                 post.append(('body', text))
                 post.append(('para_break', ''))
+                i += 1
+                continue
+            if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
+                list_mode = text in {"In short", "This makes it"}
+                post.append(('subsection', text))
                 i += 1
                 continue
             if (
