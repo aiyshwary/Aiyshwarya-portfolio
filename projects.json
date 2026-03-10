@@ -332,4 +332,41 @@
     "github": "https://github.com/aiyshwary/Bengaluru-House-Rent-Prediction",
     "featured": false
   }
+    ,
+    {
+      "title": "Flower Classification",
+      "summary": "An image classification project that identifies flower species using transfer learning and a compact CNN backbone.",
+      "pdf": "assets/projects/flower-classification.pdf",
+      "original_filename": "Flower Classification.pdf",
+      "impact": "Built a lightweight transfer-learning classifier with clean preprocessing and a reproducible training notebook suitable for deployment.",
+      "bullets": [
+        "Preprocessed a flowers image dataset with resizing, normalization, and train/validation splits.",
+        "Used transfer learning (MobileNetV2 backbone) with data augmentation to achieve stable validation accuracy.",
+        "Exported a small ONNX and Keras SavedModel for fast inference on CPU-constrained environments.",
+        "Included a notebook demonstrating end-to-end training, evaluation, and sample inference code for deployment.",
+        "Provided model-card style notes on dataset provenance, evaluation metrics, and limitations."
+      ],
+      "techs": ["Python", "TensorFlow", "Keras", "Transfer Learning", "CNN", "Jupyter"],
+      "thumbnail": "assets/images/flower classification project.png",
+      "github": "https://github.com/aiyshwary/Flower-Classification",
+      "featured": false
+    },
+    {
+      "title": "Real Estate Price Prediction",
+      "summary": "A regression pipeline to predict real estate prices using feature engineering, model benchmarking, and cross-validated evaluation.",
+      "pdf": "assets/projects/real-estate-price-prediction.pdf",
+      "original_filename": "Real Estate Price Prediction.pdf",
+      "impact": "Delivered a reproducible modeling pipeline with feature transformations and tuned regressors suitable for batch inference.",
+      "bullets": [
+        "Cleaned and engineered features (area conversions, categorical encoding, missing value strategies) from raw listings data.",
+        "Benchmarked linear models, Random Forest, and XGBoost with cross-validation and sensible evaluation metrics (RMSE, MAE).",
+        "Applied target transformation and feature selection to reduce skew and improve generalization.",
+        "Packaged preprocessing and model artifacts for simple batch inference with example scripts.",
+        "Documented hyperparameter search ranges and final model selection rationale in the project notebook."
+      ],
+      "techs": ["Python", "scikit-learn", "Pandas", "XGBoost", "Feature Engineering"],
+      "thumbnail": "assets/images/real-estate-price-prediction.png",
+      "github": "https://github.com/aiyshwary/real-estate-price-prediction",
+      "featured": false
+    }
 ]
