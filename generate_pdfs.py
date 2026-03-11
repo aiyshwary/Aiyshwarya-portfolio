@@ -387,6 +387,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     # Convert colon-ended lines into subsection headers and bulletize following lines.
     post = []
     list_mode = False
+    findings_mode = False  # True after "Key Findings" etc. – allows longer bullet items
     list_remaining = 0           # >0 for count-based lists ("has N items")
     expect_body_after_heading = False
     two_way_mode = False
@@ -481,6 +482,15 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 post.append((kind, text))
                 i += 1
                 continue
+            # Section heading introducing findings / conclusions
+            # (e.g. "Key Findings", "Key Takeaways")
+            if re.search(r'\bKey\s+(?:Findings|Takeaways|Results)\b', text, re.IGNORECASE):
+                list_mode = True
+                findings_mode = True
+                list_remaining = 0
+                post.append((kind, text))
+                i += 1
+                continue
             # Section line introducing a counted list (e.g. "The system has 5 main modules")
             m_count = re.search(r'\b(?:has|have|with|contains?)\s+(\d+)\s+', text, re.IGNORECASE)
             if m_count:
@@ -532,7 +542,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and not text.endswith('Centrality')  # real headings, e.g. "Closeness Centrality"
             ):
                 # Long section items (>=7 words) signal end of list → body
-                if len(text.split()) >= 7:
+                # (but not in findings_mode, where items can be longer)
+                if len(text.split()) >= 7 and not findings_mode:
                     list_mode = False
                     post.append(('body', text))
                 else:
@@ -544,6 +555,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             list_mode = False
+            findings_mode = False
             post.append((kind, text))
             i += 1
             continue
@@ -684,7 +696,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 # start with a label pattern like "Word (file.py):" or
                 # "ANN build (build_faiss.py):" are still list items even if long.
                 is_labeled = bool(re.match(r'^[A-Z][\w\s]{0,30}\(', text))
-                if len(text.split()) > 7 and not is_labeled:
+                if len(text.split()) > 7 and not is_labeled and not findings_mode:
                     list_mode = False
                     two_way_mode = False
                     post.append(('body', text))
