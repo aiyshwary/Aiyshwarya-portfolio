@@ -76,7 +76,7 @@ _PAGE_HDR     = re.compile(
     re.IGNORECASE,
 )
 _ENDS_SENT    = re.compile(r'[.!?]$')
-_TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:\u2013\u2014]{0,70}$')
+_TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
 _STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
 _ROMAN_BULLET_RE = re.compile(r'^(?P<r>[ivxlcdm]+)\)\s*(?P<txt>.+)$', re.IGNORECASE)
 _SHORT_HEADINGS = {
@@ -93,6 +93,9 @@ _SHORT_HEADINGS = {
     "Interactive demo",
     "Business logic",
     "What happens here",
+    "Fine-Tuning",
+    "Inference",
+    "Results",
 }
 _QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
@@ -304,6 +307,26 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
 
+        # Lines with em/en dashes surrounded by spaces (e.g. "System components — 30-second walk-through")
+        # Check if the part before the dash qualifies as a heading.
+        # Only match dashes with spaces around them (not compound words like "learning–based").
+        m_dash = re.search(r'\s[\u2013\u2014]\s', cleaned_no_paren)
+        if not is_bullet and m_dash:
+            before_dash = cleaned_no_paren[:m_dash.start()].strip()
+            total_words = len(cleaned_no_paren.split())
+            if (
+                before_dash
+                and _TITLE_HDG.match(before_dash)
+                and 2 <= len(before_dash.split()) <= 5
+                and total_words <= 8
+                and not _ENDS_SENT.search(before_dash)
+                and not _LIST_VERB_RE.match(before_dash)
+                and not _ENDS_SENT.search(cleaned_no_paren)
+            ):
+                items.append(('section', cleaned_no_paren))
+                i += 1
+                continue
+
         if is_bullet:
             items.append(('bullet', cleaned))
         else:
@@ -377,7 +400,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind == 'bullet' and (text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text)):
-            list_mode = text in {"In short", "This makes it", "Script", "What happens here"}
+            list_mode = text in {"In short", "This makes it", "Script", "What happens here", "Results"}
             post.append(('subsection', text))
             expect_body_after_heading = text in {
                 "Core idea",
@@ -387,11 +410,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 "Full automation",
                 "Step-by-step execution",
                 "Interactive demo",
+                "Fine-Tuning",
+                "Inference",
             } or _QUESTION_HDG_RE.match(text)
             i += 1
             continue
         if kind == 'body' and text in _SHORT_HEADINGS:
-            list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
+            list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here", "Results"}
             post.append(('subsection', text))
             expect_body_after_heading = text in {
                 "Core idea",
@@ -401,6 +426,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 "Full automation",
                 "Step-by-step execution",
                 "Interactive demo",
+                "Fine-Tuning",
+                "Inference",
             }
             if text == "Two ways to run the system":
                 two_way_mode = True
@@ -428,6 +455,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind in ('section', 'subsection'):
+            # If we're expecting body text after a heading (e.g. after "Fine-Tuning"),
+            # convert section-classified items into body unless they are recognized headings.
+            if expect_body_after_heading and text not in _SHORT_HEADINGS and not _QUESTION_HDG_RE.match(text) and not text.endswith(':') and not _STEP_HDG.match(text):
+                post.append(('body', text))
+                expect_body_after_heading = False
+                i += 1
+                continue
             # Section heading introducing a component walkthrough
             # (e.g. "System components — 30-second walk-through")
             if re.search(r'\bcomponents?\b', text, re.IGNORECASE) and re.search(r'walk-?through', text, re.IGNORECASE):
@@ -451,7 +485,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here", "Results"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
@@ -461,6 +495,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     "Full automation",
                     "Step-by-step execution",
                     "Interactive demo",
+                    "Fine-Tuning",
+                    "Inference",
                 } or _QUESTION_HDG_RE.match(text)
                 if text == "Two ways to run the system":
                     two_way_mode = True
@@ -484,11 +520,16 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and not text.lower().endswith('module')
                 and 'centrality' not in text.lower()
             ):
-                post.append(('bullet', text))
-                if list_remaining > 0:
-                    list_remaining -= 1
-                    if list_remaining == 0:
-                        list_mode = False
+                # Long section items (>=7 words) signal end of list → body
+                if len(text.split()) >= 7:
+                    list_mode = False
+                    post.append(('body', text))
+                else:
+                    post.append(('bullet', text))
+                    if list_remaining > 0:
+                        list_remaining -= 1
+                        if list_remaining == 0:
+                            list_mode = False
                 i += 1
                 continue
             list_mode = False
@@ -514,7 +555,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     i += 1
                     continue
                 if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
-                    list_mode = roman_text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
+                    list_mode = roman_text in {"In short", "This makes it", "Script", "Business logic", "What happens here", "Results"}
                     post.append(('subsection', roman_text))
                     expect_body_after_heading = roman_text in {
                         "Core idea",
@@ -524,6 +565,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                         "Full automation",
                         "Step-by-step execution",
                         "Interactive demo",
+                        "Fine-Tuning",
+                        "Inference",
                     } or _QUESTION_HDG_RE.match(roman_text)
                 elif expect_body_after_heading:
                     post.append(('body', roman_text))
@@ -597,7 +640,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here", "Results"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
@@ -607,6 +650,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     "Full automation",
                     "Step-by-step execution",
                     "Interactive demo",
+                    "Fine-Tuning",
+                    "Inference",
                 } or _QUESTION_HDG_RE.match(text)
                 if text == "Two ways to run the system":
                     two_way_mode = True
@@ -623,7 +668,16 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 two_way_mode = False
                 post.append(('subsection', text))
             else:
-                if two_way_mode and text in {"Full automation", "Step-by-step execution"}:
+                # Long lines (>7 words) likely signal the end of a list —
+                # treat as body and exit list mode.  Exception: lines that
+                # start with a label pattern like "Word (file.py):" or
+                # "ANN build (build_faiss.py):" are still list items even if long.
+                is_labeled = bool(re.match(r'^[A-Z][\w\s]{0,30}\(', text))
+                if len(text.split()) > 7 and not is_labeled:
+                    list_mode = False
+                    two_way_mode = False
+                    post.append(('body', text))
+                elif two_way_mode and text in {"Full automation", "Step-by-step execution"}:
                     post.append(('bullet', f"{two_way_count}) {text}"))
                     two_way_count += 1
                     expect_body_after_heading = True
