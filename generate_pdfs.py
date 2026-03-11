@@ -312,9 +312,19 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     post = []
     list_mode = False
     expect_body_after_heading = False
+    two_way_mode = False
+    two_way_count = 1
     i = 0
     while i < len(merged):
         kind, text = merged[i]
+        if two_way_mode and text in {"Full automation", "Step-by-step execution"}:
+            post.append(('bullet', f"{two_way_count}) {text}"))
+            two_way_count += 1
+            expect_body_after_heading = True
+            if two_way_count > 2:
+                two_way_mode = False
+            i += 1
+            continue
         if kind == 'bullet' and (text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text)):
             list_mode = text in {"In short", "This makes it", "Script"}
             post.append(('subsection', text))
@@ -341,6 +351,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 "Step-by-step execution",
                 "Interactive demo",
             }
+            if text == "Two ways to run the system":
+                two_way_mode = True
+                two_way_count = 1
+            else:
+                two_way_mode = False
             i += 1
             continue
         if kind == 'body' and _QUESTION_HDG_RE.match(text):
@@ -351,6 +366,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             continue
         if kind == 'para_break':
             list_mode = False
+            two_way_mode = False
             i += 1
             continue
         if kind in ('section', 'subsection'):
@@ -372,6 +388,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     "Step-by-step execution",
                     "Interactive demo",
                 } or _QUESTION_HDG_RE.match(text)
+                if text == "Two ways to run the system":
+                    two_way_mode = True
+                    two_way_count = 1
+                else:
+                    two_way_mode = False
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
@@ -392,6 +413,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             continue
         if kind == 'body' and _STEP_HDG.match(text):
             list_mode = False
+            two_way_mode = False
             post.append(('subsection', text))
             expect_body_after_heading = False
             i += 1
@@ -400,6 +422,12 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             m = _ROMAN_BULLET_RE.match(text)
             if m:
                 roman_text = m.group('txt').strip()
+                if two_way_mode and roman_text in {"Full automation", "Step-by-step execution"}:
+                    post.append(('bullet', f"{two_way_count}) {roman_text}"))
+                    two_way_count += 1
+                    expect_body_after_heading = True
+                    i += 1
+                    continue
                 if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
                     list_mode = roman_text in {"In short", "This makes it", "Script"}
                     post.append(('subsection', roman_text))
@@ -421,6 +449,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 continue
         if kind == 'body' and text.endswith(':'):
             list_mode = True
+            two_way_mode = False
             post.append(('subsection', text.rstrip(':').strip()))
             expect_body_after_heading = False
             i += 1
@@ -428,6 +457,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
 
         if kind == 'bullet' and text.endswith(':'):
             list_mode = True
+            two_way_mode = False
             post.append(('subsection', text.rstrip(':').strip()))
             i += 1
             continue
@@ -471,6 +501,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             # If a quoted line appears, treat it as body and end list mode
             if (text.startswith('"') or text.startswith('“')) and (text.endswith('"') or text.endswith('”')):
                 list_mode = False
+                two_way_mode = False
                 post.append(('body', text))
                 post.append(('para_break', ''))
                 expect_body_after_heading = False
@@ -488,6 +519,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     "Step-by-step execution",
                     "Interactive demo",
                 } or _QUESTION_HDG_RE.match(text)
+                if text == "Two ways to run the system":
+                    two_way_mode = True
+                    two_way_count = 1
+                else:
+                    two_way_mode = False
                 i += 1
                 continue
             if (
@@ -495,9 +531,15 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 or (_TITLE_HDG.match(text) and len(text.split()) <= 7 and not _ENDS_SENT.search(text) and not _LIST_VERB_RE.match(text))
             ):
                 list_mode = False
+                two_way_mode = False
                 post.append(('subsection', text))
             else:
-                post.append(('bullet', text))
+                if two_way_mode and text in {"Full automation", "Step-by-step execution"}:
+                    post.append(('bullet', f"{two_way_count}) {text}"))
+                    two_way_count += 1
+                    expect_body_after_heading = True
+                else:
+                    post.append(('bullet', text))
             i += 1
             continue
 
@@ -695,8 +737,12 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 w.heading(content)
                 num = 1
             elif kind == 'bullet':
-                w.bullet_card(content, prefix=f"{_to_roman(num)})")
-                num += 1
+                m = re.match(r'^(\d+\))\s+(.*)$', content)
+                if m:
+                    w.bullet_card(m.group(2), prefix=m.group(1))
+                else:
+                    w.bullet_card(content, prefix=f"{_to_roman(num)})")
+                    num += 1
             else:
                 w.text(content)
         w.gap()
