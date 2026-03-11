@@ -101,7 +101,7 @@ _LIST_VERB_RE = re.compile(
     r'Implements|Tracks|Evaluates|Concludes|Generates|Normalizes|Splits|'
     r'Handles|Supports|Validates|Calculates|Processes|Selects|Adds|Drops|'
     r'Converts|Groups|Compares|Finds|Provides|Ensures|Updates|Locks|Assigns|'
-    r'Stores|Downloads|Extracts|High)\b',
+    r'Stores|Downloads|Extracts)\b',
     re.IGNORECASE,
 )
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
@@ -111,6 +111,7 @@ _SYMBOL_ONLY = set('●○■◆•►✔→←—')
 _COACHING_RE = re.compile(
     r'start with this|start here|very important.*interview|for interviewers|'
     r'this is a great interview|only if interviewer|explain this step-by-step|'
+    r'explain this in steps|'
     r'you can even draw|you can add:|example you can say|gold for interviews|'
     r'short version\s*\(|30.second answer|verbally:',
     re.IGNORECASE,
