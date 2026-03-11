@@ -473,6 +473,14 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 post.append((kind, text))
                 i += 1
                 continue
+            # Section heading introducing a tech/concept list
+            # (e.g. "Technologies & Concepts Used")
+            if re.search(r'\b(?:Technologies|Tech Stack|Concepts?\s+Used)\b', text, re.IGNORECASE):
+                list_mode = True
+                list_remaining = 0
+                post.append((kind, text))
+                i += 1
+                continue
             # Section line introducing a counted list (e.g. "The system has 5 main modules")
             m_count = re.search(r'\b(?:has|have|with|contains?)\s+(\d+)\s+', text, re.IGNORECASE)
             if m_count:
@@ -521,7 +529,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and kind == 'section'
                 and not _NUMBERED_HDG.match(text)
                 and not text.lower().endswith('module')
-                and 'centrality' not in text.lower()
+                and not text.endswith('Centrality')  # real headings, e.g. "Closeness Centrality"
             ):
                 # Long section items (>=7 words) signal end of list → body
                 if len(text.split()) >= 7:
