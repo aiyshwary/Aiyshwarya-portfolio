@@ -619,7 +619,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             expect_body_after_heading = False
             i += 1
             continue
-
+        # Standalone filenames (e.g. "Correcting_matching.py") → bullet
+        if kind == 'body' and re.match(r'^[\w\-\.]+\.\w{1,4}$', text) and not _ENDS_SENT.search(text):
+            post.append(('bullet', text))
+            i += 1
+            continue
         post.append((kind, text))
         i += 1
 
