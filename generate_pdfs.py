@@ -428,6 +428,14 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind in ('section', 'subsection'):
+            # Section heading introducing a component walkthrough
+            # (e.g. "System components — 30-second walk-through")
+            if re.search(r'\bcomponents?\b', text, re.IGNORECASE) and re.search(r'walk-?through', text, re.IGNORECASE):
+                list_mode = True
+                list_remaining = 0
+                post.append((kind, text))
+                i += 1
+                continue
             # Section line introducing a counted list (e.g. "The system has 5 main modules")
             m_count = re.search(r'\b(?:has|have|with|contains?)\s+(\d+)\s+', text, re.IGNORECASE)
             if m_count:
