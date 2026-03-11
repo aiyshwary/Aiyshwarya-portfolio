@@ -345,7 +345,10 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'body':
             quote_break = buf and (text.startswith('"') or text.startswith('“') or buf[-1].startswith('"') or buf[-1].startswith('“'))
             colon_break = buf and (buf[-1].endswith(':') or text.endswith(':'))
-            list_break = buf and (_is_list_like_line(buf[-1]) or _is_list_like_line(text))
+            list_break = buf and (
+                _is_list_like_line(buf[-1])
+                or (_is_list_like_line(text) and text[:1].isupper())
+            )
             flush_now = (
                 buf
                 and _ENDS_SENT.search(buf[-1])
