@@ -91,6 +91,7 @@ _SHORT_HEADINGS = {
     "Full automation",
     "Step-by-step execution",
     "Interactive demo",
+    "Business logic",
 }
 _QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
