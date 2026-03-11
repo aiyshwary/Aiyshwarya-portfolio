@@ -971,7 +971,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
             elif kind == 'body':
                 # A body line (e.g. "The system has 5 main modules") resets step context
                 under_step = False
-                w.text(content)
+                w.text(content, indent=0.4 * cm)
             elif kind == 'bullet':
                 m = re.match(r'^(\d+\))\s+(.*)$', content)
                 if m:
