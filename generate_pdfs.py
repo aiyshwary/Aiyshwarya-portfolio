@@ -832,6 +832,10 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         title_text = project.get("title", "").strip()
 
         filtered_items = []
+        # Structural labels already rendered by the PDF template
+        _STRUCT_LABELS = {"OVERVIEW", "IMPACT", "TECHNICAL WALKTHROUGH", "KEY DETAILS",
+                          "Overview", "Impact", "Technical Walkthrough", "Key Details"}
+        tech_names = {t.strip() for t in project.get("techs", [])}
         for k, t in source_items:
             t_norm = _normalize_ws(t)
             if t_norm in skip_texts:
@@ -839,6 +843,12 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
             if t_norm == title_text:
                 continue
             if github_url and t_norm == github_url:
+                continue
+            # Skip structural section labels that the template already renders
+            if t_norm in _STRUCT_LABELS:
+                continue
+            # Skip tech pill names echoed from the source PDF header
+            if t_norm in tech_names:
                 continue
             # Skip lines that are part of the already-shown summary or impact
             if len(t_norm) > 30 and (t_norm in summary_norm or t_norm in impact_norm):
