@@ -202,6 +202,21 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     for page in reader.pages:
         raw_lines.extend((page.extract_text() or '').split('\n'))
 
+    # Deduplicate: remove consecutive or repeated blocks that PDF extraction
+    # sometimes produces (e.g. overlapping text layers in the source PDF).
+    seen = set()
+    deduped = []
+    for line in raw_lines:
+        key = line.strip()
+        if not key:
+            deduped.append(line)          # keep blank lines for paragraph breaks
+            continue
+        if key in seen:
+            continue                       # skip exact duplicate lines
+        seen.add(key)
+        deduped.append(line)
+    raw_lines = deduped
+
     items = []
     i = 0
     while i < len(raw_lines):
@@ -228,6 +243,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         cleaned = _strip_emojis(raw.strip())
         # Remove leading isolated bullet/symbol chars
         cleaned = re.sub(r'^[●○■◆•►✔\-]\s+', '', cleaned).strip()
+        if title == "Bus Reservation And Ticketing System":
+            cleaned = re.sub(r'^(?:[ivxlcdm]+\))\s*', '', cleaned, flags=re.IGNORECASE)
         cleaned = _normalize_ws(cleaned)
 
         if not cleaned or len(cleaned) <= 2:
@@ -555,6 +572,47 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         post.append((kind, text))
         i += 1
 
+    # Project-specific cleanup: keep fare formula under Business logic as equation text.
+    if title == "Bus Reservation And Ticketing System":
+        normalized = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+            normalized.append((kind, text))
+            if kind == 'subsection' and text == 'Business logic':
+                j = i + 1
+                business_bullets = []
+                while j < len(post) and post[j][0] == 'bullet':
+                    business_bullets.append(post[j][1].strip())
+                    j += 1
+
+                # Combine any split fare-formula bullets into one equation
+                if len(business_bullets) >= 3:
+                    b1, b2, b3 = business_bullets[0], business_bullets[1], business_bullets[2]
+                    if b1.startswith('Total Fare =') and b2.startswith('(') and b3.startswith('+'):
+                        eq = f"{b1} {b2} {b3}".replace('fare \u2013 20%', 'fare \u00d7 0.80').replace('fare - 20%', 'fare \u00d7 0.80')
+                        normalized.append(('equation', eq))
+                        i = j
+                        continue
+
+                if len(business_bullets) >= 2:
+                    b1, b2 = business_bullets[0], business_bullets[1]
+                    if b1.startswith('Total Fare =') and b2.startswith('+'):
+                        eq = f"{b1} {b2}".replace('fare \u2013 20%', 'fare \u00d7 0.80').replace('fare - 20%', 'fare \u00d7 0.80')
+                        normalized.append(('equation', eq))
+                        i = j
+                        continue
+
+                if len(business_bullets) >= 1:
+                    b1 = business_bullets[0]
+                    if b1.startswith('Total Fare ='):
+                        eq = b1.replace('fare \u2013 20%', 'fare \u00d7 0.80').replace('fare - 20%', 'fare \u00d7 0.80')
+                        normalized.append(('equation', eq))
+                        i = j
+                        continue
+            i += 1
+        post = normalized
+
     return post
 
 
@@ -664,6 +722,14 @@ class Writer:
         # Add a clearer gap after the card
         self.y -= block_h + 0.5 * cm
 
+    def equation(self, content: str):
+        """Draw an equation without wrapping, using a smaller font if needed."""
+        self._need(LH)
+        self.c.setFont(F, 8)  # Use 8pt font for equations
+        self.c.setFillColor(C_BODY)
+        self.c.drawString(ML + 0.45 * cm, self.y, content)
+        self.y -= LH
+
     def gap(self, h: float = 0.4 * cm):
         self.y -= h
 
@@ -730,9 +796,34 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
     if source_items:
+        # Remove walkthrough items that duplicate the Key Details bullets,
+        # the overview/impact text, or the project title/github URL.
+        key_bullets = {_normalize_ws(b) for b in project.get("bullets", [])}
+        skip_texts = set(key_bullets)
+        # Also skip lines that are substrings of the summary/impact
+        summary_norm = _normalize_ws(project.get("summary", ""))
+        impact_norm = _normalize_ws(project.get("impact", ""))
+        github_url = (project.get("github") or "").strip()
+        title_text = project.get("title", "").strip()
+
+        filtered_items = []
+        for k, t in source_items:
+            t_norm = _normalize_ws(t)
+            if t_norm in skip_texts:
+                continue
+            if t_norm == title_text:
+                continue
+            if github_url and t_norm == github_url:
+                continue
+            # Skip lines that are part of the already-shown summary or impact
+            if len(t_norm) > 30 and (t_norm in summary_norm or t_norm in impact_norm):
+                continue
+            filtered_items.append((k, t))
+
         w.section_label("Technical Walkthrough")
         num = 1
-        for kind, content in source_items:
+        use_dash_bullets = project.get("title") == "Bus Reservation And Ticketing System"
+        for kind, content in filtered_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
@@ -742,8 +833,14 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 if m:
                     w.bullet_card(m.group(2), prefix=m.group(1))
                 else:
-                    w.bullet_card(content, prefix=f"{_to_roman(num)})")
+                    if use_dash_bullets:
+                        w.bullet_card(content, prefix="-")
+                    else:
+                        w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
+            elif kind == 'equation':
+                # Draw equations without wrapping
+                w.equation(content)
             else:
                 w.text(content)
         w.gap()
