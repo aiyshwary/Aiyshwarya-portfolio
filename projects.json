@@ -10,7 +10,10 @@
       "Generates image crops, normalizes labels, and creates masks for each labeled region.",
       "Uses DeepImageSearch (GPU-accelerated) to identify the most visually similar labeled images for each new image.",
       "Transfers and corrects annotations from matched images, then exports back to CVAT-compatible JSON.",
-      "Includes normalized and denormalized visualization scripts and an interactive Jupyter demo notebook."
+      "Includes normalized and denormalized visualization scripts and an interactive Jupyter demo notebook.",
+      "Uses VGG19 as the feature extraction backbone with FAISS indexing for similarity search; supports incremental indexing so previously indexed images are not re-processed.",
+      "Annotation transfer selects the best match per crop by minimum cosine distance, replacing class and attribute tokens while preserving original polygon coordinates.",
+      "Automates CVAT task creation via REST API — programmatically creates cloud storage connections, generates S3-compatible JSONL manifests with per-image checksums, and uploads Datumaro ZIP annotations."
     ],
     "techs": [
       "Python",
@@ -33,7 +36,10 @@
       "Implements user authentication, seat selection, and multi-passenger booking in a single session.",
       "Handles billing logic including discount tiers for different passenger categories.",
       "Uses structured in-memory data storage for transaction tracking without a database dependency.",
-      "Validates all inputs to prevent double-booking and illegal seat selections."
+      "Validates all inputs to prevent double-booking and illegal seat selections.",
+      "Supports 5 Mindanao route destinations with preset fares and 20 seats each; applies a flat 20% discount for PWD, Student, and Senior Citizen passengers.",
+      "Offers a 5-option console menu: Destination (view routes and live seat counts), Passengers (book), Billing (payment with change), View (search and receipt), and Exit.",
+      "Enforces a 3-attempt login lockout; uses three parallel 2D arrays to store passenger name/destination/status, counts, and fare data."
     ],
     "techs": [
       "Java",
@@ -55,7 +61,10 @@
       "CNN with data augmentation and stratified cross-validation achieved approximately 75.5% validation accuracy.",
       "Random Forest reduced overfitting vs Decision Tree, achieving approximately 89.2% on ICML dataset.",
       "SVM with PCA preprocessing achieved approximately 55% accuracy — lowest among all models on high-dimensional pixel data.",
-      "Concluded CNNs are best suited for FER due to hierarchical spatial feature extraction."
+      "Concluded CNNs are best suited for FER due to hierarchical spatial feature extraction.",
+      "CNN architecture: 4 convolutional blocks (64-128-256-512 filters) with BatchNormalization, He Normal initialization, Dropout (0.25-0.6), and Dense(512) to Dense(7, softmax) head totaling ~7.1M parameters.",
+      "Input images are 48x48 grayscale pixels normalized to [0,1]; augmentation via Keras ImageDataGenerator with rotation (15 degrees), width/height shift, shear, zoom (0.15), and horizontal flip.",
+      "Training used Adam optimizer with EarlyStopping (patience=11), ReduceLROnPlateau (factor=0.5, patience=7, min_lr=1e-5), and 10-fold stratified cross-validation with batch size 32."
     ],
     "techs": [
       "Python",
@@ -80,7 +89,10 @@
       "Detects document language using FastText (LID176) across Tamil, Hindi, Telugu, Kannada, Bengali and more.",
       "Applies SimHash near-duplicate detection and token-aware chunking with sentence-based splitting.",
       "Generates multilingual embeddings using Sentence Transformers and indexes them in FAISS IVF-PQ.",
-      "Hybrid BM25 and ANN retrieval with document-level score aggregation and best-snippet selection per result."
+      "Hybrid BM25 and ANN retrieval with document-level score aggregation and best-snippet selection per result.",
+      "Embeds with paraphrase-multilingual-MiniLM-L12-v2 (L2-normalized, batch 256) and queries FAISS at nprobe=16; final document score is 0.5 x max(BM25) + 0.5 x max(ANN) with reciprocal-rank ANN scoring.",
+      "Falls back to Lingua library when FastText confidence drops below 0.60, and normalizes ISO-639-1 codes to ISO-639-3 across the entire pipeline for consistent language filtering.",
+      "Parallelizes ingestion via ProcessPoolExecutor with (cpu_count - 2) workers and runs BM25 and FAISS searches concurrently in separate threads before union."
     ],
     "techs": [
       "Python",
@@ -105,7 +117,9 @@
       "Inference operator loads the ONNX model and outputs a prediction DataFrame with classified labels.",
       "Supports ResNet, AlexNet, VGGNet, SqueezeNet, DenseNet, and Inception architectures.",
       "Compatible with both CPU and GPU (CUDA) environments via configurable conda environment.",
-      "Installed as a JAR extension in RapidMiner Studio with Python Scripting backend."
+      "Installed as a JAR extension in RapidMiner Studio with Python Scripting backend.",
+      "Inference operator requires four inputs: the ONNX model path, image path, class-label text file, and result directory — organizing classified output images alongside the prediction DataFrame.",
+      "Depends on Custom Operators (>=1.1.0) and Python Scripting (>=10.0.1) marketplace extensions with a pinned conda environment (Python 3.10.8, ONNX 1.15.0, ONNX Runtime 1.15.1)."
     ],
     "techs": [
       "Python",
@@ -129,7 +143,10 @@
       "Computed degree, betweenness, closeness, and eigenvector centrality to rank individuals by transmission risk.",
       "Identified superspreader nodes whose removal would most disrupt disease propagation chains.",
       "Visualized network topology and centrality distributions to communicate findings clearly.",
-      "Results provide evidence-based recommendations for targeted wildlife intervention strategies."
+      "Results provide evidence-based recommendations for targeted wildlife intervention strategies.",
+      "Analyzed a dense 24-node, 226-edge proximity graph (~82% density) derived from 1,997 weighted temporal contact records.",
+      "Computed clustering coefficients and aggregated per-node contact strength (total edge weight) to quantify interaction intensity — node 4 had the highest total contact weight (956,341).",
+      "Rendered the network using Kamada-Kawai force-directed layout (Matplotlib) to reveal spatial clustering patterns in the proximity data."
     ],
     "techs": [
       "Python",
@@ -153,7 +170,9 @@
       "ObjectDetectionModelInference runs predictions on new images and returns bounding boxes and class labels as a DataFrame.",
       "Supports five architectures: Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet for varying speed-accuracy trade-offs.",
       "Configurable for CPU-only and GPU (CUDA cu118) environments; installed as a JAR extension in RapidMiner Studio.",
-      "Enables domain-specific object detection with minimal ML expertise using a drag-and-drop process designer."
+      "Enables domain-specific object detection with minimal ML expertise using a drag-and-drop process designer.",
+      "Inference operator can optionally save annotated images with overlaid prediction bounding boxes via Matplotlib, in addition to the DataFrame output.",
+      "Uses chardet for automatic annotation-file encoding detection, ensuring robust parsing of YOLO/Pascal VOC label files across different systems and locales."
     ],
     "techs": [
       "Python",
@@ -224,7 +243,10 @@
       "Composites crops onto varied background images with randomized scale, rotation, and position transformations.",
       "Automatically generates YOLO/Pascal VOC-compatible annotation files alongside each synthetic image.",
       "Targets underrepresented classes to balance dataset distributions for improved model generalization.",
-      "Validated improvements in downstream detection model performance on augmented versus original-only training sets."
+      "Validated improvements in downstream detection model performance on augmented versus original-only training sets.",
+      "Uses Ultralytics auto_annotate with a custom YOLO detection model and SAM2 for automatic polygon-level instance segmentation labels.",
+      "Implements three synthesis strategies: CropScatterSynth (up to 30 objects/image), ClusteredSyntheticGen (40,000 instances/class target), and SyntheticPhaseGen (three-phase YAML-configurable generation) with multithreaded generation.",
+      "Dockerized on nvidia/cuda:12.2.0 with full 9-step bash pipeline: S3 download, annotation conversion, auto-annotation, crop extraction, synthetic generation, and visualization."
     ],
     "techs": [
       "Python",
@@ -247,7 +269,10 @@
       "Orchestrator runs each step via the Executor, applies deterministic validators, and uses Reflection to decide retry or replan actions.",
       "Memory Manager persists short summaries and semantic snippets for context retrieval across long pipelines.",
       "Outputs churn_report.json, per-client quarterly revenue CSVs, and HTML/PNG visualizations per run.",
-      "Fully containerized with Docker Compose; CI/CD via GitHub Actions with pytest unit test suite."
+      "Fully containerized with Docker Compose; CI/CD via GitHub Actions with pytest unit test suite.",
+      "GraphRunner resolves step dependencies as a DAG and executes ready nodes in parallel via ThreadPoolExecutor, with per-step CircuitBreaker and SHA-256 idempotency keys to prevent duplicate execution.",
+      "SemanticMemory uses a dependency-free in-memory cosine-similarity index with deterministic MD5/SHA-256 token hashing for fully reproducible tests; long-term memory uses zlib compression and persists to JSON.",
+      "LLMClient supports both a mock provider (deterministic stubs for offline testing) and OpenAI provider (gpt-3.5-turbo); TokenEstimator enforces budgets before every call. Visualizations generated with Matplotlib (PNG) and Plotly (interactive HTML)."
     ],
     "techs": [
       "Python",
@@ -272,7 +297,9 @@
       "Computes text embeddings with SentenceTransformers (MiniLM) and image embeddings with OpenCLIP for dual-modality indexing.",
       "Stores embeddings and metadata in two parallel FAISS indexes supporting independent text or image-based retrieval.",
       "Query interface accepts a natural language string and returns top-k matching scenes with frame references and timestamps.",
-      "Modular architecture (preprocessing, embeddings, storage, retrieval) designed for extension to production vector databases."
+      "Modular architecture (preprocessing, embeddings, storage, retrieval) designed for extension to production vector databases.",
+      "FAISS indexes use IndexFlatIP with L2-normalized vectors for cosine-similarity search; OpenCLIP defaults to ViT-g-14 pretrained on LAION-2B with automatic GPU/CPU selection.",
+      "Includes a pytest suite and a self-contained demo that synthesizes a 30-frame test video with OpenCV to run the full index-and-query pipeline without needing a real video file."
     ],
     "techs": [
       "Python",
@@ -297,7 +324,9 @@
       "Officer portal logs violators, records fines, and updates real-time road and signal status.",
       "Citizen portal supports account registration, violation history lookup, and online fine payment.",
       "Automated daily reports summarize traffic violations and flag roads needing infrastructure attention.",
-      "Built with PHP, MySQL (XAMPP), JavaScript, and CSS with a responsive multi-role front-end."
+      "Built with PHP, MySQL (XAMPP), JavaScript, and CSS with a responsive multi-role front-end.",
+      "Uses PHP session-based authentication with separate login handlers for citizens and officers, each querying its own MySQL table.",
+      "MySQL database backs five core tables (citizen, officer, fine, road, signalling); citizen signup automatically inserts a linked fine record by username and Vehicle ID."
     ],
     "techs": [
       "PHP",
@@ -325,7 +354,10 @@
       "Encoded the location categorical feature using one-hot (dummy) encoding, grouping rare locations with fewer than 10 listings into an 'other' category to control dimensionality.",
       "Benchmarked Decision Tree, Linear Regression, and KNN regressors without PCA; then applied PCA (4 components) with Bagging ensembles (90 estimators) for each model.",
       "Applied RandomizedSearchCV with 5-fold cross-validation to tune Random Forest Regressor (200 estimators) across max_depth, max_features, max_leaf_nodes, and min_samples_leaf.",
-      "Key finding: Linear Regression with PCA achieved the highest overall accuracy; Decision Tree Regressor achieved the best accuracy among non-PCA models."
+      "Key finding: Linear Regression with PCA achieved the highest overall accuracy; Decision Tree Regressor achieved the best accuracy among non-PCA models.",
+      "Grouped rare locations appearing 10 or fewer times into an 'other' category, reducing unique locations from 1,293 to 242 before one-hot encoding.",
+      "Removed bathroom outliers where bathrooms exceed BHK count by more than 2; final cleaned dataset contained 7,266 rows.",
+      "Visualized 2-BHK vs 3-BHK price scatter plots per location and price-per-sqft histograms with Matplotlib to verify outlier-removal effectiveness."
     ],
     "techs": ["Python", "scikit-learn", "Pandas", "NumPy", "PCA", "Random Forest"],
     "thumbnail": "assets/images/Bengaluru-House-Rent-Prediction.png",
@@ -343,7 +375,9 @@
       "Preprocessed images by resizing and normalizing pixel values, then created train/validation splits for model evaluation.",
       "Implemented a custom CNN architecture in TensorFlow/Keras for 5-class image classification.",
       "Tracked training/validation accuracy and loss across epochs and visualized results with Matplotlib/Seaborn.",
-      "Packaged the workflow into a reproducible Jupyter Notebook for easy experimentation and iteration."
+      "Packaged the workflow into a reproducible Jupyter Notebook for easy experimentation and iteration.",
+      "Uses OpenCV for image loading/processing and scikit-learn for train/test splitting alongside TensorFlow/Keras for model building.",
+      "Serializes processed image data to a data.pickle file so subsequent runs skip re-reading raw images from disk."
     ],
     "walkthrough": [
       {"kind": "section", "text": "Dataset & Setup"},
@@ -381,7 +415,9 @@
       "Trained Linear Regression, KNN Regressor, Decision Tree, Random Forest, AdaBoost, and Gradient Boosting models.",
       "Compared model performance using $R^2$ and MSE to select the best-performing regressor.",
       "Applied bagging/boosting strategies and hyperparameter tuning to improve predictive accuracy.",
-      "Documented the workflow in a Jupyter Notebook and included presentation slides for project reporting."
+      "Documented the workflow in a Jupyter Notebook and included presentation slides for project reporting.",
+      "Explicitly excludes logistic regression from the model comparison, noting it is a classification algorithm unsuitable for continuous price prediction.",
+      "Includes a PowerPoint slide deck alongside the notebook for presentation-ready project documentation."
     ],
     "walkthrough": [
       {"kind": "section", "text": "Project Contents"},
