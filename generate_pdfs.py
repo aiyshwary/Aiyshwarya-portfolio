@@ -76,7 +76,7 @@ _PAGE_HDR     = re.compile(
     re.IGNORECASE,
 )
 _ENDS_SENT    = re.compile(r'[.!?]$')
-_TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
+_TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:\u2013\u2014]{0,70}$')
 _STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
 _ROMAN_BULLET_RE = re.compile(r'^(?P<r>[ivxlcdm]+)\)\s*(?P<txt>.+)$', re.IGNORECASE)
 _SHORT_HEADINGS = {
