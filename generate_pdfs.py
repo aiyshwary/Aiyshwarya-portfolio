@@ -328,6 +328,18 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     if buf:
         merged.append(('body', ' '.join(buf)))
 
+    # Merge consecutive bullets/body when the previous line ends with an arrow →
+    # (indicates a continuation, e.g. "Find similar images → reuse annotations →"
+    #  + "export back to CVAT" should be one bullet).
+    arrow_merged = []
+    for kind, text in merged:
+        if arrow_merged and arrow_merged[-1][1].rstrip().endswith('→') and kind in ('bullet', 'body'):
+            prev_kind, prev_text = arrow_merged[-1]
+            arrow_merged[-1] = (prev_kind, prev_text.rstrip() + ' ' + text)
+        else:
+            arrow_merged.append((kind, text))
+    merged = arrow_merged
+
     # Convert colon-ended lines into subsection headers and bulletize following lines.
     post = []
     list_mode = False
