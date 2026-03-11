@@ -661,7 +661,7 @@ class Writer:
         self.c.drawText(text)
 
         # Add a clearer gap after the card
-        self.y -= block_h + 0.28 * cm
+        self.y -= block_h + 0.5 * cm
 
     def gap(self, h: float = 0.4 * cm):
         self.y -= h
