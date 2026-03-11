@@ -235,6 +235,18 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 heading = _strip_emojis(raw_lines[j].strip())
                 # Drop trailing parenthetical coaching notes, e.g. "(start here)"
                 heading = re.sub(r'\s*\([^)]{0,80}\)\s*$', '', heading).strip()
+                # Guard: if the next line is too long to be a heading
+                # (>7 words, ends with sentence punctuation, starts with
+                # a quote, or contains a filename like .py/.js), skip the
+                # marker — let normal classification handle it.
+                too_long = len(heading.split()) > 7
+                ends_sent = bool(_ENDS_SENT.search(heading))
+                starts_quote = heading[:1] in ('"', '"', "'")
+                has_filename = bool(re.search(r'\.\w{1,4}[)\s,:]', heading))
+                if too_long or ends_sent or starts_quote or has_filename:
+                    # Just skip the marker line, don't consume the next line
+                    i += 1
+                    continue
                 if heading and not _COACHING_RE.search(heading) and len(heading) > 3:
                     kind = 'subsection' if is_numbered else 'section'
                     items.append((kind, heading))
