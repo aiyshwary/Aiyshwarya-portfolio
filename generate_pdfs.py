@@ -265,10 +265,16 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         orig = raw.strip()
         is_bullet = bool(re.match(r'^[●○■◆•►✔]\s', orig))
 
+        # Strip trailing parenthetical coaching notes, e.g. "(very important)",
+        # "(start here)", so the core text can match heading heuristics.
+        cleaned_no_paren = re.sub(r'\s*\([^)]{0,80}\)\s*$', '', cleaned).strip()
+        if not cleaned_no_paren:
+            cleaned_no_paren = cleaned
+
         # Numbered section headings ("1. Overview" / "4.1 Files") → section item
-        if not is_bullet and _NUMBERED_HDG.match(cleaned):
+        if not is_bullet and _NUMBERED_HDG.match(cleaned_no_paren):
             # strip leading "N. " or "N.N. " prefix
-            heading = re.sub(r'^(\d+\.)+\s*', '', cleaned).strip()
+            heading = re.sub(r'^(\d+\.)+\s*', '', cleaned_no_paren).strip()
             if heading:
                 items.append(('section', heading))
             i += 1
@@ -277,12 +283,12 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         # Heuristic for short title-case headings from PDFs
         if (
             not is_bullet
-            and _TITLE_HDG.match(cleaned)
-            and len(cleaned.split()) <= 7
-            and not _ENDS_SENT.search(cleaned)
-            and not _LIST_VERB_RE.match(cleaned)
+            and _TITLE_HDG.match(cleaned_no_paren)
+            and len(cleaned_no_paren.split()) <= 7
+            and not _ENDS_SENT.search(cleaned_no_paren)
+            and not _LIST_VERB_RE.match(cleaned_no_paren)
         ):
-            items.append(('section', cleaned))
+            items.append(('section', cleaned_no_paren))
             i += 1
             continue
 
