@@ -111,7 +111,7 @@ _SYMBOL_ONLY = set('●○■◆•►✔→←—')
 _COACHING_RE = re.compile(
     r'start with this|start here|very important.*interview|for interviewers|'
     r'this is a great interview|only if interviewer|explain this step-by-step|'
-    r'explain this in steps|'
+    r'explain this in steps|this acts as a human-in-the-loop|'
     r'you can even draw|you can add:|example you can say|gold for interviews|'
     r'short version\s*\(|30.second answer|verbally:',
     re.IGNORECASE,
