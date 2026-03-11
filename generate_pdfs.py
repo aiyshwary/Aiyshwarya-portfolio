@@ -755,9 +755,9 @@ class Writer:
         self.y -= block_h + 0.5 * cm
 
     def equation(self, content: str):
-        """Draw an equation without wrapping, using a smaller font if needed."""
+        """Draw an equation at normal body font size."""
         self._need(LH)
-        self.c.setFont(F, 8)  # Use 8pt font for equations
+        self.c.setFont(F, S_BODY)
         self.c.setFillColor(C_BODY)
         self.c.drawString(ML + 0.45 * cm, self.y, content)
         self.y -= LH
