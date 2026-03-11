@@ -104,7 +104,7 @@ _LIST_VERB_RE = re.compile(
     r'Implements|Tracks|Evaluates|Concludes|Generates|Normalizes|Splits|'
     r'Handles|Supports|Validates|Calculates|Processes|Selects|Adds|Drops|'
     r'Converts|Groups|Compares|Finds|Provides|Ensures|Updates|Locks|Assigns|'
-    r'Stores|Downloads|Extracts)\b',
+    r'Stores|Downloads|Extracts|Used)\b',
     re.IGNORECASE,
 )
 _KEYCAP_RE   = re.compile(r'\d\u20E3|\u20E3')
