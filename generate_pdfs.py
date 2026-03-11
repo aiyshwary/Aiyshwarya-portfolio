@@ -92,6 +92,7 @@ _SHORT_HEADINGS = {
     "Step-by-step execution",
     "Interactive demo",
     "Business logic",
+    "What happens here",
 }
 _QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
@@ -329,6 +330,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     # Convert colon-ended lines into subsection headers and bulletize following lines.
     post = []
     list_mode = False
+    list_remaining = 0           # >0 for count-based lists ("has N items")
     expect_body_after_heading = False
     two_way_mode = False
     two_way_count = 1
@@ -344,7 +346,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind == 'bullet' and (text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text)):
-            list_mode = text in {"In short", "This makes it", "Script"}
+            list_mode = text in {"In short", "This makes it", "Script", "What happens here"}
             post.append(('subsection', text))
             expect_body_after_heading = text in {
                 "Core idea",
@@ -358,7 +360,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind == 'body' and text in _SHORT_HEADINGS:
-            list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
+            list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
             post.append(('subsection', text))
             expect_body_after_heading = text in {
                 "Core idea",
@@ -382,12 +384,27 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             expect_body_after_heading = True
             i += 1
             continue
+        # Short verb-only bullet items (e.g. "Shows", "Displays") → subsection + list_mode
+        if kind == 'bullet' and _LIST_VERB_RE.match(text) and len(text.split()) == 1 and not _ENDS_SENT.search(text):
+            list_mode = True
+            post.append(('subsection', text))
+            i += 1
+            continue
         if kind == 'para_break':
-            list_mode = False
+            # Don't reset list_mode here; let section headings reset it instead.
+            # This allows lists to span across blank lines in the source PDF.
             two_way_mode = False
             i += 1
             continue
         if kind in ('section', 'subsection'):
+            # Section line introducing a counted list (e.g. "The system has 5 main modules")
+            m_count = re.search(r'\b(?:has|have|with|contains?)\s+(\d+)\s+', text, re.IGNORECASE)
+            if m_count:
+                list_mode = True
+                list_remaining = int(m_count.group(1))
+                post.append(('body', text))
+                i += 1
+                continue
             # If a section line ends with ':', treat it as a list heading
             if text.endswith(':'):
                 list_mode = True
@@ -395,7 +412,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
@@ -423,6 +440,10 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and 'centrality' not in text.lower()
             ):
                 post.append(('bullet', text))
+                if list_remaining > 0:
+                    list_remaining -= 1
+                    if list_remaining == 0:
+                        list_mode = False
                 i += 1
                 continue
             list_mode = False
@@ -447,7 +468,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     i += 1
                     continue
                 if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
-                    list_mode = roman_text in {"In short", "This makes it", "Script", "Business logic"}
+                    list_mode = roman_text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
                     post.append(('subsection', roman_text))
                     expect_body_after_heading = roman_text in {
                         "Core idea",
@@ -494,7 +515,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if len(run) >= 2:
                 for t2 in run:
                     if t2 in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(t2):
-                        list_mode = t2 in {"In short", "This makes it", "Script"}
+                        list_mode = t2 in {"In short", "This makes it", "Script", "What happens here"}
                         post.append(('subsection', t2))
                         expect_body_after_heading = t2 in {
                             "Core idea",
@@ -510,6 +531,10 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                         list_mode = True
                         post.append(('subsection', t2.rstrip(':').strip()))
                         expect_body_after_heading = False
+                    elif _LIST_VERB_RE.match(t2) and len(t2.split()) == 1 and not _ENDS_SENT.search(t2):
+                        # Short verb-only items (e.g. "Shows") → subsection + list_mode
+                        list_mode = True
+                        post.append(('subsection', t2))
                     else:
                         post.append(('bullet', t2))
                 i = j
@@ -526,7 +551,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic", "What happens here"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
@@ -822,7 +847,6 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
         w.section_label("Technical Walkthrough")
         num = 1
-        use_dash_bullets = project.get("title") == "Bus Reservation And Ticketing System"
         for kind, content in filtered_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
@@ -833,10 +857,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 if m:
                     w.bullet_card(m.group(2), prefix=m.group(1))
                 else:
-                    if use_dash_bullets:
-                        w.bullet_card(content, prefix="-")
-                    else:
-                        w.bullet_card(content, prefix=f"{_to_roman(num)})")
+                    w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
             elif kind == 'equation':
                 # Draw equations without wrapping
