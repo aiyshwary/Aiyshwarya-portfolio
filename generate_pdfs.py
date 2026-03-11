@@ -86,6 +86,11 @@ _SHORT_HEADINGS = {
     "End-to-end pipeline explanation",
     "Configuration-driven setup",
     "One-liner summary",
+    "Script",
+    "Two ways to run the system",
+    "Full automation",
+    "Step-by-step execution",
+    "Interactive demo",
 }
 _QUESTION_HDG_RE = re.compile(r'^What\s+.*\?$')
 _LIST_VERB_RE = re.compile(
@@ -310,10 +315,32 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
     i = 0
     while i < len(merged):
         kind, text = merged[i]
-        if kind == 'body' and text in _SHORT_HEADINGS:
-            list_mode = text in {"In short", "This makes it"}
+        if kind == 'bullet' and (text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text)):
+            list_mode = text in {"In short", "This makes it", "Script"}
             post.append(('subsection', text))
-            expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"}
+            expect_body_after_heading = text in {
+                "Core idea",
+                "End-to-end pipeline explanation",
+                "Configuration-driven setup",
+                "One-liner summary",
+                "Full automation",
+                "Step-by-step execution",
+                "Interactive demo",
+            } or _QUESTION_HDG_RE.match(text)
+            i += 1
+            continue
+        if kind == 'body' and text in _SHORT_HEADINGS:
+            list_mode = text in {"In short", "This makes it", "Script"}
+            post.append(('subsection', text))
+            expect_body_after_heading = text in {
+                "Core idea",
+                "End-to-end pipeline explanation",
+                "Configuration-driven setup",
+                "One-liner summary",
+                "Full automation",
+                "Step-by-step execution",
+                "Interactive demo",
+            }
             i += 1
             continue
         if kind == 'body' and _QUESTION_HDG_RE.match(text):
@@ -334,9 +361,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it"}
+                list_mode = text in {"In short", "This makes it", "Script"}
                 post.append(('subsection', text))
-                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"} or _QUESTION_HDG_RE.match(text)
+                expect_body_after_heading = text in {
+                    "Core idea",
+                    "End-to-end pipeline explanation",
+                    "Configuration-driven setup",
+                    "One-liner summary",
+                    "Full automation",
+                    "Step-by-step execution",
+                    "Interactive demo",
+                } or _QUESTION_HDG_RE.match(text)
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
@@ -366,9 +401,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if m:
                 roman_text = m.group('txt').strip()
                 if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
-                    list_mode = roman_text in {"In short", "This makes it"}
+                    list_mode = roman_text in {"In short", "This makes it", "Script"}
                     post.append(('subsection', roman_text))
-                    expect_body_after_heading = roman_text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(roman_text)
+                    expect_body_after_heading = roman_text in {
+                        "Core idea",
+                        "End-to-end pipeline explanation",
+                        "Configuration-driven setup",
+                        "One-liner summary",
+                        "Full automation",
+                        "Step-by-step execution",
+                        "Interactive demo",
+                    } or _QUESTION_HDG_RE.match(roman_text)
                 elif expect_body_after_heading:
                     post.append(('body', roman_text))
                     expect_body_after_heading = False
@@ -403,9 +446,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             if len(run) >= 2:
                 for t2 in run:
                     if t2 in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(t2):
-                        list_mode = t2 in {"In short", "This makes it"}
+                        list_mode = t2 in {"In short", "This makes it", "Script"}
                         post.append(('subsection', t2))
-                        expect_body_after_heading = t2 in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup"} or _QUESTION_HDG_RE.match(t2)
+                        expect_body_after_heading = t2 in {
+                            "Core idea",
+                            "End-to-end pipeline explanation",
+                            "Configuration-driven setup",
+                            "One-liner summary",
+                            "Full automation",
+                            "Step-by-step execution",
+                            "Interactive demo",
+                        } or _QUESTION_HDG_RE.match(t2)
                         continue
                     if t2.endswith(':'):
                         list_mode = True
@@ -426,9 +477,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it"}
+                list_mode = text in {"In short", "This makes it", "Script"}
                 post.append(('subsection', text))
-                expect_body_after_heading = text in {"Core idea", "End-to-end pipeline explanation", "Configuration-driven setup", "One-liner summary"} or _QUESTION_HDG_RE.match(text)
+                expect_body_after_heading = text in {
+                    "Core idea",
+                    "End-to-end pipeline explanation",
+                    "Configuration-driven setup",
+                    "One-liner summary",
+                    "Full automation",
+                    "Step-by-step execution",
+                    "Interactive demo",
+                } or _QUESTION_HDG_RE.match(text)
                 i += 1
                 continue
             if (
