@@ -341,7 +341,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind == 'body' and text in _SHORT_HEADINGS:
-            list_mode = text in {"In short", "This makes it", "Script"}
+            list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
             post.append(('subsection', text))
             expect_body_after_heading = text in {
                 "Core idea",
@@ -378,7 +378,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
@@ -430,7 +430,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     i += 1
                     continue
                 if roman_text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(roman_text):
-                    list_mode = roman_text in {"In short", "This makes it", "Script"}
+                    list_mode = roman_text in {"In short", "This makes it", "Script", "Business logic"}
                     post.append(('subsection', roman_text))
                     expect_body_after_heading = roman_text in {
                         "Core idea",
@@ -509,7 +509,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
-                list_mode = text in {"In short", "This makes it", "Script"}
+                list_mode = text in {"In short", "This makes it", "Script", "Business logic"}
                 post.append(('subsection', text))
                 expect_body_after_heading = text in {
                     "Core idea",
