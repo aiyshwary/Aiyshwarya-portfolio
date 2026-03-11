@@ -430,11 +430,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                     two_way_mode = False
                 i += 1
                 continue
+            # Step headings ("Step 1: Authentication") → subsection + list_mode
+            if _STEP_HDG.match(text):
+                list_mode = True
+                list_remaining = 0
+                post.append(('subsection', text))
+                i += 1
+                continue
             # If currently in list mode, convert short section items into bullets
             if (
                 list_mode
                 and kind == 'section'
-                and not _STEP_HDG.match(text)
                 and not _NUMBERED_HDG.match(text)
                 and not text.lower().endswith('module')
                 and 'centrality' not in text.lower()
@@ -451,7 +457,8 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
             continue
         if kind == 'body' and _STEP_HDG.match(text):
-            list_mode = False
+            list_mode = True
+            list_remaining = 0
             two_way_mode = False
             post.append(('subsection', text))
             expect_body_after_heading = False
@@ -857,15 +864,23 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
         w.section_label("Technical Walkthrough")
         num = 1
+        under_step = False
         for kind, content in filtered_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
                 num = 1
+                under_step = bool(_STEP_HDG.match(content))
+            elif kind == 'body':
+                # A body line (e.g. "The system has 5 main modules") resets step context
+                under_step = False
+                w.text(content)
             elif kind == 'bullet':
                 m = re.match(r'^(\d+\))\s+(.*)$', content)
                 if m:
                     w.bullet_card(m.group(2), prefix=m.group(1))
+                elif under_step:
+                    w.bullet_card(content, prefix="-")
                 else:
                     w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
