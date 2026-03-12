@@ -924,6 +924,128 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Online Event Management System.
+    # The source PDF uses a flat bullet-list style which the generic
+    # parser mis-classifies: action lines under "Key Actors" become
+    # section headings, entity names under "Core Database Modules" become
+    # bullets, etc.  We fix the structure in a single pass by tracking
+    # which *logical section* we are inside.
+    if title == "Online Event Management System":
+        # ── Known headings for each structural level ─────────────────
+        _OEM_SECTIONS = {
+            "Key Actors", "Core Database Modules",
+            "Database Design Highlights", "Important SQL Features Used",
+            "Overall Summary",
+        }
+        _OEM_DB_ENTITIES = {
+            "User", "Event Details", "Event Discount",
+            "Special Preference", "User Booking", "Amount", "Admin",
+        }
+        _OEM_SQL_SUBSECTIONS = {"Queries", "Views", "Indexes"}
+        _OEM_ACTOR_SUBSECTIONS = {"User", "Admin"}
+
+        rebuilt = []
+        cur_section = None    # tracks the current top-level section
+        cur_subsection = None  # tracks the current subsection
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+
+            # ── Promote items that should be section headings ────────
+            if text in _OEM_SECTIONS:
+                rebuilt.append(('section', text))
+                cur_section = text
+                cur_subsection = None
+                i += 1
+                continue
+
+            # ── Key Actors: "User" / "Admin" → subsection,
+            #    everything else → bullet ─────────────────────────────
+            if cur_section == "Key Actors":
+                if text in _OEM_ACTOR_SUBSECTIONS:
+                    rebuilt.append(('subsection', text))
+                    cur_subsection = text
+                    i += 1
+                    continue
+                # "Adds, updates, or deletes" is already a valid subsection
+                if kind == 'subsection':
+                    rebuilt.append((kind, text))
+                    cur_subsection = text
+                    i += 1
+                    continue
+                # Everything else under Key Actors is a bullet
+                if kind in ('section', 'body'):
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+
+            # ── Core Database Modules ────────────────────────────────
+            if cur_section == "Core Database Modules":
+                # Entity names → subsection
+                if text in _OEM_DB_ENTITIES:
+                    rebuilt.append(('subsection', text))
+                    cur_subsection = text
+                    i += 1
+                    continue
+                # Description lines (currently subsection from colon
+                # handler like "Stores registered user details") → body
+                if kind == 'subsection':
+                    rebuilt.append(('body', text + ':'))
+                    i += 1
+                    continue
+                # Sentences → body
+                if kind in ('body', 'bullet') and text.endswith('.'):
+                    rebuilt.append(('body', text))
+                    i += 1
+                    continue
+                # Short items → bullet
+                if kind == 'bullet':
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+                # Body items that are short list-like lines → bullet
+                if kind == 'body' and not text.endswith('.'):
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+                # Section-classified items that are actually bullets
+                if kind == 'section':
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+
+            # ── Database Design Highlights: items → bullets ──────────
+            if cur_section == "Database Design Highlights":
+                if kind != 'section':
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+
+            # ── Important SQL Features Used ──────────────────────────
+            if cur_section == "Important SQL Features Used":
+                # Queries / Views / Indexes → subsection
+                if text in _OEM_SQL_SUBSECTIONS:
+                    rebuilt.append(('subsection', text))
+                    cur_subsection = text
+                    i += 1
+                    continue
+                # "Examples" → subsection
+                if text == "Examples" or kind == 'subsection':
+                    rebuilt.append(('subsection', text))
+                    cur_subsection = text
+                    i += 1
+                    continue
+                # Everything else → bullet
+                if kind in ('section', 'body', 'bullet'):
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+
+            # ── Default: keep as-is ──────────────────────────────────
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     return post
 
 
