@@ -1549,6 +1549,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         px += pill_w + 0.2 * cm
 
     # ── Body ─────────────────────────────────────────────────────────────────
+
     w = Writer(cv, project["title"])
 
     # OVERVIEW
@@ -1561,8 +1562,40 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
     w.text(_normalize_ws(project["impact"]))
     w.gap()
 
+    # Special center alignment for Video RAG Retrieval Project summary lines
+    def center_text(writer, content, font=F, size=S_BODY):
+        lines = simpleSplit(content, font, size, CW)
+        writer._need(len(lines) * LH)
+        writer.c.setFont(font, size)
+        writer.c.setFillColor(C_BODY)
+        for line in lines:
+            text_width = writer.c.stringWidth(line, font, size)
+            x = ML + (CW - text_width) / 2
+            writer._need(LH)
+            writer.c.drawString(x, writer.y, line)
+            writer.y -= LH
+
     # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
     if source_items:
+        # Center-align the first two body lines if this is Video RAG Retrieval Project
+        if project["title"] == "Video RAG Retrieval Project":
+            # Find the indices of the summary and problem statement
+            filtered_items = []
+            centered_sections = {"One-line summary", "Problem statement"}
+            i = 0
+            while i < len(source_items):
+                kind, content = source_items[i]
+                if kind == "section" and content in centered_sections:
+                    # Add the section label as usual
+                    filtered_items.append((kind, content))
+                    # Center-align the next body if present
+                    if i + 1 < len(source_items) and source_items[i+1][0] == "body":
+                        filtered_items.append(("centered_body", source_items[i+1][1]))
+                        i += 1
+                else:
+                    filtered_items.append((kind, content))
+                i += 1
+            source_items = filtered_items
         # Remove walkthrough items that duplicate the Key Details bullets,
         # the overview/impact text, or the project title/github URL.
         key_bullets = {_normalize_ws(b) for b in project.get("bullets", [])}
@@ -1606,16 +1639,15 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 w.heading(content)
                 num = 1
                 under_step = bool(_STEP_HDG.match(content))
+            elif kind == 'centered_body':
+                center_text(w, content)
             elif kind == 'body':
-                # A body line (e.g. "The system has 5 main modules") resets step context
                 under_step = False
-                # If the body text introduces a list (ends with ':'), reset the
-                # bullet counter so the following bullets restart at i).
                 if content.endswith(':'):
                     num = 1
                 w.text(content, indent=0.4 * cm)
             elif kind == 'bullet':
-                m = re.match(r'^(\d+\))\s+(.*)$', content)
+                m = re.match(r'^(\d+)\)\s+(.*)$', content)
                 if m:
                     w.bullet_card(m.group(2), prefix=m.group(1))
                 elif under_step:
@@ -1624,7 +1656,6 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                     w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
             elif kind == 'equation':
-                # Draw equations without wrapping
                 w.equation(content)
             else:
                 w.text(content)
