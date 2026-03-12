@@ -1,62 +1,142 @@
 [
   {
-    "title": "Bus Reservation And Ticketing System",
-    "summary": "Java-based console application simulating bus ticket reservation and billing. Allows login, ticket booking, passenger management, and billing operations.",
-    "impact": "Main menu for destination, passenger, billing, view, and exit. Handles seat availability, discounts for PWD, students, senior citizens. Prints passenger details, fare, and handles payment and change.",
+    "title": "Annotation Transfer Tool",
+    "summary": "Tool for transferring annotations between datasets or formats.",
+    "impact": "Speeds up dataset preparation for ML projects.",
+    "github": "https://github.com/aiyshwary/Annotation-Transfer-Tool",
+    "techs": ["Python", "Annotation"],
+    "bullets": ["Transfer annotations between formats", "Speeds up ML dataset prep"],
+    "pdf": "assets/projects/annotation-transfer-tool.pdf",
+    "thumbnail": "assets/images/Annotation Transfer Tool.png"
+  },
+  {
+    "title": "Bengaluru House Rent Prediction",
+    "summary": "Predicts house rent prices in Bengaluru using ML models.",
+    "impact": "Helps users estimate rental costs.",
+    "github": "https://github.com/aiyshwary/Bengaluru-House-Rent-Prediction",
+    "techs": ["Python", "Regression"],
+    "bullets": ["Predicts Bengaluru house rent", "Uses regression models"],
+    "pdf": "assets/projects/bengaluru-house-rent-prediction.pdf",
+    "thumbnail": "assets/images/Bengaluru-House-Rent-Prediction.png"
+  },
+  {
+    "title": "Bus Reservation and Ticketing System",
+    "summary": "Java-based console application for bus ticket booking and billing.",
+    "impact": "Simulates real-world bus ticketing.",
     "github": "https://github.com/aiyshwary/Bus-Reservation-and-Ticketing-System",
     "techs": ["Java"],
-    "bullets": ["Main menu for destination, passenger, billing, view, and exit", "Handles seat availability, discounts for PWD, students, senior citizens", "Prints passenger details, fare, and handles payment and change"],
+    "bullets": ["Book tickets, manage passengers, billing"],
     "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf",
     "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png"
   },
   {
-    "title": "Facial Emotion Detection",
-    "summary": "Detects facial emotions using machine learning models (CNN, SVM, Decision Tree, Random Forest). Features extraction, preprocessing, and performance comparison across multiple datasets.",
-    "impact": "Facial Emotion Recognition (FER) for applications in healthcare, e-learning, retail, surveillance, and entertainment. Training accuracy up to ~99.8%, ICML dataset ~86.1%.",
+    "title": "Facial Emotion Recognition",
+    "summary": "Detects facial emotions using ML models (CNN, SVM, etc).",
+    "impact": "Applications in healthcare, e-learning, retail, etc.",
     "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
-    "techs": ["Python", "Jupyter Notebook", "CNN", "SVM", "Random Forest", "Decision Tree"],
-    "bullets": ["Project Overview: Facial Emotion Recognition (FER)", "Models: CNN, SVM, Random Forest, Decision Tree", "Datasets: train.csv, test.csv, icml_face_data.csv", "Performance: Training accuracy up to ~99.8%, ICML dataset ~86.1%", "Author: Aiyshwarya A, Integrated M.Sc. in Data Science"],
+    "techs": ["Python", "CNN", "SVM"],
+    "bullets": ["Facial emotion recognition", "Multiple ML models"],
     "pdf": "assets/projects/facial-emotion-detection.pdf",
-    "thumbnail": "assets/images/facial-emotion-detection.png"
+    "thumbnail": "assets/images/facial-emotion-recognition.svg"
   },
   {
-    "title": "Real Estate Price Prediction",
-    "summary": "Predicts house prices using supervised regression models. Compares performance using R2 and MSE.",
-    "impact": "Models: Linear Regression, KNN, Decision Tree, Random Forest, AdaBoost, Gradient Boosting. Requirements: Python 3.9+, pandas, numpy, matplotlib, seaborn, scikit-learn. Usage: Run notebook with kc_house_data.csv.",
-    "github": "https://github.com/aiyshwary/real-estate-price-prediction",
-    "techs": ["Python", "Jupyter Notebook", "Linear Regression", "KNN", "Decision Tree", "Random Forest", "AdaBoost", "Gradient Boosting"],
-    "bullets": ["Models: Linear Regression, KNN, Decision Tree, Random Forest, AdaBoost, Gradient Boosting", "Requirements: Python 3.9+, pandas, numpy, matplotlib, seaborn, scikit-learn", "Usage: Run notebook with kc_house_data.csv"],
-    "pdf": "assets/projects/real-estate-price-prediction.pdf",
-    "thumbnail": "assets/images/real-estate-price-prediction.png"
+    "title": "Hybrid Search & Retrieval POC",
+    "summary": "Proof of concept for hybrid search and retrieval.",
+    "impact": "Demonstrates hybrid search techniques.",
+    "github": "NOT FOUND",
+    "techs": ["Python", "Search"],
+    "bullets": ["Hybrid search demo"],
+    "pdf": "assets/projects/hybrid-search-retrieval-poc.pdf",
+    "thumbnail": "assets/images/Hybrid Search Engine.png"
   },
   {
-    "title": "Video RAG Retrieval Project",
-    "summary": "Implements a Video Retrieval-Augmented Generation (RAG) system. Enables semantic search over videos by converting scenes and frames into embeddings for nearest-neighbor lookups.",
-    "impact": "Features: Frame extraction, scene description, text/image embeddings, FAISS vector store, semantic retrieval. Example usage: Index scenes, run text queries, retrieve relevant video segments. Installation: Python, pip, requirements.txt. Notes: Extensible for advanced scene detection and production vector databases.",
-    "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
-    "techs": ["Python", "FAISS", "Embeddings", "Deep Learning"],
-    "bullets": ["Frame extraction, scene description, text/image embeddings, FAISS vector store, semantic retrieval", "Index scenes, run text queries, retrieve relevant video segments", "Extensible for advanced scene detection and production vector databases"],
-    "pdf": "assets/projects/video-rag-retrieval.pdf",
-    "thumbnail": "assets/images/Video RAG Retrieval.png"
+    "title": "Image Classification Extension",
+    "summary": "Extension for image classification in RapidMiner.",
+    "impact": "Adds image classification to RapidMiner.",
+    "github": "https://github.com/aiyshwary/Image-Classification-Extension-in-Rapid-Miner",
+    "techs": ["Java", "RapidMiner"],
+    "bullets": ["Image classification extension"],
+    "pdf": "assets/projects/image-classification-extension.pdf",
+    "thumbnail": "assets/images/Image Classification Extension.png"
   },
   {
-    "title": "Raccoon Network Analysis",
-    "summary": "Analyzes the spread of rabies in raccoons using network centrality measures to generalize to human rabies spread.",
-    "impact": "Network centrality analysis for epidemiology. Jupyter Notebook implementation.",
+    "title": "Mammalia Raccoon Proximity Network Analysis",
+    "summary": "Network analysis of raccoon proximity for epidemiology.",
+    "impact": "Generalizes to human rabies spread.",
     "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
-    "techs": ["Jupyter Notebook", "Network Analysis", "Epidemiology", "Data Science"],
-    "bullets": ["Network centrality analysis for epidemiology", "Jupyter Notebook implementation"],
+    "techs": ["Python", "Network Analysis"],
+    "bullets": ["Network centrality analysis"],
     "pdf": "assets/projects/raccoon-network-analysis.pdf",
     "thumbnail": "assets/images/Raccoon Network Analysis.png"
   },
   {
-    "title": "Tableau Data Visualization",
-    "summary": "Data visualization on hotel booking dataset using Tableau. Multiple worksheets and dashboard actions.",
-    "impact": "Hotel booking dataset analysis. Multiple Tableau worksheets and dashboards.",
-    "github": "https://github.com/aiyshwary/Tableau-Data-Visualization-",
-    "techs": ["Tableau", "Data Visualization", "Dashboard"],
-    "bullets": ["Hotel booking dataset analysis", "Multiple Tableau worksheets and dashboards"],
-    "pdf": "assets/projects/tableau-data-visualization.pdf",
-    "thumbnail": "assets/images/thumbnail.png"
+    "title": "Multi-Agent-Architecture",
+    "summary": "Multi-agent architecture for revenue churn prediction.",
+    "impact": "Predicts churn using multiple agents.",
+    "github": "https://github.com/aiyshwary/multi-agent-revenue-churn",
+    "techs": ["Python", "Multi-Agent"],
+    "bullets": ["Multi-agent churn prediction"],
+    "pdf": "assets/projects/multi-agent-architecture.pdf",
+    "thumbnail": "assets/images/multi-agent-architecture.svg"
+  },
+  {
+    "title": "Object Detection Extension",
+    "summary": "Object detection extension for RapidMiner.",
+    "impact": "Adds object detection to RapidMiner.",
+    "github": "https://github.com/aiyshwary/Object-Detection-Extension-in-Rapid-Miner",
+    "techs": ["Java", "RapidMiner"],
+    "bullets": ["Object detection extension"],
+    "pdf": "assets/projects/object-detection-extension.pdf",
+    "thumbnail": "assets/images/object detection extension.png"
+  },
+  {
+    "title": "Online Event Management System",
+    "summary": "Web app for managing online events.",
+    "impact": "Simplifies event management.",
+    "github": "https://github.com/aiyshwary/Online-Event-Management-System",
+    "techs": ["Web", "Event"],
+    "bullets": ["Manage online events"],
+    "pdf": "assets/projects/online-event-management-system.pdf",
+    "thumbnail": "assets/images/Online Event Management System.png"
+  },
+  {
+    "title": "Sentiment Analysis Extension",
+    "summary": "Extension for sentiment analysis (video/audio).",
+    "impact": "Analyzes sentiment from video/audio.",
+    "github": "https://github.com/aiyshwary/Video-based-and-audio-based-sentiment-analysis",
+    "techs": ["Python", "Sentiment Analysis"],
+    "bullets": ["Sentiment analysis extension"],
+    "pdf": "assets/projects/sentiment-analysis-extension.pdf",
+    "thumbnail": "assets/images/sentiment-analysis-extension.svg"
+  },
+  {
+    "title": "Synthetic Image Generation",
+    "summary": "Generates synthetic images for ML training.",
+    "impact": "Augments datasets for better ML models.",
+    "github": "NOT FOUND",
+    "techs": ["Python", "Image Generation"],
+    "bullets": ["Synthetic image generation"],
+    "pdf": "assets/projects/synthetic-image-generation.pdf",
+    "thumbnail": "assets/images/Synthetic Image Generation.png"
+  },
+  {
+    "title": "Traffic Monitoring System",
+    "summary": "System for monitoring traffic using ML.",
+    "impact": "Improves traffic management.",
+    "github": "https://github.com/aiyshwary/Traffic-Monitoring-System",
+    "techs": ["Python", "Traffic"],
+    "bullets": ["Traffic monitoring system"],
+    "pdf": "assets/projects/traffic-monitoring-system.pdf",
+    "thumbnail": "assets/images/Traffic Monitoring System.png"
+  },
+  {
+    "title": "Video RAG Retrieval Project",
+    "summary": "Implements a Video Retrieval-Augmented Generation (RAG) system.",
+    "impact": "Semantic search over videos using embeddings.",
+    "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
+    "techs": ["Python", "FAISS"],
+    "bullets": ["Video RAG retrieval"],
+    "pdf": "assets/projects/video-rag-retrieval.pdf",
+    "thumbnail": "assets/images/Video RAG Retrieval.png"
   }
 ]
