@@ -1433,7 +1433,7 @@ class Writer:
         self.c.line(ML, self.y, PW - MR, self.y)
         self.y -= 0.55 * cm
 
-    def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0, center=False):
+    def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
             color = C_BODY
         lines = simpleSplit(content, font, size, CW - indent)
@@ -1442,10 +1442,7 @@ class Writer:
         self.c.setFillColor(color)
         for line in lines:
             self._need(LH)
-            if center:
-                self.c.drawCentredString(ML + CW / 2, self.y, line)
-            else:
-                self.c.drawString(ML + indent, self.y, line)
+            self.c.drawString(ML + indent, self.y, line)
             self.y -= LH
 
     def heading(self, content: str):
@@ -1556,12 +1553,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # OVERVIEW
     w.section_label("Overview")
-    # Center-align the summary if it starts with a quote (One-liner summary)
-    summary_text = _normalize_ws(project["summary"])
-    if summary_text.startswith('"') or summary_text.startswith('“'):
-        w.text(summary_text, center=True)
-    else:
-        w.text(summary_text)
+    w.text(_normalize_ws(project["summary"]))
     w.gap()
 
     # IMPACT
