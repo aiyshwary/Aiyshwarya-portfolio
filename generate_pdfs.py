@@ -1,73 +1,46 @@
-"""
-Generates comprehensive, professional PDFs for all portfolio projects.
-
-Content is sourced from TWO places:
-  - projects.json  → structured title, github, techs, summary, impact, bullets
-  - Project_Explanation_Detailed copy/*.pdf → full technical walkthrough (cleaned)
-
-All emojis, orphaned bullet symbols, and interview-coaching notes are stripped.
-Font sizes are uniform (10 pt body) throughout every PDF.
-"""
-
-import json
-import os
 import re
 
-import pypdf
-from reportlab.lib.colors import HexColor
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import cm
-from reportlab.lib.utils import simpleSplit
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfgen import canvas
-
-# ── Colour palette ────────────────────────────────────────────────────────────
-C_BG      = HexColor("#0f1117")
-C_HDR     = HexColor("#1a1d2e")
-C_ACCENT  = HexColor("#38bdf8")
-C_BODY    = HexColor("#cbd5e1")
-C_SUBTLE  = HexColor("#64748b")
-C_WHITE   = HexColor("#f1f5f9")
-C_CARD    = HexColor("#1e2435")
-C_TECH    = HexColor("#172033")
-C_DIV     = HexColor("#2e3650")
-
-# ── Typography — one body size used everywhere ────────────────────────────────
-F   = "Helvetica"
-FB  = "Helvetica-Bold"
-S_TITLE   = 20
-S_SECTION = 9      # section-label caps
-S_BODY    = 10     # every paragraph, bullet, heading in the body
-S_TECH    = 8.5
-S_FOOTER  = 8
-LH        = 15     # line height (pts)
-
-# ── Page geometry ─────────────────────────────────────────────────────────────
-PW, PH = A4
-ML = 2.2 * cm
-MR = 2.2 * cm
-MB = 2.0 * cm
-CW = PW - ML - MR     # usable content width
-HDR_H = 3.8 * cm
-
-# ── Source-PDF directory + title → filename map ───────────────────────────────
-SRC_DIR = "Project_Explanation_Detailed copy"
-
-SRC_MAP = {
-    "Annotation Transfer Tool":                   "Annotation Transfer Tool.pdf",
-    "Bus Reservation And Ticketing System":        "Bus Reservation and Ticketing System.pdf",
-    "Facial Emotion Recognition":                  "Facial Emotion Recognition.pdf",
-    "Hybrid Search & Retrieval POC":               "Hybrid Search & Retrieval POC.pdf",
-    "Image Classification Extension":              "Image Classification Extension.pdf",
-    "Mammalia Raccoon Proximity Network Analysis": "Mammalia Raccoon Proximity Network Analysis.pdf",
-    "Object Detection Extension":                  "Object Detection Extension.pdf",
-    "Online Event Management System":              "Online Event Management System.pdf",
-    "Sentiment Analysis Extension":                "Sentiment Analysis Extension.pdf",
-    "Synthetic Image Generation":                  "Synthetic Image Generation.pdf",
-    "Multi-Agent Architecture":                    "Multi-Agent-Architecture.pdf",
-    "Video RAG Retrieval Project":                 "Video RAG Retrieval Project.pdf",
-    "Traffic Monitoring System":                   "Traffic Monitoring System.pdf",
-}
+def fix_video_rag_text(rebuilt):
+    i = 0
+    while i < len(rebuilt):
+        kind, text = rebuilt[i]
+        clean = text
+        clean = clean.replace('for interviewers', '').replace('interviewers', '').replace('interviewer', '').replace('as an interview answer', '').strip()
+        rebuilt[i] = (kind, clean)
+        # Remove all "interviewer" or coaching language from any body/section/subsection
+        if any(word in text.lower() for word in ['interviewer', 'for interviewers', 'as an interview answer', 'coaching note']):
+            i += 1
+            continue
+        # Remove leading/trailing quotes from all bodies in this section
+        if kind == 'body' and text.startswith('Vector storage for'):
+            rebuilt[i] = ('bullet', text)
+            i += 1
+            continue
+        if kind == 'body' and text.startswith('Similarity-based retrieval'):
+            rebuilt[i] = ('bullet', text)
+            i += 1
+            continue
+        i += 1
+    # Merge split summary lines at the end for Video RAG Retrieval Project
+    merged = []
+    i = 0
+    while i < len(rebuilt):
+        kind, text = rebuilt[i]
+        # Look for the summary start
+        if text.strip().startswith('“I built a Visual RAG system'):
+            merged_text = text.strip()
+            # Merge all following body lines that are part of the same summary
+            while (i + 1 < len(rebuilt)
+                   and rebuilt[i + 1][0] == 'body'
+                   and not rebuilt[i + 1][1].strip().startswith('“')):
+                merged_text += ' ' + rebuilt[i + 1][1].strip()
+                i += 1
+            merged.append(('body', merged_text))
+            i += 1
+            continue
+        merged.append((kind, text))
+        i += 1
+    return merged
 
 # ── Text-cleaning helpers ─────────────────────────────────────────────────────
 _NUMBERED_HDG = re.compile(r'^(\d+\.)+\s+\S')   # "1. Overview" or "4.1 Files"
@@ -1086,92 +1059,6 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             rebuilt.append((kind, text))
             i += 1
         post = rebuilt
-
-    # Project-specific cleanup for Video RAG Retrieval Project.
-    if title == "Video RAG Retrieval Project":
-        rebuilt = []
-        i = 0
-        while i < len(post):
-            kind, text = post[i]
-            # Fix the "High-level architecture" block
-            if text.strip().startswith('“The system has three main components'):
-                i += 1
-                bullets = []
-                for j in range(3):
-                    if i < len(post):
-                        k, t = post[i]
-                        t = t.strip().strip('“”"')
-                        bullets.append(t)
-                        i += 1
-                for b in bullets:
-                    rebuilt.append(('bullet', b))
-                continue
-            # Fix the pipeline line: make it a bullet, remove quotes
-            if text.strip().startswith('Video →'):
-                rebuilt.append(('bullet', text.strip().strip('“”"')))
-                i += 1
-                continue
-            # Merge Video-LLaMA and frame lines into previous body under Input & preprocessing
-            if text.strip().startswith('“The input to the system is one or more videos.'):
-                merged = text.strip().strip('“”"')
-                # Next: Scene-level textual descriptions...
-                if i+1 < len(post) and post[i+1][0] == 'body' and 'Scene-level textual descriptions' in post[i+1][1]:
-                    merged += ' ' + post[i+1][1].strip().strip('“”"')
-                    i += 1
-                # Next: Video-LLaMA (should be merged, not highlighted)
-                if i+1 < len(post) and post[i+1][0] in ('section','subsection') and 'Video-LLaMA' in post[i+1][1]:
-                    merged += ' using open-source vision models like Video-LLaMA.'
-                    i += 1
-                # Next: Key video frames...
-                if i+1 < len(post) and post[i+1][0] == 'body' and 'Key video frames' in post[i+1][1]:
-                    merged += ' ' + post[i+1][1].strip().strip('“”"')
-                    i += 1
-                rebuilt.append(('body', merged))
-                i += 1
-                continue
-            # Merge "For example..." into previous body under Vision understanding
-            if text.strip().startswith('“I use vision-language models to understand the video content.'):
-                merged = text.strip().strip('“”"')
-                # Next: analyze video scenes...
-                if i+1 < len(post) and post[i+1][0] == 'body' and 'analyze video scenes' in post[i+1][1]:
-                    merged += ' ' + post[i+1][1].strip().strip('“”"')
-                    i += 1
-                # Next: For example, a scene might be described as...
-                if i+1 < len(post) and post[i+1][0] == 'body' and 'For example, a scene might be described' in post[i+1][1]:
-                    merged += ' ' + post[i+1][1].strip().strip('“”"')
-                    i += 1
-                # Next: picking up an item
-                if i+1 < len(post) and post[i+1][0] == 'body' and 'picking up an item' in post[i+1][1]:
-                    merged += ' ' + post[i+1][1].strip().strip('“”"')
-                    i += 1
-                rebuilt.append(('body', merged))
-                i += 1
-                continue
-            # Remove (very important for interviewers) from Embedding strategy
-            if kind in ('section','subsection') and 'Embedding strategy' in text:
-                clean = text.replace('(very important for interviewers)', '').replace('(very important for', '').replace('interviewers)', '').strip()
-                clean = clean.replace('for interviewers', '').replace('interviewers', '').replace('interviewer', '').replace('as an interview answer', '').strip()
-                rebuilt.append((kind, clean))
-                i += 1
-                continue
-            # Remove all "interviewer" or coaching language from any body/section/subsection
-            if any(word in text.lower() for word in ['interviewer', 'for interviewers', 'as an interview answer', 'coaching note']):
-                i += 1
-                continue
-            # Remove leading/trailing quotes from all bodies in this section
-            if kind == 'body' and text.strip().startswith('Vector storage for'):
-                rebuilt.append(('bullet', text.strip().strip('“”"')))
-                i += 1
-                continue
-            if kind == 'body' and text.strip().startswith('Similarity-based retrieval'):
-                rebuilt.append(('bullet', text.strip().strip('“”"')))
-                i += 1
-                continue
-            # Default: keep as-is
-            rebuilt.append((kind, text))
-            i += 1
-        post = rebuilt
-
     # Project-specific cleanup for Synthetic Image Generation.
     if title == "Synthetic Image Generation":
         rebuilt = []
