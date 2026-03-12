@@ -614,6 +614,17 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
         if kind == 'body' and text.endswith(':'):
+            # If the colon-line starts lowercase, it's a sentence continuation
+            # (e.g. "supporting\nmultiple architectures:").  Merge it into the
+            # previous body item instead of promoting to a subsection heading.
+            if text[0].islower() and post and post[-1][0] == 'body':
+                prev_k, prev_t = post[-1]
+                post[-1] = ('body', prev_t + ' ' + text)
+                list_mode = True
+                two_way_mode = False
+                expect_body_after_heading = False
+                i += 1
+                continue
             list_mode = True
             two_way_mode = False
             s = text.rstrip(':').strip()
