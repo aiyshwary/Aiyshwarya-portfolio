@@ -778,6 +778,60 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = normalized
 
+    # Project-specific cleanup: insert "Inference" sub-headings under each
+    # centrality metric in the Raccoon network analysis project.
+    if title == "Mammalia Raccoon Proximity Network Analysis":
+        _CENTRALITY_HDGS = {
+            "Closeness Centrality", "Betweenness Centrality",
+            "Clustering Coefficient", "Eigenvector Centrality",
+            "PageRank Algorithm",
+        }
+        # Raccoon-specific inference lines start with "Raccoon #" or contain
+        # project-specific observations (not generic metric descriptions).
+        _RACCOON_INF_RE = re.compile(
+            r'^(?:Raccoon\s*#|Can\s+spread|Removing\s+or\s+vaccinating|'
+            r'Infection\s+here|Connected\s+to\s+other|Considered\s+a\s+super|'
+            r'Helps\s+rank)',
+            re.IGNORECASE,
+        )
+        rebuilt = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+            if kind == 'section' and text in _CENTRALITY_HDGS:
+                rebuilt.append((kind, text))
+                i += 1
+                # Collect all items until the next section heading or end
+                desc_items = []
+                inf_items = []
+                in_inference = False
+                while i < len(post) and not (post[i][0] == 'section' and post[i][1] not in _CENTRALITY_HDGS and not _RACCOON_INF_RE.match(post[i][1])):
+                    pk, pt = post[i]
+                    # Stop at the next centrality heading or a non-inference section
+                    if pk == 'section' and pt in _CENTRALITY_HDGS:
+                        break
+                    if pk == 'section' and pt in {"Key Findings", "Technologies & Concepts Used"}:
+                        break
+                    if pk == 'subsection':
+                        break
+                    if not in_inference and _RACCOON_INF_RE.match(pt):
+                        in_inference = True
+                    if in_inference:
+                        inf_items.append(('bullet', pt))
+                    else:
+                        desc_items.append(('bullet', pt))
+                    i += 1
+                for item in desc_items:
+                    rebuilt.append(item)
+                if inf_items:
+                    rebuilt.append(('subsection', 'Inference'))
+                    for item in inf_items:
+                        rebuilt.append(item)
+            else:
+                rebuilt.append((kind, text))
+                i += 1
+        post = rebuilt
+
     return post
 
 
