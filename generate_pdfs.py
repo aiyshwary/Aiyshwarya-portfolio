@@ -1153,6 +1153,170 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Multi-Agent Architecture.
+    # The source PDF has a table (Component | Responsible for) that the
+    # text extractor fragments into many broken lines.  We replace the
+    # entire "Core components & their roles" section with properly
+    # merged entries, and fix several other structural issues.
+    if title == "Multi-Agent Architecture":
+        # ── 1. Build replacement items for the components table ──────
+        _COMP_TABLE = [
+            ('subsection', 'PlannerAgent / LLMPlanner'),
+            ('body', 'Translate objectives into steps. Can be deterministic or LLM-assisted.'),
+            ('subsection', 'ExecutorAgent'),
+            ('body', 'Implements the actual data transformations (load, assign_quarter, aggregate, churn, validate, reflect).'),
+            ('subsection', 'ValidatorAgent / LLMValidator'),
+            ('body', 'Checks totals, churn sanity, etc. Optionally asks an LLM to review outputs.'),
+            ('subsection', 'ReflectionAgent'),
+            ('body', 'Scores results and returns suggestions ("investigate lost clients", "retry aggregation", etc.).'),
+            ('subsection', 'MemoryManager'),
+            ('body', 'Tracks short-term step outputs, compresses summaries to long-term memory, maintains idempotency and a tiny semantic index.'),
+            ('subsection', 'CircuitBreaker'),
+            ('body', 'Stops repeating failing steps after a threshold.'),
+            ('subsection', 'MetricsCollector'),
+            ('body', 'Simple in-process counters & timers written to metrics.json.'),
+            ('subsection', 'GraphRunner'),
+            ('body', 'Executes a dependency graph, honouring depends_on and allowing parallelism.'),
+            ('subsection', 'SemanticMemory'),
+            ('body', 'Deterministic vector store used by agents/LLMs for retrieval.'),
+        ]
+
+        # Text markers for the table region
+        _TABLE_START = 'Component Responsible for'
+        _TABLE_END_TEXTS = {'Tools package', 'Deterministic helpers called by executors'}
+
+        rebuilt = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+
+            # "Every execution is a closed-loop..." → body (not subsection)
+            if text.startswith('Every execution is a closed-loop'):
+                rebuilt.append(('body', text + ':'))
+                i += 1
+                continue
+
+            # Run-loop agent lines → bullets
+            if kind == 'body' and any(text.startswith(p) for p in [
+                'Planner –', 'Executor –', 'Validator –',
+                'Reflection –', 'Orchestrator –',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # "Component Responsible for" table header → replace with
+            # the cleaned table and skip all broken table lines.
+            if text == _TABLE_START:
+                # Emit the table header row is already the section heading,
+                # skip it and all table rows until we hit "Tools package"
+                i += 1
+                while i < len(post):
+                    pk, pt = post[i]
+                    if pt in _TABLE_END_TEXTS:
+                        break
+                    i += 1
+                # Insert cleaned table
+                rebuilt.extend(_COMP_TABLE)
+                continue
+
+            # "Retries with exponential backoff" section + "(configurable...)" body → merge
+            if text == 'Retries with exponential backoff':
+                merged_text = text
+                if i + 1 < len(post) and post[i + 1][1].startswith('(configurable'):
+                    merged_text += ' ' + post[i + 1][1]
+                    i += 2
+                else:
+                    i += 1
+                rebuilt.append(('body', merged_text))
+                continue
+
+            # "Memory managers are called throughout" section + body → merge to body
+            if text == 'Memory managers are called throughout':
+                merged_text = text
+                if i + 1 < len(post) and post[i + 1][0] == 'body':
+                    merged_text += ' ' + post[i + 1][1]
+                    i += 2
+                else:
+                    i += 1
+                rebuilt.append(('body', merged_text))
+                continue
+
+            # "Graph execution" as bullet → subsection
+            if kind == 'bullet' and text == 'Graph execution':
+                rebuilt.append(('subsection', text))
+                i += 1
+                continue
+
+            # "Final note" as bullet → subsection
+            if kind == 'bullet' and text == 'Final note':
+                rebuilt.append(('subsection', text))
+                i += 1
+                continue
+
+            # Reliability items (dash-separated) → bullets
+            if kind == 'body' and ' – ' in text and any(text.startswith(p) for p in [
+                'Retries & backoff', 'Circuit breaker', 'Idempotency',
+                'Metrics', 'Logs', 'Tests',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # "open" continuation line after Circuit breaker → merge with previous
+            if kind == 'body' and 'open' in text[:10] and 'abort' in text and rebuilt and rebuilt[-1][1].startswith('Circuit breaker'):
+                prev_k, prev_t = rebuilt[-1]
+                rebuilt[-1] = (prev_k, prev_t + ' ' + text)
+                i += 1
+                continue
+
+            # Multi-agent collaboration body items (Separation, Pluggability, etc.) → bullets
+            if kind == 'body' and ' – ' in text and any(text.startswith(p) for p in [
+                'Separation of concerns', 'Pluggability', 'Deterministic fallbacks',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # Tools package items → bullets
+            if kind == 'body' and any(text.startswith(p) for p in [
+                'DataLoader', 'Validator –', 'SemanticMemory –', 'MemoryManager –',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # "Workflow highlights from tests" items → bullets
+            if kind == 'body' and any(text.startswith(p) for p in [
+                'Chunking', 'GraphRunner correctly', 'Circuit breaker trips',
+                'LLMPlanner respects', 'Semantic memory returns',
+                'Orchestrator accepts',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # Memory model items → bullets
+            if kind == 'body' and any(text.startswith(p) for p in [
+                'Short-term', 'Long-term', 'Semantic –',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # Post-run reflection items → bullets
+            if kind == 'body' and any(text.startswith(p) for p in [
+                'Reflection suggestions', 'Metrics and logs',
+                'Visualizations generated',
+            ]):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     return post
 
 
