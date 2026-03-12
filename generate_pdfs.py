@@ -1088,302 +1088,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
-    # Project-specific cleanup for Sentiment Analysis Extension.
-    # Several one-word heading names (Methodology, Applications, Deployment,
-    # Conclusion) are misclassified as bullets.  Short sentence-like items
-    # that belong under Deployment are misclassified as section headings.
-    if title == "Sentiment Analysis Extension":
-        _SA_SUBSECTION_NAMES = {
-            "Methodology", "Applications", "Deployment", "Conclusion",
-        }
-        rebuilt = []
-        i = 0
-        cur_sub = None
-        while i < len(post):
-            kind, text = post[i]
-
-            # Promote known names to subsection headings
-            if text in _SA_SUBSECTION_NAMES:
-                rebuilt.append(('subsection', text))
-                cur_sub = text
-                i += 1
-                continue
-
-            # Under "Deployment": body/section items → bullets
-            if cur_sub == "Deployment" and kind in ('body', 'section'):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # Track current subsection for other subsections
-            if kind == 'subsection':
-                cur_sub = text
-
-            # Body items right after Methodology that describe the process → bullets
-            if cur_sub == "Methodology" and kind == 'body' and not text.endswith('.'):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            rebuilt.append((kind, text))
-            i += 1
-        post = rebuilt
-    # Project-specific cleanup for Synthetic Image Generation.
-    if title == "Synthetic Image Generation":
-        rebuilt = []
-        i = 0
-        while i < len(post):
-            kind, text = post[i]
-
-            # 1. "End-to-end pipeline explanation (...)" → section heading,
-            #    strip the parenthetical coaching note.
-            if 'End-to-end pipeline explanation' in text:
-                import re as _re
-                clean = _re.sub(r'\s*\([^)]*\)\s*$', '', text).strip()
-                rebuilt.append(('section', clean))
-                i += 1
-                continue
-
-            # 2. "Why synthetic data?" → section heading
-            if text == 'Why synthetic data?':
-                rebuilt.append(('section', text))
-                i += 1
-                continue
-
-            # 3. Under "Two paths": "Or auto-annotate..." body → bullet
-            if kind == 'body' and text.startswith('Or auto-annotate'):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # 4. "Two strategies" subsection: the merged body line with two
-            #    strategies separated by arrow text → split into 2 bullets.
-            if kind == 'body' and 'Spread-out placement' in text and 'Clustered placement' in text:
-                # Split on "Clustered" since the two strategies were merged
-                idx_split = text.find('Clustered placement')
-                if idx_split > 0:
-                    part1 = text[:idx_split].strip()
-                    part2 = text[idx_split:].strip()
-                    rebuilt.append(('bullet', part1))
-                    rebuilt.append(('bullet', part2))
-                else:
-                    rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # 5. "This increases" / "This helps" / "This step simplifies" →
-            #    body text (not subsection heading) so it reads naturally.
-            if kind == 'subsection' and text in {'This increases', 'This helps', 'This step simplifies'}:
-                rebuilt.append(('body', text + ':'))
-                i += 1
-                continue
-
-            # 6. Remove coaching notes: "If interviewer asks...",
-            #    "You can say", and the response body after it.
-            if 'interviewer asks' in text.lower():
-                i += 1
-                continue
-            if text == 'You can say':
-                # Also skip the body line that follows
-                i += 1
-                if i < len(post) and post[i][0] == 'body':
-                    i += 1
-                continue
-
-            rebuilt.append((kind, text))
-            i += 1
-        post = rebuilt
-
-    # Project-specific cleanup for Multi-Agent Architecture.
-    # The source PDF has a table (Component | Responsible for) that the
-    # text extractor fragments into many broken lines.  We replace the
-    # entire "Core components & their roles" section with properly
-    # merged entries, and fix several other structural issues.
-    if title == "Multi-Agent Architecture":
-        # ── 1. Build replacement items for the components table ──────
-        _COMP_TABLE = [
-            ('subsection', 'PlannerAgent / LLMPlanner'),
-            ('body', 'Translate objectives into steps. Can be deterministic or LLM-assisted.'),
-            ('subsection', 'ExecutorAgent'),
-            ('body', 'Implements the actual data transformations (load, assign_quarter, aggregate, churn, validate, reflect).'),
-            ('subsection', 'ValidatorAgent / LLMValidator'),
-            ('body', 'Checks totals, churn sanity, etc. Optionally asks an LLM to review outputs.'),
-            ('subsection', 'ReflectionAgent'),
-            ('body', 'Scores results and returns suggestions ("investigate lost clients", "retry aggregation", etc.).'),
-            ('subsection', 'MemoryManager'),
-            ('body', 'Tracks short-term step outputs, compresses summaries to long-term memory, maintains idempotency and a tiny semantic index.'),
-            ('subsection', 'CircuitBreaker'),
-            ('body', 'Stops repeating failing steps after a threshold.'),
-            ('subsection', 'MetricsCollector'),
-            ('body', 'Simple in-process counters & timers written to metrics.json.'),
-            ('subsection', 'GraphRunner'),
-            ('body', 'Executes a dependency graph, honouring depends_on and allowing parallelism.'),
-            ('subsection', 'SemanticMemory'),
-            ('body', 'Deterministic vector store used by agents/LLMs for retrieval.'),
-        ]
-
-        # Text markers for the table region
-        _TABLE_START = 'Component Responsible for'
-        _TABLE_END_TEXTS = {'Tools package', 'Deterministic helpers called by executors'}
-
-        rebuilt = []
-        i = 0
-        while i < len(post):
-            kind, text = post[i]
-
-            # "Every execution is a closed-loop..." → body (not subsection)
-            if text.startswith('Every execution is a closed-loop'):
-                rebuilt.append(('body', text + ':'))
-                i += 1
-                continue
-
-            # Run-loop agent lines → bullets
-            if kind == 'body' and any(text.startswith(p) for p in [
-                'Planner –', 'Executor –', 'Validator –',
-                'Reflection –', 'Orchestrator –',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # "Component Responsible for" table header → replace with
-            # the cleaned table and skip all broken table lines.
-            if text == _TABLE_START:
-                # Emit the table header row is already the section heading,
-                # skip it and all table rows until we hit "Tools package"
-                i += 1
-                while i < len(post):
-                    pk, pt = post[i]
-                    if pt in _TABLE_END_TEXTS:
-                        break
-                    i += 1
-                # Insert cleaned table
-                rebuilt.extend(_COMP_TABLE)
-                continue
-
-            # "Retries with exponential backoff" section + "(configurable...)" body → merge
-            if text == 'Retries with exponential backoff':
-                merged_text = text
-                if i + 1 < len(post) and post[i + 1][1].startswith('(configurable'):
-                    merged_text += ' ' + post[i + 1][1]
-                    i += 2
-                else:
-                    i += 1
-                rebuilt.append(('body', merged_text))
-                continue
-
-            # "Memory managers are called throughout" section + body → merge to body
-            if text == 'Memory managers are called throughout':
-                merged_text = text
-                if i + 1 < len(post) and post[i + 1][0] == 'body':
-                    merged_text += ' ' + post[i + 1][1]
-                    i += 2
-                else:
-                    i += 1
-                rebuilt.append(('body', merged_text))
-                continue
-
-            # "Graph execution" as bullet → subsection
-            if kind == 'bullet' and text == 'Graph execution':
-                rebuilt.append(('subsection', text))
-                i += 1
-                continue
-
-            # "Final note" as bullet → subsection
-            if kind == 'bullet' and text == 'Final note':
-                rebuilt.append(('subsection', text))
-                i += 1
-                continue
-
-            # Reliability items (dash-separated) → bullets
-            if kind == 'body' and ' – ' in text and any(text.startswith(p) for p in [
-                'Retries & backoff', 'Circuit breaker', 'Idempotency',
-                'Metrics', 'Logs', 'Tests',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # "open" continuation line after Circuit breaker → merge with previous
-            if kind == 'body' and 'open' in text[:10] and 'abort' in text and rebuilt and rebuilt[-1][1].startswith('Circuit breaker'):
-                prev_k, prev_t = rebuilt[-1]
-                rebuilt[-1] = (prev_k, prev_t + ' ' + text)
-                i += 1
-                continue
-
-            # Multi-agent collaboration items (Separation, Pluggability, etc.) → bullets
-            # "Separation of concerns" may arrive as bullet+body split (continuation)
-            if ' – ' in text and any(text.startswith(p) for p in [
-                'Separation of concerns', 'Pluggability', 'Deterministic fallbacks',
-            ]):
-                merged = text
-                # If the line ends with a comma, the next body line is a continuation
-                while (i + 1 < len(post)
-                       and post[i + 1][0] == 'body'
-                       and post[i + 1][1][0].islower()):
-                    merged += ' ' + post[i + 1][1]
-                    i += 1
-                rebuilt.append(('bullet', merged))
-                i += 1
-                continue
-
-            # Tools package items → bullets
-            if kind == 'body' and any(text.startswith(p) for p in [
-                'DataLoader', 'Validator –', 'SemanticMemory –', 'MemoryManager –',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # "Workflow highlights from tests" items → bullets
-            if kind == 'body' and any(text.startswith(p) for p in [
-                'Chunking', 'GraphRunner correctly', 'Circuit breaker trips',
-                'LLMPlanner respects', 'Semantic memory returns',
-                'Orchestrator accepts',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # Memory model items → bullets
-            if kind == 'body' and any(text.startswith(p) for p in [
-                'Short-term', 'Long-term', 'Semantic –',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # Post-run reflection items → bullets
-            if kind == 'body' and any(text.startswith(p) for p in [
-                'Reflection suggestions', 'Metrics and logs',
-                'Visualizations generated',
-            ]):
-                rebuilt.append(('bullet', text))
-                i += 1
-                continue
-
-            # "Orchestrator runs load_data" subsection + fragmented bullets/body → merge
-            if text.startswith('Orchestrator runs load_data'):
-                merged = text + ':'
-                i += 1
-                # Absorb following bullets/body until we hit a section or
-                # "Orchestrator persists" (which starts a new sentence)
-                while i < len(post):
-                    nk, nt = post[i]
-                    if nk == 'section':
-                        break
-                    if nt.startswith('Orchestrator persists'):
-                        # This is a separate sentence – keep it as body
-                        break
-                    merged += ' ' + nt
-                    i += 1
-                rebuilt.append(('body', merged))
-                continue
-
-            rebuilt.append((kind, text))
-            i += 1
-        post = rebuilt
-
+    # All project-specific cleanup removed. Use normal style for all projects.
     return post
 
 
@@ -1421,17 +1126,21 @@ class Writer:
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
-        # Avoid orphaned section labels at the bottom of a page
-        min_block = 0.9 * cm + (LH * 3)
+        # Modern, bold, colored section header with divider
+        min_block = 1.2 * cm + (LH * 3)
         self._need(min_block)
+        # Shaded background for section header
+        header_h = 1.0 * cm
+        self.c.setFillColor(C_CARD)
+        self.c.roundRect(ML, self.y - header_h + 0.2 * cm, CW, header_h, 6, fill=1, stroke=0)
         self.c.setFont(FB, S_SECTION)
         self.c.setFillColor(C_ACCENT)
-        self.c.drawString(ML, self.y, label.upper())
-        self.y -= 0.15 * cm
+        self.c.drawString(ML + 0.3 * cm, self.y - 0.45 * cm, label.upper())
+        self.y -= header_h - 0.2 * cm
         self.c.setStrokeColor(C_DIV)
-        self.c.setLineWidth(0.5)
+        self.c.setLineWidth(1.2)
         self.c.line(ML, self.y, PW - MR, self.y)
-        self.y -= 0.55 * cm
+        self.y -= 0.5 * cm
 
     def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
@@ -1453,17 +1162,20 @@ class Writer:
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
     def bullet_card(self, content: str, prefix: str = "-"):
-        """Draws content inside a rounded card with a prefix (dash or number)."""
-        pad_x = 0.4 * cm
-        pad_y = 0.32 * cm
+        """Draws content inside a modern rounded card with a prefix (dash or number)."""
+        pad_x = 0.5 * cm
+        pad_y = 0.36 * cm
         prefix_w = self.c.stringWidth(prefix, FB, S_BODY)
-        gap_w = 0.2 * cm
+        gap_w = 0.25 * cm
         inner_w = CW - (pad_x * 2 + prefix_w + gap_w)
         lines = simpleSplit(content, F, S_BODY, inner_w)
         block_h = len(lines) * LH + 2 * pad_y
-        self._need(block_h + 0.2 * cm)
+        self._need(block_h + 0.3 * cm)
 
-        _rrect(self.c, ML, self.y - block_h, CW, block_h, 4, C_CARD, stroke=True)
+        # Card with subtle shadow effect
+        self.c.setFillColor(HexColor("#E9ECF3"))
+        self.c.roundRect(ML + 1, self.y - block_h - 1, CW, block_h, 7, fill=1, stroke=0)
+        _rrect(self.c, ML, self.y - block_h, CW, block_h, 7, C_CARD, stroke=True)
 
         # Center the text block vertically within the card using font metrics
         ascent = pdfmetrics.getAscent(F, S_BODY)
@@ -1487,7 +1199,7 @@ class Writer:
         self.c.drawText(text)
 
         # Add a clearer gap after the card
-        self.y -= block_h + 0.5 * cm
+        self.y -= block_h + 0.6 * cm
 
     def equation(self, content: str):
         """Draw an equation at normal body font size."""
