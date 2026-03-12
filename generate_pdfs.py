@@ -1593,52 +1593,9 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         w.section_label("Technical Walkthrough")
         num = 1
         under_step = False
-        # --- Custom formatting for Video RAG Retrieval Project summary/problem statement ---
-        is_video_rag = project["title"].strip().lower() == "video rag retrieval project"
         i = 0
         while i < len(filtered_items):
             kind, content = filtered_items[i]
-            # Center and box the summary and problem statement for Video RAG
-            if is_video_rag and kind == 'section' and content.strip().lower() == 'one-line summary':
-                # Find the next body
-                if i + 1 < len(filtered_items) and filtered_items[i+1][0] == 'body':
-                    w.gap(0.2 * cm)
-                    # Draw a shaded box with centered, italic text
-                    box_text = filtered_items[i+1][1]
-                    box_w = CW * 0.95
-                    box_h = LH * 3
-                    w._need(box_h + 0.2 * cm)
-                    _rrect(w.c, ML + (CW - box_w)/2, w.y - box_h, box_w, box_h, 8, HexColor("#F0F4FF"), stroke=True)
-                    w.c.setFont(F, S_BODY)
-                    w.c.setFillColor(HexColor("#007BFF"))
-                    # Centered, italic
-                    lines = simpleSplit(box_text, F, S_BODY, box_w - 1.5*cm)
-                    y0 = w.y - (box_h/2) + (LH * (len(lines)-1)/2)
-                    for idx, line in enumerate(lines):
-                        text_w = w.c.stringWidth(line, F, S_BODY)
-                        w.c.drawString(ML + (CW - text_w)/2, y0 - idx*LH, line)
-                    w.y -= box_h + 0.3*cm
-                    i += 2
-                    continue
-            if is_video_rag and kind == 'section' and content.strip().lower() == 'problem statement':
-                if i + 1 < len(filtered_items) and filtered_items[i+1][0] == 'body':
-                    w.gap(0.1 * cm)
-                    box_text = filtered_items[i+1][1]
-                    box_w = CW * 0.95
-                    box_h = LH * 3.2
-                    w._need(box_h + 0.2 * cm)
-                    _rrect(w.c, ML + (CW - box_w)/2, w.y - box_h, box_w, box_h, 8, HexColor("#FFF7E6"), stroke=True)
-                    w.c.setFont(F, S_BODY)
-                    w.c.setFillColor(HexColor("#E67C00"))
-                    lines = simpleSplit(box_text, F, S_BODY, box_w - 1.5*cm)
-                    y0 = w.y - (box_h/2) + (LH * (len(lines)-1)/2)
-                    for idx, line in enumerate(lines):
-                        text_w = w.c.stringWidth(line, F, S_BODY)
-                        w.c.drawString(ML + (CW - text_w)/2, y0 - idx*LH, line)
-                    w.y -= box_h + 0.3*cm
-                    i += 2
-                    continue
-            # --- End custom formatting ---
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
