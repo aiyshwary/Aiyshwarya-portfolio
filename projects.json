@@ -1,457 +1,56 @@
 [
   {
-    "title": "Annotation Transfer Tool",
-    "summary": "A smart auto-annotation pipeline that leverages deep image similarity to transfer labels from previously human-annotated images to new unannotated ones, significantly reducing manual labeling effort in computer vision workflows.",
-    "impact": "Reduced manual annotation effort by automatically transferring labels from existing human-labeled images to new images using deep feature similarity and a modular 8-step pipeline integrated with CVAT and AWS S3.",
-    "bullets": [
-      "Downloads labeled images from AWS S3 and extracts annotations from Datamaro JSON format.",
-      "Generates image crops, normalizes labels, and creates masks for each labeled region.",
-      "Uses DeepImageSearch (GPU-accelerated) to identify the most visually similar labeled images for each new image.",
-      "Transfers and corrects annotations from matched images, then exports back to CVAT-compatible JSON.",
-      "Includes normalized and denormalized visualization scripts and an interactive Jupyter demo notebook.",
-      "Uses VGG19 as the feature extraction backbone with FAISS indexing for similarity search; supports incremental indexing so previously indexed images are not re-processed.",
-      "Annotation transfer selects the best match per crop by minimum cosine distance, replacing class and attribute tokens while preserving original polygon coordinates.",
-      "Automates CVAT task creation via REST API — programmatically creates cloud storage connections, generates S3-compatible JSONL manifests with per-image checksums, and uploads Datumaro ZIP annotations."
-    ],
-    "techs": [
-      "Python",
-      "Computer Vision",
-      "AWS S3",
-      "CVAT",
-      "PyTorch"
-    ],
-    "thumbnail": "assets/images/Annotation Transfer Tool.png",
-    "github": "https://github.com/aiyshwary/Annotation-Transfer-Tool",
-    "featured": true
-  },
-  {
     "title": "Bus Reservation And Ticketing System",
-    "summary": "A Java-based console application that simulates a complete bus ticket reservation and billing workflow, supporting multi-passenger booking, seat management, and discount-based billing operations.",
-    "impact": "Built a fully functional console-based Bus Reservation and Ticketing System in Java with structured input validation, in-memory seat management, and automated billing with passenger-type discounts.",
-    "bullets": [
-      "Implements user authentication, seat selection, and multi-passenger booking in a single session.",
-      "Handles billing logic including discount tiers for different passenger categories.",
-      "Uses structured in-memory data storage for transaction tracking without a database dependency.",
-      "Validates all inputs to prevent double-booking and illegal seat selections.",
-      "Supports 5 Mindanao route destinations with preset fares and 20 seats each; applies a flat 20% discount for PWD, Student, and Senior Citizen passengers.",
-      "Offers a 5-option console menu: Destination (view routes and live seat counts), Passengers (book), Billing (payment with change), View (search and receipt), and Exit.",
-      "Enforces a 3-attempt login lockout; uses three parallel 2D arrays to store passenger name/destination/status, counts, and fare data."
-    ],
-    "techs": [
-      "Java",
-      "OOP",
-      "Console Application"
-    ],
-    "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png",
+    "summary": "Java-based console application simulating bus ticket reservation and billing. Allows login, ticket booking, passenger management, and billing operations.",
+    "impact": "Main menu for destination, passenger, billing, view, and exit. Handles seat availability, discounts for PWD, students, senior citizens. Prints passenger details, fare, and handles payment and change.",
     "github": "https://github.com/aiyshwary/Bus-Reservation-and-Ticketing-System",
-    "featured": false
+    "techs": ["Java"],
+    "bullets": ["Main menu for destination, passenger, billing, view, and exit", "Handles seat availability, discounts for PWD, students, senior citizens", "Prints passenger details, fare, and handles payment and change"],
+    "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf"
   },
   {
-    "title": "Facial Emotion Recognition",
-    "summary": "A comparative study of machine learning and deep learning approaches for recognizing facial emotions from grayscale images, benchmarking CNN, SVM, Random Forest, and Decision Tree models across multiple datasets.",
-    "impact": "Implemented and benchmarked four ML/DL models for 7-class facial emotion classification. CNN achieved the best generalization at approximately 75.5% accuracy, outperforming all traditional models on unseen data.",
-    "bullets": [
-      "Trained on icml_face_data and Kaggle FER datasets with 7 emotion classes (happy, sad, angry, fear, surprise, disgust, neutral).",
-      "CNN with data augmentation and stratified cross-validation achieved approximately 75.5% validation accuracy.",
-      "Random Forest reduced overfitting vs Decision Tree, achieving approximately 89.2% on ICML dataset.",
-      "SVM with PCA preprocessing achieved approximately 55% accuracy — lowest among all models on high-dimensional pixel data.",
-      "Concluded CNNs are best suited for FER due to hierarchical spatial feature extraction.",
-      "CNN architecture: 4 convolutional blocks (64-128-256-512 filters) with BatchNormalization, He Normal initialization, Dropout (0.25-0.6), and Dense(512) to Dense(7, softmax) head totaling ~7.1M parameters.",
-      "Input images are 48x48 grayscale pixels normalized to [0,1]; augmentation via Keras ImageDataGenerator with rotation (15 degrees), width/height shift, shear, zoom (0.15), and horizontal flip.",
-      "Training used Adam optimizer with EarlyStopping (patience=11), ReduceLROnPlateau (factor=0.5, patience=7, min_lr=1e-5), and 10-fold stratified cross-validation with batch size 32."
-    ],
-    "techs": [
-      "Python",
-      "CNN",
-      "SVM",
-      "Random Forest",
-      "TensorFlow",
-      "Jupyter"
-    ],
-    "thumbnail": "assets/images/thumbnail.png",
+    "title": "Facial Emotion Detection",
+    "summary": "Detects facial emotions using machine learning models (CNN, SVM, Decision Tree, Random Forest). Features extraction, preprocessing, and performance comparison across multiple datasets.",
+    "impact": "Facial Emotion Recognition (FER) for applications in healthcare, e-learning, retail, surveillance, and entertainment. Training accuracy up to ~99.8%, ICML dataset ~86.1%.",
     "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
-    "featured": true
-  },
-  {
-    "title": "Hybrid Search & Retrieval POC",
-    "summary": "A production-style multilingual hybrid search engine for Indian-language documents, combining BM25 lexical search and FAISS semantic retrieval to rank documents with snippet-level evidence across Tamil, Hindi, Telugu and more.",
-    "impact": "Built a multilingual hybrid search pipeline supporting Indian-language PDFs and DOCX files, combining BM25 (OpenSearch) and FAISS IVF-PQ for accurate document retrieval with chunk-level evidence and best-snippet selection.",
-    "bullets": [
-      "Ingests PDF and DOCX files with digital text extraction and Tesseract OCR fallback for scanned documents.",
-      "Detects document language using FastText (LID176) across Tamil, Hindi, Telugu, Kannada, Bengali and more.",
-      "Applies SimHash near-duplicate detection and token-aware chunking with sentence-based splitting.",
-      "Generates multilingual embeddings using Sentence Transformers and indexes them in FAISS IVF-PQ.",
-      "Hybrid BM25 and ANN retrieval with document-level score aggregation and best-snippet selection per result.",
-      "Embeds with paraphrase-multilingual-MiniLM-L12-v2 (L2-normalized, batch 256) and queries FAISS at nprobe=16; final document score is 0.5 x max(BM25) + 0.5 x max(ANN) with reciprocal-rank ANN scoring.",
-      "Falls back to Lingua library when FastText confidence drops below 0.60, and normalizes ISO-639-1 codes to ISO-639-3 across the entire pipeline for consistent language filtering.",
-      "Parallelizes ingestion via ProcessPoolExecutor with (cpu_count - 2) workers and runs BM25 and FAISS searches concurrently in separate threads before union."
-    ],
-    "techs": [
-      "Python",
-      "FAISS",
-      "BM25",
-      "OpenSearch",
-      "Sentence Transformers",
-      "Tesseract"
-    ],
-    "thumbnail": "assets/images/Hybrid Search Engine.png",
-    "github": "https://github.com/aiyshwary/Search_Engine",
-    "featured": true
-  },
-  {
-    "title": "Image Classification Extension",
-    "summary": "A RapidMiner Studio extension enabling no-code transfer learning for image classification, supporting fine-tuning of popular CNN architectures on custom datasets and ONNX-based inference without writing a single line of code.",
-    "impact": "Developed a RapidMiner extension with two custom operators — Fine Tuning and Inference — enabling practitioners to apply transfer learning with ResNet, VGGNet, DenseNet, Inception and more using a drag-and-drop interface.",
-    "bullets": [
-      "Fine Tuning operator accepts an image directory and hyperparameters; outputs a fine-tuned model in ONNX format.",
-      "Inference operator loads the ONNX model and outputs a prediction DataFrame with classified labels.",
-      "Supports ResNet, AlexNet, VGGNet, SqueezeNet, DenseNet, and Inception architectures.",
-      "Compatible with both CPU and GPU (CUDA) environments via configurable conda environment.",
-      "Installed as a JAR extension in RapidMiner Studio with Python Scripting backend.",
-      "Inference operator requires four inputs: the ONNX model path, image path, class-label text file, and result directory — organizing classified output images alongside the prediction DataFrame.",
-      "Depends on Custom Operators (>=1.1.0) and Python Scripting (>=10.0.1) marketplace extensions with a pinned conda environment (Python 3.10.8, ONNX 1.15.0, ONNX Runtime 1.15.1)."
-    ],
-    "techs": [
-      "Python",
-      "PyTorch",
-      "ONNX",
-      "RapidMiner",
-      "Transfer Learning"
-    ],
-    "thumbnail": "assets/images/Image Classification Extension.png",
-    "github": "https://github.com/aiyshwary/Image-Classification-Extension-in-Rapid-Miner",
-    "featured": false
-  },
-  {
-    "title": "Mammalia Raccoon Proximity Network Analysis",
-    "summary": "A graph-based epidemiological study modelling rabies transmission risk in urban raccoon populations through proximity network analysis and centrality measures, supporting public health and wildlife management decisions.",
-    "impact": "Constructed and analyzed a raccoon proximity network using real-world contact data, applying centrality measures to identify high-risk individuals and quantify potential rabies spread pathways within urban populations.",
-    "bullets": [
-      "Built a weighted proximity network from the mammalia-raccoon-proximity dataset using Python and NetworkX.",
-      "Computed degree, betweenness, closeness, and eigenvector centrality to rank individuals by transmission risk.",
-      "Identified superspreader nodes whose removal would most disrupt disease propagation chains.",
-      "Visualized network topology and centrality distributions to communicate findings clearly.",
-      "Results provide evidence-based recommendations for targeted wildlife intervention strategies.",
-      "Analyzed a dense 24-node, 226-edge proximity graph (~82% density) derived from 1,997 weighted temporal contact records.",
-      "Computed clustering coefficients and aggregated per-node contact strength (total edge weight) to quantify interaction intensity — node 4 had the highest total contact weight (956,341).",
-      "Rendered the network using Kamada-Kawai force-directed layout (Matplotlib) to reveal spatial clustering patterns in the proximity data."
-    ],
-    "techs": [
-      "Python",
-      "NetworkX",
-      "Jupyter",
-      "Graph Analysis",
-      "Epidemiology"
-    ],
-    "thumbnail": "assets/images/Raccoon Network Analysis.png",
-    "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
-    "featured": false
-  },
-  {
-    "title": "Object Detection Extension",
-    "summary": "A RapidMiner Studio extension that brings transfer learning-based object detection into a no-code environment, supporting fine-tuning and inference with Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet models.",
-    "impact": "Developed two RapidMiner operators for object detection — FineTuneObjectDetectionModel and ObjectDetectionModelInference — enabling users to train and deploy detection models within a visual workflow without writing code.",
-    "bullets": [
-      "FineTuneObjectDetectionModel accepts image and annotation directories (YOLO/Pascal VOC) and outputs model weights and class list CSV.",
-      "ObjectDetectionModelInference runs predictions on new images and returns bounding boxes and class labels as a DataFrame.",
-      "Supports five architectures: Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet for varying speed-accuracy trade-offs.",
-      "Configurable for CPU-only and GPU (CUDA cu118) environments; installed as a JAR extension in RapidMiner Studio.",
-      "Enables domain-specific object detection with minimal ML expertise using a drag-and-drop process designer.",
-      "Inference operator can optionally save annotated images with overlaid prediction bounding boxes via Matplotlib, in addition to the DataFrame output.",
-      "Uses chardet for automatic annotation-file encoding detection, ensuring robust parsing of YOLO/Pascal VOC label files across different systems and locales."
-    ],
-    "techs": [
-      "Python",
-      "PyTorch",
-      "ONNX Runtime",
-      "RapidMiner",
-      "Object Detection"
-    ],
-    "thumbnail": "assets/images/object detection extension.png",
-    "github": "https://github.com/aiyshwary/Object-Detection-Extension-in-Rapid-Miner",
-    "featured": true
-  },
-  {
-    "title": "Online Event Management System",
-    "summary": "A database-driven system for managing events end-to-end, allowing customers to register, browse and book events with discounts, while giving administrators full control over event listings, users, payments and preferences.",
-    "impact": "Designed and implemented a normalized relational database and NoSQL schema for an Online Event Management System, covering customer registration, booking workflows, discount management, and payment processing.",
-    "bullets": [
-      "Designed a fully normalized relational schema (up to 3NF) with entities for Users, Events, Bookings, Payments, and Discounts.",
-      "Modeled equivalent NoSQL document structures for flexible event-type storage and preference handling.",
-      "Admin interface supports CRUD operations on events, user management, and discount configuration.",
-      "Customer portal enables account creation, event browsing, booking with preference selection, and payment tracking.",
-      "Schema documented with ER diagrams, normalization steps, and a detailed project report."
-    ],
-    "techs": [
-      "SQL",
-      "NoSQL",
-      "Database Design",
-      "Normalization"
-    ],
-    "thumbnail": "assets/images/Online Event Management System.png",
-    "github": "https://github.com/aiyshwary/Online-Event-Management-System",
-    "featured": false
-  },
-  {
-    "title": "Sentiment Analysis Extension",
-    "summary": "A multimodal sentiment analysis project that independently extracts and analyses sentiment from both the video (visual) and audio streams of a recording, combining insights from two separate NLP and signal processing pipelines.",
-    "impact": "Built a dual-stream sentiment analysis pipeline that separates video and audio from a recording and independently classifies sentiment from each modality, enabling richer multimodal emotional understanding.",
-    "bullets": [
-      "Extracts audio track from video files and applies speech-to-text followed by NLP-based sentiment classification.",
-      "Processes video frames independently to infer visual sentiment cues from facial expressions and scene context.",
-      "Outputs positive, neutral, or negative sentiment labels with confidence scores per modality.",
-      "Designed for use cases including customer feedback analysis, social media monitoring, and presentation review.",
-      "Implemented using Hugging Face pretrained models and RapidMiner for pipeline orchestration."
-    ],
-    "techs": [
-      "Python",
-      "Hugging Face",
-      "NLP",
-      "RapidMiner",
-      "Audio Processing"
-    ],
-    "thumbnail": "assets/images/Video-based-and-audio-based-sentiment-analysis.png",
-    "github": "https://github.com/aiyshwary/Video-based-and-audio-based-sentiment-analysis",
-    "featured": false
-  },
-  {
-    "title": "Synthetic Image Generation",
-    "summary": "An automated pipeline for generating high-quality synthetic training images for object detection, addressing class-imbalanced datasets by compositing annotated object crops onto varied backgrounds with randomized augmentations.",
-    "impact": "Built an end-to-end synthetic image generation pipeline that composites real object crops onto diverse backgrounds with randomized augmentations, producing annotated training data that reduces dependency on costly manual data collection.",
-    "bullets": [
-      "Extracts foreground object crops from existing annotated datasets using bounding box and mask information.",
-      "Composites crops onto varied background images with randomized scale, rotation, and position transformations.",
-      "Automatically generates YOLO/Pascal VOC-compatible annotation files alongside each synthetic image.",
-      "Targets underrepresented classes to balance dataset distributions for improved model generalization.",
-      "Validated improvements in downstream detection model performance on augmented versus original-only training sets.",
-      "Uses Ultralytics auto_annotate with a custom YOLO detection model and SAM2 for automatic polygon-level instance segmentation labels.",
-      "Implements three synthesis strategies: CropScatterSynth (up to 30 objects/image), ClusteredSyntheticGen (40,000 instances/class target), and SyntheticPhaseGen (three-phase YAML-configurable generation) with multithreaded generation.",
-      "Dockerized on nvidia/cuda:12.2.0 with full 9-step bash pipeline: S3 download, annotation conversion, auto-annotation, crop extraction, synthetic generation, and visualization."
-    ],
-    "techs": [
-      "Python",
-      "Computer Vision",
-      "OpenCV",
-      "Data Augmentation"
-    ],
-    "thumbnail": "assets/images/Synthetic Image Generation.png",
-    "github": "https://github.com/aiyshwary/Synthetic_waste_image_generation",
-    "featured": true
-  },
-  {
-    "title": "Multi-Agent Architecture",
-    "summary": "A production-grade agentic pipeline that combines LLM-driven planning with deterministic Python analytics to perform revenue analysis and churn prediction, featuring an Orchestrator-Executor-Reflection loop with memory management and Docker deployment.",
-    "impact": "Designed and implemented a multi-agent revenue and churn analysis system where an LLM Planner coordinates an Executor, Validator, and Reflection agent, keeping LLMs focused on reasoning while Python handles all numeric computation.",
-    "bullets": [
-      "Planner emits an executable plan (list or graph of nodes) from a high-level task description.",
-      "Orchestrator runs each step via the Executor, applies deterministic validators, and uses Reflection to decide retry or replan actions.",
-      "Memory Manager persists short summaries and semantic snippets for context retrieval across long pipelines.",
-      "Outputs churn_report.json, per-client quarterly revenue CSVs, and HTML/PNG visualizations per run.",
-      "Fully containerized with Docker Compose; CI/CD via GitHub Actions with pytest unit test suite.",
-      "GraphRunner resolves step dependencies as a DAG and executes ready nodes in parallel via ThreadPoolExecutor, with per-step CircuitBreaker and SHA-256 idempotency keys to prevent duplicate execution.",
-      "SemanticMemory uses a dependency-free in-memory cosine-similarity index with deterministic MD5/SHA-256 token hashing for fully reproducible tests; long-term memory uses zlib compression and persists to JSON.",
-      "LLMClient supports both a mock provider (deterministic stubs for offline testing) and OpenAI provider (gpt-3.5-turbo); TokenEstimator enforces budgets before every call. Visualizations generated with Matplotlib (PNG) and Plotly (interactive HTML)."
-    ],
-    "techs": [
-      "Python",
-      "LLM",
-      "Multi-Agent",
-      "Pandas",
-      "Docker",
-      "GitHub Actions"
-    ],
-    "thumbnail": "assets/images/multi-agent-architecture.svg",
-    "github": "https://github.com/aiyshwary/multi-agent-revenue-churn",
-    "featured": false
-  },
-  {
-    "title": "Video RAG Retrieval Project",
-    "summary": "A semantic video search system that extracts frames, generates scene captions using ViT-GPT2, and embeds them with SentenceTransformers and OpenCLIP into a dual FAISS index, enabling natural language queries to retrieve the most relevant video scenes with timestamps.",
-    "pdf": "assets/projects/video-rag-retrieval-project.pdf",
-    "original_filename": "Video RAG Retrieval Project.pdf",
-    "impact": "Built a Visual RAG system that makes unstructured video content semantically searchable: a text query retrieves the most relevant scenes with timestamps by matching against dual text and image embedding indexes via cosine similarity.",
-    "bullets": [
-      "Extracts frames at a configurable FPS and generates natural-language scene captions using ViT-GPT2 image captioning.",
-      "Computes text embeddings with SentenceTransformers (MiniLM) and image embeddings with OpenCLIP for dual-modality indexing.",
-      "Stores embeddings and metadata in two parallel FAISS indexes supporting independent text or image-based retrieval.",
-      "Query interface accepts a natural language string and returns top-k matching scenes with frame references and timestamps.",
-      "Modular architecture (preprocessing, embeddings, storage, retrieval) designed for extension to production vector databases.",
-      "FAISS indexes use IndexFlatIP with L2-normalized vectors for cosine-similarity search; OpenCLIP defaults to ViT-g-14 pretrained on LAION-2B with automatic GPU/CPU selection.",
-      "Includes a pytest suite and a self-contained demo that synthesizes a 30-frame test video with OpenCV to run the full index-and-query pipeline without needing a real video file."
-    ],
-    "techs": [
-      "Python",
-      "FAISS",
-      "OpenCLIP",
-      "ViT-GPT2",
-      "Sentence Transformers",
-      "RAG"
-    ],
-    "thumbnail": "assets/images/Video RAG Retrieval.png",
-    "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
-    "featured": true,
-    "walkthrough": [
-      {"kind": "section", "text": "One-line summary"},
-      {"kind": "body", "text": "I built a Visual Retrieval-Augmented Generation (RAG) system that retrieves relevant video scenes based on a user’s text prompt by combining vision models and vector similarity search."},
-      {"kind": "section", "text": "Problem statement"},
-      {"kind": "body", "text": "Searching videos using text is hard because video content is unstructured. Traditional keyword search doesn’t understand what’s actually happening inside a video. My project solves this by converting both video scenes and user queries into embeddings and retrieving the most relevant video segments."},
-      {"kind": "section", "text": "High-level architecture"},
-      {"kind": "bullet", "text": "Scene understanding using vision models"},
-      {"kind": "bullet", "text": "Vector storage for text and image embeddings"},
-      {"kind": "bullet", "text": "Similarity-based retrieval using VDMS"},
-      {"kind": "bullet", "text": "Video → Scene Description + Frames → Embeddings → Vector DB → Retrieval → Video Clips"},
-      {"kind": "section", "text": "Input & preprocessing"},
-      {"kind": "body", "text": "The input to the system is one or more videos. Each video is processed to extract: Scene-level textual descriptions using open-source vision models like Video-LLaMA. Key video frames along with metadata like frame number, FPS, and timestamp."},
-      {"kind": "section", "text": "Vision understanding"},
-      {"kind": "body", "text": "Vision-language models are used to understand the video content. These models analyze video scenes and generate natural language descriptions that summarize what’s happening in each scene. For example, a scene might be described as ‘a person walking into a store and picking up an item’."},
-      {"kind": "section", "text": "Embedding strategy"},
-      {"kind": "body", "text": "To support efficient retrieval, two types of embeddings are stored in separate vector stores:"},
-      {"kind": "bullet", "text": "Text embeddings: Model: SentenceTransformer – all-MiniLM-L6-V2 / L12-V2. Used for scene descriptions and user queries. This converts textual descriptions into dense vectors that capture semantic meaning."},
-      {"kind": "bullet", "text": "Image embeddings: Model: OpenCLIP – ViT-g-14. Used for video frames. This helps capture visual semantics like objects, actions, and context directly from frames."},
-      {"kind": "section", "text": "Vector storage & retrieval"},
-      {"kind": "body", "text": "Both text and image embeddings are stored in VDMS, which allows fast vector similarity search. Separate vector collections are maintained for text and image embeddings but are linked using video metadata."},
-      {"kind": "bullet", "text": "Stored metadata includes: Video name, Scene ID, Frame number, Timestamp"},
-      {"kind": "section", "text": "Query flow"},
-      {"kind": "body", "text": "When a user enters a text prompt: Prompt is converted into a text embedding. Vector similarity search is performed against scene text embeddings and (optionally) image embeddings. The system retrieves the most relevant scenes and corresponding frames and timestamps."},
-      {"kind": "section", "text": "Final output"},
-      {"kind": "body", "text": "Scene description and exact time range to jump to in the video. Text embeddings capture semantic meaning, while image embeddings capture visual features. Using both improves retrieval accuracy because some queries are better answered by visual similarity and others by textual context."},
-      {"kind": "section", "text": "Example"},
-      {"kind": "bullet", "text": "‘a red car’ → image embeddings"},
-      {"kind": "bullet", "text": "‘a tense conversation’ → text embeddings"},
-      {"kind": "section", "text": "Technical depth"},
-      {"kind": "bullet", "text": "Efficient vector search using cosine similarity"},
-      {"kind": "bullet", "text": "Decoupling embeddings for scalability"},
-      {"kind": "bullet", "text": "Model choice based on speed vs accuracy"},
-      {"kind": "bullet", "text": "Frame sampling using FPS to avoid redundancy"},
-      {"kind": "section", "text": "Closing line"},
-      {"kind": "body", "text": "This approach makes video content searchable, explainable, and scalable, and it can be extended to surveillance, media indexing, or enterprise video search."},
-      {"kind": "section", "text": "Short version"},
-      {"kind": "body", "text": "A Visual RAG system enables semantic search over videos. It uses vision models to generate scene descriptions and extract frames, converts them into text and image embeddings using SentenceTransformers and OpenCLIP, stores them in VDMS, and retrieves relevant video segments based on user queries."}
-    ]
-  },
-  {
-    "title": "Traffic Monitoring System",
-    "summary": "A PHP and SQL-based web application that supports traffic controllers with real-time violator tracking, periodic traffic status notifications, daily reports, and transport department recommendations for infrastructure improvements.",
-    "impact": "Developed a multi-role Traffic Monitoring System web application with separate portals for admins, officers, and citizens, enabling automated violator tracking, fine management, road signalling status, and daily traffic reporting.",
-    "bullets": [
-      "Admin portal manages user accounts, officer assignments, road data, and signalling configurations.",
-      "Officer portal logs violators, records fines, and updates real-time road and signal status.",
-      "Citizen portal supports account registration, violation history lookup, and online fine payment.",
-      "Automated daily reports summarize traffic violations and flag roads needing infrastructure attention.",
-      "Built with PHP, MySQL (XAMPP), JavaScript, and CSS with a responsive multi-role front-end.",
-      "Uses PHP session-based authentication with separate login handlers for citizens and officers, each querying its own MySQL table.",
-      "MySQL database backs five core tables (citizen, officer, fine, road, signalling); citizen signup automatically inserts a linked fine record by username and Vehicle ID."
-    ],
-    "techs": [
-      "PHP",
-      "MySQL",
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "XAMPP"
-    ],
-    "thumbnail": "assets/images/Traffic Monitoring System.png",
-    "github": "https://github.com/aiyshwary/Traffic-Monitoring-System",
-    "featured": false
-  },
-  {
-    "title": "Bengaluru House Rent Prediction",
-    "summary": "A supervised machine learning project that predicts rental prices of houses in Bengaluru using structured property data, applying extensive feature engineering, multi-stage outlier removal, and benchmarking six regression models with and without PCA-based dimensionality reduction.",
-    "impact": "Built and benchmarked six regression models on the Bengaluru House Data dataset, finding that Linear Regression with PCA achieved the highest accuracy and Decision Tree Regressor performed best without dimensionality reduction, providing a deployable price prediction pipeline.",
-    "bullets": [
-      "Loaded and cleaned the Bengaluru_House_Data.csv dataset: dropped irrelevant columns (area_type, society, balcony, availability) and removed null rows.",
-      "Engineered a BHK feature from the size column and normalized the total_sqft column by converting range values (e.g. 1120-1145) to their numeric average.",
-      "Created a price_per_sqft feature for outlier detection; removed properties with less than 300 sqft per BHK and applied per-location mean±std filtering.",
-      "Removed BHK outliers by comparing price_per_sqft of each BHK tier against the tier below within the same location; removed properties where bathrooms exceeded BHK count by more than two.",
-      "Encoded the location categorical feature using one-hot (dummy) encoding, grouping rare locations with fewer than 10 listings into an 'other' category to control dimensionality.",
-      "Benchmarked Decision Tree, Linear Regression, and KNN regressors without PCA; then applied PCA (4 components) with Bagging ensembles (90 estimators) for each model.",
-      "Applied RandomizedSearchCV with 5-fold cross-validation to tune Random Forest Regressor (200 estimators) across max_depth, max_features, max_leaf_nodes, and min_samples_leaf.",
-      "Key finding: Linear Regression with PCA achieved the highest overall accuracy; Decision Tree Regressor achieved the best accuracy among non-PCA models.",
-      "Grouped rare locations appearing 10 or fewer times into an 'other' category, reducing unique locations from 1,293 to 242 before one-hot encoding.",
-      "Removed bathroom outliers where bathrooms exceed BHK count by more than 2; final cleaned dataset contained 7,266 rows.",
-      "Visualized 2-BHK vs 3-BHK price scatter plots per location and price-per-sqft histograms with Matplotlib to verify outlier-removal effectiveness."
-    ],
-    "techs": ["Python", "scikit-learn", "Pandas", "NumPy", "PCA", "Random Forest"],
-    "thumbnail": "assets/images/Bengaluru-House-Rent-Prediction.png",
-    "github": "https://github.com/aiyshwary/Bengaluru-House-Rent-Prediction",
-    "featured": false
-  },
-  {
-    "title": "Flower Classification",
-    "summary": "A CNN-based image classification project that identifies five flower types (Daisy, Dandelion, Rose, Sunflower, Tulip) using the Kaggle Flowers Recognition dataset and a custom TensorFlow/Keras model pipeline.",
-    "impact": "Built an end-to-end notebook workflow that prepares the dataset, trains a custom CNN, and evaluates multi-class accuracy to classify flower species from images.",
-    "bullets": [
-      "Organized the Kaggle Flowers Recognition dataset into class-specific folders for five flower categories.",
-      "Preprocessed images by resizing and normalizing pixel values, then created train/validation splits for model evaluation.",
-      "Implemented a custom CNN architecture in TensorFlow/Keras for 5-class image classification.",
-      "Tracked training/validation accuracy and loss across epochs and visualized results with Matplotlib/Seaborn.",
-      "Packaged the workflow into a reproducible Jupyter Notebook for easy experimentation and iteration.",
-      "Uses OpenCV for image loading/processing and scikit-learn for train/test splitting alongside TensorFlow/Keras for model building.",
-      "Serializes processed image data to a data.pickle file so subsequent runs skip re-reading raw images from disk."
-    ],
-    "walkthrough": [
-      {"kind": "section", "text": "Dataset & Setup"},
-      {"kind": "body", "text": "Used the Kaggle Flowers Recognition dataset with five classes: Daisy, Dandelion, Rose, Sunflower, and Tulip. The dataset is organized into class folders and loaded into the notebook for training and validation."},
-      {"kind": "bullet", "text": "Install dependencies: TensorFlow, OpenCV, scikit-learn, matplotlib, seaborn."},
-      {"kind": "bullet", "text": "Place the dataset under flowers/<class_name>/ to match the expected directory structure."},
-      {"kind": "section", "text": "Preprocessing Pipeline"},
-      {"kind": "body", "text": "Images are resized to a consistent shape, normalized to [0,1], and split into train/validation sets to ensure fair evaluation across classes."},
-      {"kind": "bullet", "text": "Resize and normalize images to stabilize training."},
-      {"kind": "bullet", "text": "Create stratified train/validation splits for balanced class coverage."},
-      {"kind": "section", "text": "Model Architecture"},
-      {"kind": "body", "text": "Implemented a custom CNN in Keras with stacked convolution + pooling blocks followed by dense layers for multi-class classification."},
-      {"kind": "bullet", "text": "Convolutional blocks learn spatial features of petals and textures."},
-      {"kind": "bullet", "text": "Dense layers map extracted features to 5-class softmax outputs."},
-      {"kind": "section", "text": "Training & Evaluation"},
-      {"kind": "body", "text": "Tracked training and validation curves to monitor convergence and prevent overfitting."},
-      {"kind": "bullet", "text": "Visualized accuracy/loss trends to validate model stability."},
-      {"kind": "bullet", "text": "Evaluated class-wise performance using predictions on validation data."},
-      {"kind": "section", "text": "Reproducible Notebook"},
-      {"kind": "body", "text": "The full workflow is implemented in the notebook for end-to-end reproducibility and easy experimentation."}
-    ],
-    "techs": ["Python", "TensorFlow", "Keras", "OpenCV", "scikit-learn", "Matplotlib", "Seaborn"],
-    "thumbnail": "assets/images/flower classification project.png",
-    "github": "https://github.com/aiyshwary/flower-classification-project",
-    "featured": false
+    "techs": ["Python", "Jupyter Notebook", "CNN", "SVM", "Random Forest", "Decision Tree"],
+    "bullets": ["Project Overview: Facial Emotion Recognition (FER)", "Models: CNN, SVM, Random Forest, Decision Tree", "Datasets: train.csv, test.csv, icml_face_data.csv", "Performance: Training accuracy up to ~99.8%, ICML dataset ~86.1%", "Author: Aiyshwarya A, Integrated M.Sc. in Data Science"],
+    "pdf": "assets/projects/facial-emotion-detection.pdf"
   },
   {
     "title": "Real Estate Price Prediction",
-    "summary": "A supervised regression case study that predicts house prices using the kc_house_data dataset, benchmarking multiple models and comparing performance with R2 and MSE metrics.",
-    "impact": "Benchmarked six regression models with bagging/boosting and hyperparameter tuning to identify the most accurate predictor for house prices.",
-    "bullets": [
-      "Loaded and explored kc_house_data.csv, performing basic cleaning and feature analysis for regression modeling.",
-      "Trained Linear Regression, KNN Regressor, Decision Tree, Random Forest, AdaBoost, and Gradient Boosting models.",
-      "Compared model performance using $R^2$ and MSE to select the best-performing regressor.",
-      "Applied bagging/boosting strategies and hyperparameter tuning to improve predictive accuracy.",
-      "Documented the workflow in a Jupyter Notebook and included presentation slides for project reporting.",
-      "Explicitly excludes logistic regression from the model comparison, noting it is a classification algorithm unsuitable for continuous price prediction.",
-      "Includes a PowerPoint slide deck alongside the notebook for presentation-ready project documentation."
-    ],
-    "walkthrough": [
-      {"kind": "section", "text": "Project Contents"},
-      {"kind": "body", "text": "The project includes a Jupyter notebook, the kc_house_data.csv dataset, and a slide deck summarizing findings."},
-      {"kind": "bullet", "text": "Notebook: ML_HOUSE_RENT_PREDICTION_CASE_STUDY IPYNB (1).ipynb"},
-      {"kind": "bullet", "text": "Dataset: kc_house_data.csv (house attributes and prices)"},
-      {"kind": "bullet", "text": "Slides: ML GROUP 8 (1).pptx"},
-      {"kind": "section", "text": "Data Preparation"},
-      {"kind": "body", "text": "Loaded the dataset, checked distributions and missing values, and prepared features for regression modeling."},
-      {"kind": "bullet", "text": "Exploratory analysis with pandas, matplotlib, and seaborn."},
-      {"kind": "bullet", "text": "Basic cleaning to ensure consistent numeric inputs."},
-      {"kind": "section", "text": "Models Evaluated"},
-      {"kind": "body", "text": "Benchmarked multiple regression models to compare predictive performance."},
-      {"kind": "bullet", "text": "Linear Regression, KNN Regressor, Decision Tree Regressor"},
-      {"kind": "bullet", "text": "Random Forest, AdaBoost, Gradient Boosting Regressors"},
-      {"kind": "section", "text": "Training & Tuning"},
-      {"kind": "body", "text": "Applied bagging and boosting techniques, then used hyperparameter tuning to improve generalization."},
-      {"kind": "bullet", "text": "Model selection guided by R2 and MSE metrics."},
-      {"kind": "section", "text": "Results"},
-      {"kind": "body", "text": "Compared model scores and selected the best-performing regressor based on error metrics."},
-      {"kind": "section", "text": "Reproducibility"},
-      {"kind": "body", "text": "Notebook can be run end-to-end with the dataset placed in the project root, producing charts and model metrics."}
-    ],
-    "techs": ["Python", "pandas", "NumPy", "scikit-learn", "Matplotlib", "Seaborn"],
-    "thumbnail": "assets/images/real-estate-price-prediction.png",
+    "summary": "Predicts house prices using supervised regression models. Compares performance using R2 and MSE.",
+    "impact": "Models: Linear Regression, KNN, Decision Tree, Random Forest, AdaBoost, Gradient Boosting. Requirements: Python 3.9+, pandas, numpy, matplotlib, seaborn, scikit-learn. Usage: Run notebook with kc_house_data.csv.",
     "github": "https://github.com/aiyshwary/real-estate-price-prediction",
-    "featured": false
+    "techs": ["Python", "Jupyter Notebook", "Linear Regression", "KNN", "Decision Tree", "Random Forest", "AdaBoost", "Gradient Boosting"],
+    "bullets": ["Models: Linear Regression, KNN, Decision Tree, Random Forest, AdaBoost, Gradient Boosting", "Requirements: Python 3.9+, pandas, numpy, matplotlib, seaborn, scikit-learn", "Usage: Run notebook with kc_house_data.csv"],
+    "pdf": "assets/projects/real-estate-price-prediction.pdf"
+  },
+  {
+    "title": "Video RAG Retrieval Project",
+    "summary": "Implements a Video Retrieval-Augmented Generation (RAG) system. Enables semantic search over videos by converting scenes and frames into embeddings for nearest-neighbor lookups.",
+    "impact": "Features: Frame extraction, scene description, text/image embeddings, FAISS vector store, semantic retrieval. Example usage: Index scenes, run text queries, retrieve relevant video segments. Installation: Python, pip, requirements.txt. Notes: Extensible for advanced scene detection and production vector databases.",
+    "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
+    "techs": ["Python", "FAISS", "Embeddings", "Deep Learning"],
+    "bullets": ["Frame extraction, scene description, text/image embeddings, FAISS vector store, semantic retrieval", "Index scenes, run text queries, retrieve relevant video segments", "Extensible for advanced scene detection and production vector databases"],
+    "pdf": "assets/projects/video-rag-retrieval.pdf"
+  },
+  {
+    "title": "Raccoon Network Analysis",
+    "summary": "Analyzes the spread of rabies in raccoons using network centrality measures to generalize to human rabies spread.",
+    "impact": "Network centrality analysis for epidemiology. Jupyter Notebook implementation.",
+    "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
+    "techs": ["Jupyter Notebook", "Network Analysis", "Epidemiology", "Data Science"],
+    "bullets": ["Network centrality analysis for epidemiology", "Jupyter Notebook implementation"],
+    "pdf": "assets/projects/raccoon-network-analysis.pdf"
+  },
+  {
+    "title": "Tableau Data Visualization",
+    "summary": "Data visualization on hotel booking dataset using Tableau. Multiple worksheets and dashboard actions.",
+    "impact": "Hotel booking dataset analysis. Multiple Tableau worksheets and dashboards.",
+    "github": "https://github.com/aiyshwary/Tableau-Data-Visualization-",
+    "techs": ["Tableau", "Data Visualization", "Dashboard"],
+    "bullets": ["Hotel booking dataset analysis", "Multiple Tableau worksheets and dashboards"],
+    "pdf": "assets/projects/tableau-data-visualization.pdf"
   }
 ]

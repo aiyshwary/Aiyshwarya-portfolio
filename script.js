@@ -155,9 +155,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         <p class="lead-card">${impact}</p>
 
         <div class="actions">
-
           <button class="btn-ghost btn-discuss">Discuss</button>
           ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
+          ${p.pdf ? `<a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener" download>PDF</a>` : ''}
         </div>
       `;
 
