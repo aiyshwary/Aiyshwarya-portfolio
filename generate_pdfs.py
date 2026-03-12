@@ -506,7 +506,9 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             # If a section line ends with ':', treat it as a list heading
             if text.endswith(':'):
                 list_mode = True
-                post.append(('subsection', text.rstrip(':').strip()))
+                s = text.rstrip(':').strip()
+                s = s[0].upper() + s[1:] if s else s
+                post.append(('subsection', s))
                 i += 1
                 continue
             if text in _SHORT_HEADINGS or _QUESTION_HDG_RE.match(text):
@@ -614,7 +616,9 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'body' and text.endswith(':'):
             list_mode = True
             two_way_mode = False
-            post.append(('subsection', text.rstrip(':').strip()))
+            s = text.rstrip(':').strip()
+            s = s[0].upper() + s[1:] if s else s
+            post.append(('subsection', s))
             expect_body_after_heading = False
             i += 1
             continue
@@ -622,7 +626,9 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         if kind == 'bullet' and text.endswith(':'):
             list_mode = True
             two_way_mode = False
-            post.append(('subsection', text.rstrip(':').strip()))
+            s = text.rstrip(':').strip()
+            s = s[0].upper() + s[1:] if s else s
+            post.append(('subsection', s))
             i += 1
             continue
 
