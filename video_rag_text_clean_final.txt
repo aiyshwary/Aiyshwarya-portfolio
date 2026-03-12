@@ -10,11 +10,17 @@ IMPACT
 Built a Visual RAG system that makes unstructured video content semantically searchable: a text query retrieves the most relevant scenes with timestamps by matching against dual text and image embedding indexes via cosine similarity.
 
 TECHNICAL WALKTHROUGH
+
 - Summary:
-	I built a Visual Retrieval-Augmented Generation (RAG) system that retrieves relevant video scenes based on a user's text prompt by combining vision models and vector similarity search.
+				I built a Visual Retrieval-Augmented Generation (RAG) system that retrieves
+				relevant video scenes based on a user’s text prompt by combining vision
+				models and vector similarity search.
 
 - Problem Statement:
-	Searching videos using text is hard because video content is unstructured. Traditional keyword search doesn’t understand what’s actually happening inside a video. My project solves this by converting both video scenes and user queries into embeddings and retrieving the most relevant video segments.
+				Searching videos using text is hard because video content is unstructured.
+				Traditional keyword search doesn’t understand what’s actually happening inside a video. My project
+				solves this by converting both video scenes and user queries into embeddings and retrieving the most
+				relevant video segments.
 
 - High-level Architecture:
 	1. Scene understanding using vision models
