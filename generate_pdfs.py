@@ -1126,17 +1126,17 @@ class Writer:
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
-        # Minimalist, left-aligned, bold section header with subtle divider
-        min_block = 0.8 * cm + (LH * 2)
+        # Professional, clean, bold section header with extra whitespace and subtle divider
+        min_block = 1.2 * cm + (LH * 2)
         self._need(min_block)
-        self.c.setFont(FB, S_SECTION + 2)
-        self.c.setFillColor(C_HDR)
+        self.c.setFont(FB, S_SECTION + 4)
+        self.c.setFillColor(HexColor("#222B45"))
         self.c.drawString(ML, self.y, label.upper())
-        self.y -= 0.35 * cm
-        self.c.setStrokeColor(C_DIV)
-        self.c.setLineWidth(0.7)
+        self.y -= 0.5 * cm
+        self.c.setStrokeColor(HexColor("#E0E3EA"))
+        self.c.setLineWidth(1.1)
         self.c.line(ML, self.y, PW - MR, self.y)
-        self.y -= 0.4 * cm
+        self.y -= 0.7 * cm
 
     def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
@@ -1158,18 +1158,18 @@ class Writer:
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
     def bullet_card(self, content: str, prefix: str = "•"):
-        """Draws a simple, left-aligned bullet point (no card, no box)."""
-        lines = simpleSplit(content, F, S_BODY, CW - 0.5 * cm)
-        self._need(len(lines) * LH + 0.2 * cm)
-        self.c.setFont(FB, S_BODY)
-        self.c.setFillColor(C_ACCENT)
+        """Draws a clean, left-aligned bullet point with extra spacing and modern font."""
+        lines = simpleSplit(content, F, S_BODY + 1, CW - 0.5 * cm)
+        self._need(len(lines) * (LH + 2) + 0.3 * cm)
+        self.c.setFont(FB, S_BODY + 1)
+        self.c.setFillColor(HexColor("#007BFF"))
         self.c.drawString(ML, self.y, prefix)
-        self.c.setFont(F, S_BODY)
-        self.c.setFillColor(C_BODY)
+        self.c.setFont(F, S_BODY + 1)
+        self.c.setFillColor(HexColor("#222B45"))
         for idx, line in enumerate(lines):
-            self.c.drawString(ML + 0.5 * cm, self.y, line)
-            self.y -= LH
-        self.y -= 0.1 * cm
+            self.c.drawString(ML + 0.6 * cm, self.y, line)
+            self.y -= LH + 2
+        self.y -= 0.2 * cm
 
     def equation(self, content: str):
         """Draw an equation at normal body font size."""
