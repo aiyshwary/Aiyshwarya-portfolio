@@ -1,0 +1,37 @@
+{
+  "title": "Video RAG Retrieval Project",
+  "summary": "A semantic video search system that extracts frames, generates scene captions via ViT-GPT2, and embeds them using MiniLM and OpenCLIP. Queries are matched against a dual FAISS index using cosine similarity, returning the most relevant video scenes with timestamps and frame references.",
+  "pdf": "assets/projects/video-rag-retrieval-project.pdf",
+  "impact": "Enables semantic search over unstructured video content by leveraging vision-language models and vector similarity search, making video scenes retrievable by natural language queries.",
+  "bullets": [
+    "Extracts frames and scene descriptions from videos using open-source models (ViT-GPT2 for captions).",
+    "Computes text embeddings with SentenceTransformers and image embeddings with OpenCLIP.",
+    "Stores embeddings in FAISS indexes with associated metadata.",
+    "Retrieves relevant scenes or frames for a text query.",
+    "Lightweight Python prototype; can be extended to production vector DBs like VDMS, Milvus, or Pinecone."
+  ],
+  "techs": [
+    "Python", "FAISS", "OpenCLIP", "ViT-GPT2", "Sentence Transformers", "RAG"
+  ],
+  "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
+  "walkthrough": [
+    {"kind": "section", "text": "Project Overview"},
+    {"kind": "body", "text": "Implements a simple Video Retrieval-Augmented Generation (RAG) system for semantic video search by converting scenes and frames into embeddings and performing nearest-neighbor lookups."},
+    {"kind": "section", "text": "Features"},
+    {"kind": "bullet", "text": "Extract frames and scene descriptions from videos using ViT-GPT2 image captioning."},
+    {"kind": "bullet", "text": "Compute text embeddings with SentenceTransformers and image embeddings with OpenCLIP."},
+    {"kind": "bullet", "text": "Store embeddings in FAISS indexes with associated metadata (video name, scene ID, frame number, timestamp)."},
+    {"kind": "bullet", "text": "Retrieve relevant scenes or frames for a text query using cosine similarity."},
+    {"kind": "section", "text": "Installation"},
+    {"kind": "body", "text": "Clone the repository, create a virtual environment, and install dependencies from requirements.txt. GPU is optional but speeds up embedding computation."},
+    {"kind": "section", "text": "Example Usage"},
+    {"kind": "body", "text": "Process a video and index its scenes: extract_scenes('path/to/video.mp4', fps=0.5); retriever = VideoRetriever(); retriever.index_scenes(scenes, video_name='demo')."},
+    {"kind": "body", "text": "Query: results = retriever.query('a person walking', k=3, use_text=True)."},
+    {"kind": "section", "text": "Project Layout"},
+    {"kind": "body", "text": "/Video RAG Retrieval Project\n├── README.md\n├── requirements.txt\n└── src/video_rag/\n    ├── __init__.py\n    ├── preprocessing.py\n    ├── embeddings.py\n    ├── storage.py\n    ├── retrieval.py\n    └── utils.py"},
+    {"kind": "section", "text": "Notes"},
+    {"kind": "bullet", "text": "Scene detection is rudimentary; can be replaced with advanced shot-detection or segmentation logic."},
+    {"kind": "bullet", "text": "Metadata stored with embeddings can be extended to track file paths, timestamps, etc."},
+    {"kind": "bullet", "text": "For production, swap FAISS for a proper vector database such as VDMS, Milvus, or Pinecone."}
+  ]
+}

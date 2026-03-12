@@ -3,25 +3,11 @@ import json
 from generate_pdfs import generate_pdf
 
 if __name__ == "__main__":
-    # Load project data from projects.json
-    with open("projects.json") as f:
-        projects = json.load(f)
-    # Find the Video RAG Retrieval Project entry
-    project = next(p for p in projects if p["title"] == "Video RAG Retrieval Project")
-    # If walkthrough is not present, try to load from text file as fallback
-    source_items = []
-    if "walkthrough" in project:
-        for item in project["walkthrough"]:
-            kind = item.get("kind", "body")
-            text = item.get("text", "")
-            source_items.append((kind, text))
-    else:
-        # fallback: use lines from text file as body
-        with open("video_rag_text_noquotes.txt") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    source_items.append(("body", line))
+    # Load project data from the new JSON file (GitHub-based content)
+    with open("video_rag_pdf_data.json") as f:
+        project = json.load(f)
+    # Prepare source_items from walkthrough
+    source_items = [(item.get("kind", "body"), item.get("text", "")) for item in project["walkthrough"]]
     # Output path
     out_path = project["pdf"]
     # Generate the PDF using the standard function
