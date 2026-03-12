@@ -1549,7 +1549,6 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         px += pill_w + 0.2 * cm
 
     # ── Body ─────────────────────────────────────────────────────────────────
-
     w = Writer(cv, project["title"])
 
     # OVERVIEW
@@ -1562,52 +1561,16 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
     w.text(_normalize_ws(project["impact"]))
     w.gap()
 
-    # Special center alignment for Video RAG Retrieval Project summary lines
-    def center_text(writer, content, font=F, size=S_BODY):
-        lines = simpleSplit(content, font, size, CW)
-        writer._need(len(lines) * LH)
-        writer.c.setFont(font, size)
-        writer.c.setFillColor(C_BODY)
-        for line in lines:
-            text_width = writer.c.stringWidth(line, font, size)
-            x = ML + (CW - text_width) / 2
-            writer._need(LH)
-            writer.c.drawString(x, writer.y, line)
-            writer.y -= LH
-
     # FULL TECHNICAL WALKTHROUGH (sourced from original PDF or projects.json)
     if source_items:
-        # Center-align the first two body lines if this is Video RAG Retrieval Project
-        if project["title"] == "Video RAG Retrieval Project":
-            # Find the indices of the summary and problem statement
-            filtered_items = []
-            centered_sections = {"One-line summary", "Problem statement"}
-            i = 0
-            while i < len(source_items):
-                kind, content = source_items[i]
-                if kind == "section" and content in centered_sections:
-                    # Add the section label as usual
-                    filtered_items.append((kind, content))
-                    # Center-align the next body if present
-                    if i + 1 < len(source_items) and source_items[i+1][0] == "body":
-                        filtered_items.append(("centered_body", source_items[i+1][1]))
-                        i += 1
-                else:
-                    filtered_items.append((kind, content))
-                i += 1
-            source_items = filtered_items
-        # Remove walkthrough items that duplicate the Key Details bullets,
-        # the overview/impact text, or the project title/github URL.
         key_bullets = {_normalize_ws(b) for b in project.get("bullets", [])}
         skip_texts = set(key_bullets)
-        # Also skip lines that are substrings of the summary/impact
         summary_norm = _normalize_ws(project.get("summary", ""))
         impact_norm = _normalize_ws(project.get("impact", ""))
         github_url = (project.get("github") or "").strip()
         title_text = project.get("title", "").strip()
 
         filtered_items = []
-        # Structural labels already rendered by the PDF template
         _STRUCT_LABELS = {"OVERVIEW", "IMPACT", "TECHNICAL WALKTHROUGH", "KEY DETAILS",
                           "Overview", "Impact", "Technical Walkthrough", "Key Details"}
         tech_names = {t.strip() for t in project.get("techs", [])}
@@ -1619,13 +1582,10 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 continue
             if github_url and t_norm == github_url:
                 continue
-            # Skip structural section labels that the template already renders
             if t_norm in _STRUCT_LABELS:
                 continue
-            # Skip tech pill names echoed from the source PDF header
             if t_norm in tech_names:
                 continue
-            # Skip lines that are part of the already-shown summary or impact
             if len(t_norm) > 30 and (t_norm in summary_norm or t_norm in impact_norm):
                 continue
             filtered_items.append((k, t))
@@ -1633,14 +1593,57 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         w.section_label("Technical Walkthrough")
         num = 1
         under_step = False
-        for kind, content in filtered_items:
+        # --- Custom formatting for Video RAG Retrieval Project summary/problem statement ---
+        is_video_rag = project["title"].strip().lower() == "video rag retrieval project"
+        i = 0
+        while i < len(filtered_items):
+            kind, content = filtered_items[i]
+            # Center and box the summary and problem statement for Video RAG
+            if is_video_rag and kind == 'section' and content.strip().lower() == 'one-line summary':
+                # Find the next body
+                if i + 1 < len(filtered_items) and filtered_items[i+1][0] == 'body':
+                    w.gap(0.2 * cm)
+                    # Draw a shaded box with centered, italic text
+                    box_text = filtered_items[i+1][1]
+                    box_w = CW * 0.95
+                    box_h = LH * 3
+                    w._need(box_h + 0.2 * cm)
+                    _rrect(w.c, ML + (CW - box_w)/2, w.y - box_h, box_w, box_h, 8, HexColor("#F0F4FF"), stroke=True)
+                    w.c.setFont(F, S_BODY)
+                    w.c.setFillColor(HexColor("#007BFF"))
+                    # Centered, italic
+                    lines = simpleSplit(box_text, F, S_BODY, box_w - 1.5*cm)
+                    y0 = w.y - (box_h/2) + (LH * (len(lines)-1)/2)
+                    for idx, line in enumerate(lines):
+                        text_w = w.c.stringWidth(line, F, S_BODY)
+                        w.c.drawString(ML + (CW - text_w)/2, y0 - idx*LH, line)
+                    w.y -= box_h + 0.3*cm
+                    i += 2
+                    continue
+            if is_video_rag and kind == 'section' and content.strip().lower() == 'problem statement':
+                if i + 1 < len(filtered_items) and filtered_items[i+1][0] == 'body':
+                    w.gap(0.1 * cm)
+                    box_text = filtered_items[i+1][1]
+                    box_w = CW * 0.95
+                    box_h = LH * 3.2
+                    w._need(box_h + 0.2 * cm)
+                    _rrect(w.c, ML + (CW - box_w)/2, w.y - box_h, box_w, box_h, 8, HexColor("#FFF7E6"), stroke=True)
+                    w.c.setFont(F, S_BODY)
+                    w.c.setFillColor(HexColor("#E67C00"))
+                    lines = simpleSplit(box_text, F, S_BODY, box_w - 1.5*cm)
+                    y0 = w.y - (box_h/2) + (LH * (len(lines)-1)/2)
+                    for idx, line in enumerate(lines):
+                        text_w = w.c.stringWidth(line, F, S_BODY)
+                        w.c.drawString(ML + (CW - text_w)/2, y0 - idx*LH, line)
+                    w.y -= box_h + 0.3*cm
+                    i += 2
+                    continue
+            # --- End custom formatting ---
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
                 num = 1
                 under_step = bool(_STEP_HDG.match(content))
-            elif kind == 'centered_body':
-                center_text(w, content)
             elif kind == 'body':
                 under_step = False
                 if content.endswith(':'):
@@ -1659,6 +1662,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                 w.equation(content)
             else:
                 w.text(content)
+            i += 1
         w.gap()
 
     # KEY DETAILS (structured bullets from projects.json)
