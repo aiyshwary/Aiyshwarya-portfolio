@@ -14,10 +14,25 @@ import json
 SRC_MAP = {}
 SRC_DIR = "assets/projects"
 
-# Implement simpleSplit function
+
+# Implement simpleSplit function with text wrapping
+from reportlab.pdfbase.pdfmetrics import stringWidth
 def simpleSplit(text, font, size, width):
     """Split text into lines that fit within the given width."""
-    return [text]  # Simplified implementation for now
+    words = text.split()
+    if not words:
+        return ['']
+    lines = []
+    current = words[0]
+    for word in words[1:]:
+        test = current + ' ' + word
+        if stringWidth(test, font, size) <= width:
+            current = test
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+    return lines
 
 # Define missing constants
 ML = 40  # Left margin
@@ -36,12 +51,12 @@ C_BODY = HexColor("#000000")
 # Define additional missing constants
 MB = 40  # Bottom margin
 
-# Define missing constants
-C_BG = HexColor("#F9F9F9")
-C_ACCENT = HexColor("#FF5733")
+# Define missing constants (reset to match other PDFs)
+C_BG = HexColor("#FFFFFF")  # White background for consistency
+C_ACCENT = HexColor("#007BFF")  # Blue accent (matches tech pill)
 C_WHITE = HexColor("#FFFFFF")
-C_HDR = HexColor("#333333")
-C_CARD = HexColor("#EFEFEF")
+C_HDR = HexColor("#222B45")  # Darker header for contrast
+C_CARD = HexColor("#F5F6FA")  # Light card background
 C_TECH = HexColor("#007BFF")
 S_SECTION = 14  # Section font size
 S_TITLE = 18  # Title font size
