@@ -1087,6 +1087,47 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Video RAG Retrieval Project.
+    if title == "Video RAG Retrieval Project":
+        rebuilt = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+            # Fix the "High-level architecture" block
+            if text.strip().startswith('“The system has three main components'):
+                # Skip this quoted subsection (M7)
+                i += 1
+                # Next three lines: bullet/body/body (M8, M9, M10)
+                bullets = []
+                for j in range(3):
+                    if i < len(post):
+                        k, t = post[i]
+                        # Remove leading/trailing quotes and whitespace
+                        t = t.strip().strip('“”"')
+                        bullets.append(t)
+                        i += 1
+                for b in bullets:
+                    rebuilt.append(('bullet', b))
+                continue
+            # Fix the pipeline line: make it a bullet, remove quotes
+            if text.strip().startswith('Video →'):
+                rebuilt.append(('bullet', text.strip().strip('“”"')))
+                i += 1
+                continue
+            # Remove leading/trailing quotes from all bodies in this section
+            if kind == 'body' and text.strip().startswith('Vector storage for'):
+                rebuilt.append(('bullet', text.strip().strip('“”"')))
+                i += 1
+                continue
+            if kind == 'body' and text.strip().startswith('Similarity-based retrieval'):
+                rebuilt.append(('bullet', text.strip().strip('“”"')))
+                i += 1
+                continue
+            # Default: keep as-is
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     # Project-specific cleanup for Synthetic Image Generation.
     if title == "Synthetic Image Generation":
         rebuilt = []
