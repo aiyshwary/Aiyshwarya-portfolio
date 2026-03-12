@@ -6,7 +6,8 @@
     "github": "https://github.com/aiyshwary/Bus-Reservation-and-Ticketing-System",
     "techs": ["Java"],
     "bullets": ["Main menu for destination, passenger, billing, view, and exit", "Handles seat availability, discounts for PWD, students, senior citizens", "Prints passenger details, fare, and handles payment and change"],
-    "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf"
+    "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf",
+    "thumbnail": "assets/images/Bus-Reservation-and-Ticketing-system.png"
   },
   {
     "title": "Facial Emotion Detection",
@@ -15,7 +16,8 @@
     "github": "https://github.com/aiyshwary/Facial-Emotion-Detection",
     "techs": ["Python", "Jupyter Notebook", "CNN", "SVM", "Random Forest", "Decision Tree"],
     "bullets": ["Project Overview: Facial Emotion Recognition (FER)", "Models: CNN, SVM, Random Forest, Decision Tree", "Datasets: train.csv, test.csv, icml_face_data.csv", "Performance: Training accuracy up to ~99.8%, ICML dataset ~86.1%", "Author: Aiyshwarya A, Integrated M.Sc. in Data Science"],
-    "pdf": "assets/projects/facial-emotion-detection.pdf"
+    "pdf": "assets/projects/facial-emotion-detection.pdf",
+    "thumbnail": "assets/images/facial-emotion-detection.png"
   },
   {
     "title": "Real Estate Price Prediction",
@@ -24,7 +26,8 @@
     "github": "https://github.com/aiyshwary/real-estate-price-prediction",
     "techs": ["Python", "Jupyter Notebook", "Linear Regression", "KNN", "Decision Tree", "Random Forest", "AdaBoost", "Gradient Boosting"],
     "bullets": ["Models: Linear Regression, KNN, Decision Tree, Random Forest, AdaBoost, Gradient Boosting", "Requirements: Python 3.9+, pandas, numpy, matplotlib, seaborn, scikit-learn", "Usage: Run notebook with kc_house_data.csv"],
-    "pdf": "assets/projects/real-estate-price-prediction.pdf"
+    "pdf": "assets/projects/real-estate-price-prediction.pdf",
+    "thumbnail": "assets/images/real-estate-price-prediction.png"
   },
   {
     "title": "Video RAG Retrieval Project",
@@ -33,7 +36,8 @@
     "github": "https://github.com/aiyshwary/Video-RAG-Retrieval",
     "techs": ["Python", "FAISS", "Embeddings", "Deep Learning"],
     "bullets": ["Frame extraction, scene description, text/image embeddings, FAISS vector store, semantic retrieval", "Index scenes, run text queries, retrieve relevant video segments", "Extensible for advanced scene detection and production vector databases"],
-    "pdf": "assets/projects/video-rag-retrieval.pdf"
+    "pdf": "assets/projects/video-rag-retrieval.pdf",
+    "thumbnail": "assets/images/Video RAG Retrieval.png"
   },
   {
     "title": "Raccoon Network Analysis",
@@ -42,7 +46,8 @@
     "github": "https://github.com/aiyshwary/Raccoon-Network-Analysis",
     "techs": ["Jupyter Notebook", "Network Analysis", "Epidemiology", "Data Science"],
     "bullets": ["Network centrality analysis for epidemiology", "Jupyter Notebook implementation"],
-    "pdf": "assets/projects/raccoon-network-analysis.pdf"
+    "pdf": "assets/projects/raccoon-network-analysis.pdf",
+    "thumbnail": "assets/images/Raccoon Network Analysis.png"
   },
   {
     "title": "Tableau Data Visualization",
@@ -51,6 +56,7 @@
     "github": "https://github.com/aiyshwary/Tableau-Data-Visualization-",
     "techs": ["Tableau", "Data Visualization", "Dashboard"],
     "bullets": ["Hotel booking dataset analysis", "Multiple Tableau worksheets and dashboards"],
-    "pdf": "assets/projects/tableau-data-visualization.pdf"
+    "pdf": "assets/projects/tableau-data-visualization.pdf",
+    "thumbnail": "assets/images/thumbnail.png"
   }
 ]
