@@ -1270,11 +1270,19 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
                 continue
 
-            # Multi-agent collaboration body items (Separation, Pluggability, etc.) → bullets
-            if kind == 'body' and ' – ' in text and any(text.startswith(p) for p in [
+            # Multi-agent collaboration items (Separation, Pluggability, etc.) → bullets
+            # "Separation of concerns" may arrive as bullet+body split (continuation)
+            if ' – ' in text and any(text.startswith(p) for p in [
                 'Separation of concerns', 'Pluggability', 'Deterministic fallbacks',
             ]):
-                rebuilt.append(('bullet', text))
+                merged = text
+                # If the line ends with a comma, the next body line is a continuation
+                while (i + 1 < len(post)
+                       and post[i + 1][0] == 'body'
+                       and post[i + 1][1][0].islower()):
+                    merged += ' ' + post[i + 1][1]
+                    i += 1
+                rebuilt.append(('bullet', merged))
                 i += 1
                 continue
 
@@ -1311,6 +1319,24 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             ]):
                 rebuilt.append(('bullet', text))
                 i += 1
+                continue
+
+            # "Orchestrator runs load_data" subsection + fragmented bullets/body → merge
+            if text.startswith('Orchestrator runs load_data'):
+                merged = text + ':'
+                i += 1
+                # Absorb following bullets/body until we hit a section or
+                # "Orchestrator persists" (which starts a new sentence)
+                while i < len(post):
+                    nk, nt = post[i]
+                    if nk == 'section':
+                        break
+                    if nt.startswith('Orchestrator persists'):
+                        # This is a separate sentence – keep it as body
+                        break
+                    merged += ' ' + nt
+                    i += 1
+                rebuilt.append(('body', merged))
                 continue
 
             rebuilt.append((kind, text))
