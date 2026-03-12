@@ -1095,14 +1095,11 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             kind, text = post[i]
             # Fix the "High-level architecture" block
             if text.strip().startswith('“The system has three main components'):
-                # Skip this quoted subsection (M7)
                 i += 1
-                # Next three lines: bullet/body/body (M8, M9, M10)
                 bullets = []
                 for j in range(3):
                     if i < len(post):
                         k, t = post[i]
-                        # Remove leading/trailing quotes and whitespace
                         t = t.strip().strip('“”"')
                         bullets.append(t)
                         i += 1
@@ -1112,6 +1109,53 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             # Fix the pipeline line: make it a bullet, remove quotes
             if text.strip().startswith('Video →'):
                 rebuilt.append(('bullet', text.strip().strip('“”"')))
+                i += 1
+                continue
+            # Merge Video-LLaMA and frame lines into previous body under Input & preprocessing
+            if text.strip().startswith('“The input to the system is one or more videos.'):
+                merged = text.strip().strip('“”"')
+                # Next: Scene-level textual descriptions...
+                if i+1 < len(post) and post[i+1][0] == 'body' and 'Scene-level textual descriptions' in post[i+1][1]:
+                    merged += ' ' + post[i+1][1].strip().strip('“”"')
+                    i += 1
+                # Next: Video-LLaMA (should be merged, not highlighted)
+                if i+1 < len(post) and post[i+1][0] in ('section','subsection') and 'Video-LLaMA' in post[i+1][1]:
+                    merged += ' using open-source vision models like Video-LLaMA.'
+                    i += 1
+                # Next: Key video frames...
+                if i+1 < len(post) and post[i+1][0] == 'body' and 'Key video frames' in post[i+1][1]:
+                    merged += ' ' + post[i+1][1].strip().strip('“”"')
+                    i += 1
+                rebuilt.append(('body', merged))
+                i += 1
+                continue
+            # Merge "For example..." into previous body under Vision understanding
+            if text.strip().startswith('“I use vision-language models to understand the video content.'):
+                merged = text.strip().strip('“”"')
+                # Next: analyze video scenes...
+                if i+1 < len(post) and post[i+1][0] == 'body' and 'analyze video scenes' in post[i+1][1]:
+                    merged += ' ' + post[i+1][1].strip().strip('“”"')
+                    i += 1
+                # Next: For example, a scene might be described as...
+                if i+1 < len(post) and post[i+1][0] == 'body' and 'For example, a scene might be described' in post[i+1][1]:
+                    merged += ' ' + post[i+1][1].strip().strip('“”"')
+                    i += 1
+                # Next: picking up an item
+                if i+1 < len(post) and post[i+1][0] == 'body' and 'picking up an item' in post[i+1][1]:
+                    merged += ' ' + post[i+1][1].strip().strip('“”"')
+                    i += 1
+                rebuilt.append(('body', merged))
+                i += 1
+                continue
+            # Remove (very important for interviewers) from Embedding strategy
+            if kind in ('section','subsection') and 'Embedding strategy' in text:
+                clean = text.replace('(very important for interviewers)', '').replace('(very important for', '').replace('interviewers)', '').strip()
+                clean = clean.replace('for interviewers', '').replace('interviewers', '').replace('interviewer', '').replace('as an interview answer', '').strip()
+                rebuilt.append((kind, clean))
+                i += 1
+                continue
+            # Remove all "interviewer" or coaching language from any body/section/subsection
+            if any(word in text.lower() for word in ['interviewer', 'for interviewers', 'as an interview answer', 'coaching note']):
                 i += 1
                 continue
             # Remove leading/trailing quotes from all bodies in this section
