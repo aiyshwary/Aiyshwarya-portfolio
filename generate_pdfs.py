@@ -62,12 +62,16 @@ S_SECTION = 14  # Section font size
 S_TITLE = 18  # Title font size
 S_TECH = 10  # Tech font size
 
-# Use built-in ReportLab fonts
-F = "Helvetica"  # Regular font
+
+# Use a modern sans-serif font (prefer Poppins, fallback to Arial/Helvetica)
+F = "Helvetica"  # Regular font (can be replaced with Poppins if installed)
 FB = "Helvetica-Bold"  # Bold font
 
-# Define missing font size constant
-S_BODY = 12  # Body font size
+
+# Larger font sizes for a more modern look
+S_BODY = 13
+S_SECTION = 18
+S_TITLE = 24
 
 def fix_video_rag_text(rebuilt):
     i = 0
@@ -244,7 +248,7 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
         return []
 
     try:
-        reader = pypdf.PdfReader(path)
+        reader = pypdf(path)
     except Exception as e:
         print(f"  Warning: could not read {path}: {e}")
         return []
@@ -1126,17 +1130,17 @@ class Writer:
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
-        # Professional, clean, bold section header with extra whitespace and subtle divider
-        min_block = 1.2 * cm + (LH * 2)
+        # Modern, professional section header with extra whitespace and soft divider
+        min_block = 1.6 * cm + (LH * 2)
         self._need(min_block)
-        self.c.setFont(FB, S_SECTION + 4)
-        self.c.setFillColor(HexColor("#222B45"))
+        self.c.setFont(FB, S_SECTION)
+        self.c.setFillColor(HexColor("#1A2233"))
         self.c.drawString(ML, self.y, label.upper())
-        self.y -= 0.5 * cm
-        self.c.setStrokeColor(HexColor("#E0E3EA"))
-        self.c.setLineWidth(1.1)
-        self.c.line(ML, self.y, PW - MR, self.y)
         self.y -= 0.7 * cm
+        self.c.setStrokeColor(HexColor("#E6EAF2"))
+        self.c.setLineWidth(1.5)
+        self.c.line(ML, self.y, PW - MR, self.y)
+        self.y -= 1.0 * cm
 
     def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
@@ -1158,18 +1162,18 @@ class Writer:
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
     def bullet_card(self, content: str, prefix: str = "•"):
-        """Draws a clean, left-aligned bullet point with extra spacing and modern font."""
-        lines = simpleSplit(content, F, S_BODY + 1, CW - 0.5 * cm)
-        self._need(len(lines) * (LH + 2) + 0.3 * cm)
-        self.c.setFont(FB, S_BODY + 1)
-        self.c.setFillColor(HexColor("#007BFF"))
+        """Draws a modern, left-aligned bullet point with more whitespace and lighter accent."""
+        lines = simpleSplit(content, F, S_BODY, CW - 0.5 * cm)
+        self._need(len(lines) * (LH + 6) + 0.5 * cm)
+        self.c.setFont(FB, S_BODY)
+        self.c.setFillColor(HexColor("#3B82F6"))  # Lighter blue accent
         self.c.drawString(ML, self.y, prefix)
-        self.c.setFont(F, S_BODY + 1)
-        self.c.setFillColor(HexColor("#222B45"))
+        self.c.setFont(F, S_BODY)
+        self.c.setFillColor(HexColor("#1A2233"))
         for idx, line in enumerate(lines):
-            self.c.drawString(ML + 0.6 * cm, self.y, line)
-            self.y -= LH + 2
-        self.y -= 0.2 * cm
+            self.c.drawString(ML + 0.7 * cm, self.y, line)
+            self.y -= LH + 6
+        self.y -= 0.4 * cm
 
     def equation(self, content: str):
         """Draw an equation at normal body font size."""
