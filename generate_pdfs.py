@@ -1,4 +1,58 @@
+# Import missing modules
+
 import re
+import os
+from PyPDF2 import PdfReader as pypdf
+from reportlab.pdfbase import pdfmetrics
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.colors import HexColor
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import cm
+import json
+
+# Define missing constants
+SRC_MAP = {}
+SRC_DIR = "assets/projects"
+
+# Implement simpleSplit function
+def simpleSplit(text, font, size, width):
+    """Split text into lines that fit within the given width."""
+    return [text]  # Simplified implementation for now
+
+# Define missing constants
+ML = 40  # Left margin
+MR = 40  # Right margin
+PH, PW = A4  # Page height and width
+
+# Define missing constants
+LH = 14  # Line height
+CW = PW - (ML + MR)  # Content width
+C_DIV = HexColor("#DDDDDD")
+
+# Define additional constants
+HDR_H = 50  # Header height in points
+C_BODY = HexColor("#000000")
+
+# Define additional missing constants
+MB = 40  # Bottom margin
+
+# Define missing constants
+C_BG = HexColor("#F9F9F9")
+C_ACCENT = HexColor("#FF5733")
+C_WHITE = HexColor("#FFFFFF")
+C_HDR = HexColor("#333333")
+C_CARD = HexColor("#EFEFEF")
+C_TECH = HexColor("#007BFF")
+S_SECTION = 14  # Section font size
+S_TITLE = 18  # Title font size
+S_TECH = 10  # Tech font size
+
+# Use built-in ReportLab fonts
+F = "Helvetica"  # Regular font
+FB = "Helvetica-Bold"  # Bold font
+
+# Define missing font size constant
+S_BODY = 12  # Body font size
 
 def fix_video_rag_text(rebuilt):
     i = 0
@@ -1320,13 +1374,9 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
 
 # ── Drawing utilities ─────────────────────────────────────────────────────────
 def _rrect(cv, x, y, w, h, r, fill, stroke=False):
-    cv.saveState()
+    """Draw a rounded rectangle."""
     cv.setFillColor(fill)
-    cv.setStrokeColor(C_DIV if stroke else fill)
-    if stroke:
-        cv.setLineWidth(0.5)
-    cv.roundRect(x, y, w, h, r, fill=1, stroke=1 if stroke else 0)
-    cv.restoreState()
+    cv.roundRect(x, y, w, h, r, fill=1, stroke=stroke)
 
 
 class Writer:

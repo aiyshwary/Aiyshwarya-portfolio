@@ -1,0 +1,27 @@
+Video RAG Retrieval Project
+https://github.com/aiyshwary/Video-RAG-Retrieval
+Python FAISS OpenCLIP ViT-GPT2 Sentence Transformers RAG
+OVERVIEW
+A semantic video search system that extracts frames, generates scene captions using ViT-GPT2, and embeds them with SentenceTransformers and OpenCLIP into a dual FAISS index, enabling natural language queries to retrieve the most relevant video scenes with timestamps.
+IMPACT
+A Visual RAG system that makes unstructured video content semantically searchable: a text query retrieves the most relevant scenes with timestamps by matching against dual text and image embedding indexes via cosine similarity.
+TECHNICAL WALKTHROUGH
+One-line summary
+A Visual Retrieval-Augmented Generation (RAG) system that retrieves relevant video scenes based on a user’s text prompt by combining vision models and vector similarity search.
+Problem statement
+Searching videos using text is hard because video content is unstructured. Traditional keyword search doesn’t understand what’s actually happening inside a video. This project solves this by converting both video scenes and user queries into embeddings and retrieving the most relevant video segments.
+High-level architecture
+i) Scene understanding using vision models
+ii) Vector storage for text and image embeddings
+iii) Similarity-based retrieval using VDMS
+iv) Video → Scene Description + Frames → Embeddings → Vector DB → Retrieval → Video Clips
+Input & preprocessing
+The input to the system is one or more videos. Each video is processed to extract: Scene-level textual descriptions using open-source vision models like Video-LLaMA. Key video frames along with metadata like frame number, FPS, and timestamp.
+Vision understanding
+Vision-language models are used to understand the video content. These models analyze video scenes and generate natural language descriptions that summarize what’s happening in each scene. For example, a scene might be described as ‘a person walking into a store and picking up an item’.
+Embedding strategy
+To support efficient retrieval, two types of embeddings are stored in separate vector stores:
+Text embeddings
+Model: SentenceTransformer – all-MiniLM-L6-V2 / L12-V2
+Used for
+i) Scene descriptions

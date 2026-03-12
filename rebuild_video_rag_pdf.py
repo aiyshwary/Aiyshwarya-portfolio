@@ -1,44 +1,28 @@
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
 
-pdf_path = 'assets/projects/video-rag-retrieval-project.pdf'
-text_path = 'video_rag_text_noquotes.txt'
+import json
+from generate_pdfs import generate_pdf
 
-c = canvas.Canvas(pdf_path, pagesize=letter)
-width, height = letter
-
-with open(text_path) as f:
-    lines = f.readlines()
-
-
-# Helper to clean and format lines
-def clean_line(line):
-    # Remove unwanted double quotes and smart quotes
-    line = line.replace('"', '').replace('“', '').replace('”', '').replace("'", "")
-    return line.strip()
-
-y = height - 40
-for idx, line in enumerate(lines):
-    line = clean_line(line)
-    # Center the title (first line)
-    if idx == 0:
-        c.setFont("Helvetica-Bold", 18)
-        c.drawCentredString(width / 2, y, line)
-        y -= 30
-        c.setFont("Helvetica", 12)
-        continue
-    # Add extra space before section headers
-    if line.isupper() and len(line) < 30:
-        y -= 15
-        c.setFont("Helvetica-Bold", 14)
-        c.drawString(40, y, line)
-        c.setFont("Helvetica", 12)
-        y -= 20
-        continue
-    # Regular lines
-    c.drawString(40, y, line)
-    y -= 15
-    if y < 40:
-        c.showPage()
-        y = height - 40
-c.save()
+if __name__ == "__main__":
+    # Load project data from projects.json
+    with open("projects.json") as f:
+        projects = json.load(f)
+    # Find the Video RAG Retrieval Project entry
+    project = next(p for p in projects if p["title"] == "Video RAG Retrieval Project")
+    # If walkthrough is not present, try to load from text file as fallback
+    source_items = []
+    if "walkthrough" in project:
+        for item in project["walkthrough"]:
+            kind = item.get("kind", "body")
+            text = item.get("text", "")
+            source_items.append((kind, text))
+    else:
+        # fallback: use lines from text file as body
+        with open("video_rag_text_noquotes.txt") as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    source_items.append(("body", line))
+    # Output path
+    out_path = project["pdf"]
+    # Generate the PDF using the standard function
+    generate_pdf(project, source_items, out_path)

@@ -1,0 +1,20 @@
+Key video frames along with metadata like frame number, FPS, and timestamp
+Vision understanding
+Vision-language models are used to understand the video content. These models analyze video scenes and generate natural language descriptions that summarize what’s happening in each scene. For example, a scene might be described as ‘a person walking into a store and picking up an item’.
+Embedding strategy
+To support efficient retrieval, two types of embeddings are stored in separate vector stores:
+Text embeddings
+Model: SentenceTransformer – all-MiniLM-L6-V2 / L12-V2
+Used for
+i) Scene descriptions
+ii) User queries
+This converts textual descriptions into dense vectors that capture semantic meaning.
+Image embeddings
+Model: OpenCLIP – ViT-g-14
+Video frames
+This helps capture visual semantics like objects, actions, and context directly from frames.
+Vector storage & retrieval
+Both text and image embeddings are stored in VDMS, which allows fast vector similarity search. Separate vector collections are maintained for text and image embeddings but are linked using video metadata.
+Stored metadata includes
+i) Video name
+ii) Scene ID
