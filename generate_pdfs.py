@@ -832,6 +832,81 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Object Detection Extension:
+    # 1. "Training" should break out of "multiple architectures" list → subsection
+    # 2. Items under "Output includes" should be bullets
+    # 3. Items under "Key Observations" should be bullets
+    if title == "Object Detection Extension":
+        rebuilt = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+            # "Training" inside the architecture bullet list → subsection
+            if kind == 'bullet' and text == 'Training':
+                rebuilt.append(('subsection', 'Training'))
+                i += 1
+                continue
+            # Body items under "Output includes" → bullets
+            if kind == 'body' and i >= 2 and any(
+                post[j][0] == 'subsection' and post[j][1] == 'Output includes'
+                for j in range(max(0, i - 5), i)
+                if j < len(post)
+            ):
+                # Check there's no intervening section/subsection heading
+                intervening_hdg = False
+                for j in range(i - 1, max(0, i - 5) - 1, -1):
+                    if post[j][0] == 'subsection' and post[j][1] == 'Output includes':
+                        break
+                    if post[j][0] in ('section', 'subsection'):
+                        intervening_hdg = True
+                        break
+                if not intervening_hdg:
+                    rebuilt.append(('bullet', text))
+                    i += 1
+                    continue
+            # Items under "Key Observations" → section becomes bullet
+            if kind == 'section' and i >= 1:
+                # Find the nearest preceding section/subsection
+                for j in range(i - 1, max(0, i - 6) - 1, -1):
+                    if post[j][0] in ('section', 'subsection'):
+                        if post[j][1] == 'Key Observations':
+                            rebuilt.append(('bullet', text))
+                            i += 1
+                            break
+                        elif post[j][0] == 'section' and post[j][1] != 'Key Observations':
+                            # Check if that section is itself under Key Observations
+                            # (it could be a sibling bullet-converted section)
+                            pass
+                        else:
+                            break
+                else:
+                    rebuilt.append((kind, text))
+                    i += 1
+                    continue
+                if i <= len(post) and rebuilt and rebuilt[-1] == ('bullet', text):
+                    continue
+            # Body items after Key Observations section → bullets too
+            if kind == 'body' and i >= 1:
+                for j in range(i - 1, max(0, i - 8) - 1, -1):
+                    pk, pt = post[j]
+                    if pk == 'section' and pt == 'Key Observations':
+                        rebuilt.append(('bullet', text))
+                        i += 1
+                        break
+                    if pk == 'section' and pt != 'Key Observations':
+                        continue  # could be a sibling under Key Observations
+                    if pk in ('subsection',):
+                        break
+                else:
+                    rebuilt.append((kind, text))
+                    i += 1
+                    continue
+                if rebuilt and rebuilt[-1] == ('bullet', text):
+                    continue
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     return post
 
 
