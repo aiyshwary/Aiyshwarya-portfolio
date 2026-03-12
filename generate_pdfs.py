@@ -1556,19 +1556,10 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # OVERVIEW
     w.section_label("Overview")
+    # Center-align the summary/one-liner if it starts with a quote (likely the one-liner)
     summary_text = _normalize_ws(project["summary"])
-    # For Video RAG, also check walkthrough for a 'One-line summary' section and center-align it
-    if project["title"] == "Video RAG Retrieval Project" and project.get("walkthrough"):
-        for idx, item in enumerate(project["walkthrough"]):
-            if item["kind"] == "section" and "one-line summary" in item["text"].lower():
-                # Find the next body after this section
-                if idx + 1 < len(project["walkthrough"]):
-                    next_item = project["walkthrough"][idx + 1]
-                    if next_item["kind"] == "body":
-                        w.text(_normalize_ws(next_item["text"]), align="center")
-                        break
-        else:
-            w.text(summary_text)
+    if summary_text.strip().startswith("“") or summary_text.strip().startswith('"'):
+        w.text(summary_text, align="center")
     else:
         w.text(summary_text)
     w.gap()
@@ -1617,20 +1608,23 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         w.section_label("Technical Walkthrough")
         num = 1
         under_step = False
+        in_one_line_summary = False
         for kind, content in filtered_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
                 num = 1
                 under_step = bool(_STEP_HDG.match(content))
+                in_one_line_summary = (kind == 'section' and content.strip().lower() == 'one-line summary')
             elif kind == 'body':
-                # A body line (e.g. "The system has 5 main modules") resets step context
                 under_step = False
-                # If the body text introduces a list (ends with ':'), reset the
-                # bullet counter so the following bullets restart at i).
                 if content.endswith(':'):
                     num = 1
-                w.text(content, indent=0.4 * cm)
+                # Center-align if in 'One-line summary' section
+                if in_one_line_summary:
+                    w.text(content, align="center")
+                else:
+                    w.text(content, indent=0.4 * cm)
             elif kind == 'bullet':
                 m = re.match(r'^(\d+\))\s+(.*)$', content)
                 if m:
@@ -1641,7 +1635,6 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                     w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
             elif kind == 'equation':
-                # Draw equations without wrapping
                 w.equation(content)
             else:
                 w.text(content)
