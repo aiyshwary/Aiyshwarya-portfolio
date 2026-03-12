@@ -1126,21 +1126,17 @@ class Writer:
 
     # ── Public drawing methods ─────────────────────────────────────────────────
     def section_label(self, label: str):
-        # Modern, bold, colored section header with divider
-        min_block = 1.2 * cm + (LH * 3)
+        # Minimalist, left-aligned, bold section header with subtle divider
+        min_block = 0.8 * cm + (LH * 2)
         self._need(min_block)
-        # Shaded background for section header
-        header_h = 1.0 * cm
-        self.c.setFillColor(C_CARD)
-        self.c.roundRect(ML, self.y - header_h + 0.2 * cm, CW, header_h, 6, fill=1, stroke=0)
-        self.c.setFont(FB, S_SECTION)
-        self.c.setFillColor(C_ACCENT)
-        self.c.drawString(ML + 0.3 * cm, self.y - 0.45 * cm, label.upper())
-        self.y -= header_h - 0.2 * cm
+        self.c.setFont(FB, S_SECTION + 2)
+        self.c.setFillColor(C_HDR)
+        self.c.drawString(ML, self.y, label.upper())
+        self.y -= 0.35 * cm
         self.c.setStrokeColor(C_DIV)
-        self.c.setLineWidth(1.2)
+        self.c.setLineWidth(0.7)
         self.c.line(ML, self.y, PW - MR, self.y)
-        self.y -= 0.5 * cm
+        self.y -= 0.4 * cm
 
     def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0):
         if color is None:
@@ -1161,45 +1157,19 @@ class Writer:
         self.y -= 0.08 * cm
         self.text(content, font=FB, size=S_BODY, color=C_WHITE)
 
-    def bullet_card(self, content: str, prefix: str = "-"):
-        """Draws content inside a modern rounded card with a prefix (dash or number)."""
-        pad_x = 0.5 * cm
-        pad_y = 0.36 * cm
-        prefix_w = self.c.stringWidth(prefix, FB, S_BODY)
-        gap_w = 0.25 * cm
-        inner_w = CW - (pad_x * 2 + prefix_w + gap_w)
-        lines = simpleSplit(content, F, S_BODY, inner_w)
-        block_h = len(lines) * LH + 2 * pad_y
-        self._need(block_h + 0.3 * cm)
-
-        # Card with subtle shadow effect
-        self.c.setFillColor(HexColor("#E9ECF3"))
-        self.c.roundRect(ML + 1, self.y - block_h - 1, CW, block_h, 7, fill=1, stroke=0)
-        _rrect(self.c, ML, self.y - block_h, CW, block_h, 7, C_CARD, stroke=True)
-
-        # Center the text block vertically within the card using font metrics
-        ascent = pdfmetrics.getAscent(F, S_BODY)
-        descent = abs(pdfmetrics.getDescent(F, S_BODY))
-        text_block_h = (ascent + descent) + (len(lines) - 1) * LH
-        first_line_y = self.y - ((block_h - text_block_h) / 2) - ascent
-
-        # Dash prefix
+    def bullet_card(self, content: str, prefix: str = "•"):
+        """Draws a simple, left-aligned bullet point (no card, no box)."""
+        lines = simpleSplit(content, F, S_BODY, CW - 0.5 * cm)
+        self._need(len(lines) * LH + 0.2 * cm)
         self.c.setFont(FB, S_BODY)
         self.c.setFillColor(C_ACCENT)
-        self.c.drawString(ML + pad_x, first_line_y, prefix)
-
-        # Text lines
-        text = self.c.beginText()
-        text.setTextOrigin(ML + pad_x + prefix_w + gap_w, first_line_y)
-        text.setFont(F, S_BODY)
-        text.setFillColor(C_BODY)
-        text.setLeading(LH)
-        for line in lines:
-            text.textLine(line)
-        self.c.drawText(text)
-
-        # Add a clearer gap after the card
-        self.y -= block_h + 0.6 * cm
+        self.c.drawString(ML, self.y, prefix)
+        self.c.setFont(F, S_BODY)
+        self.c.setFillColor(C_BODY)
+        for idx, line in enumerate(lines):
+            self.c.drawString(ML + 0.5 * cm, self.y, line)
+            self.y -= LH
+        self.y -= 0.1 * cm
 
     def equation(self, content: str):
         """Draw an equation at normal body font size."""
