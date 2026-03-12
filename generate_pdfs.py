@@ -78,6 +78,10 @@ _PAGE_HDR     = re.compile(
 _ENDS_SENT    = re.compile(r'[.!?]$')
 _TITLE_HDG    = re.compile(r'^[A-Z][A-Za-z0-9\s&/\-,:]{0,70}$')
 _STEP_HDG     = re.compile(r'^Step\s+\d+\s*:\s+.+$', re.IGNORECASE)
+# Verb / past-participle phrases that describe a metric, not name a section.
+_INTERP_VERB_RE = re.compile(
+    r'^(?:Indicates?|Identifies?|Acts?\s+as\b|Connected\s+to\b|'
+    r'Considered\s|Helps?\s|Suggests?)\b', re.IGNORECASE)
 _ROMAN_BULLET_RE = re.compile(r'^(?P<r>[ivxlcdm]+)\)\s*(?P<txt>.+)$', re.IGNORECASE)
 _SHORT_HEADINGS = {
     "In short",
@@ -531,6 +535,13 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 list_mode = True
                 list_remaining = 0
                 post.append(('subsection', text))
+                i += 1
+                continue
+            # Section items that start with a verb / past-participle phrase
+            # (e.g. "Indicates how fast…", "Considered a super-spreader…") are
+            # interpretation lines, not real headings → bullet.
+            if kind == 'section' and _INTERP_VERB_RE.match(text):
+                post.append(('bullet', text))
                 i += 1
                 continue
             # If currently in list mode, convert short section items into bullets
