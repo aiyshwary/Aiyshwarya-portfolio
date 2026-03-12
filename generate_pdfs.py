@@ -1046,6 +1046,47 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Sentiment Analysis Extension.
+    # Several one-word heading names (Methodology, Applications, Deployment,
+    # Conclusion) are misclassified as bullets.  Short sentence-like items
+    # that belong under Deployment are misclassified as section headings.
+    if title == "Sentiment Analysis Extension":
+        _SA_SUBSECTION_NAMES = {
+            "Methodology", "Applications", "Deployment", "Conclusion",
+        }
+        rebuilt = []
+        i = 0
+        cur_sub = None
+        while i < len(post):
+            kind, text = post[i]
+
+            # Promote known names to subsection headings
+            if text in _SA_SUBSECTION_NAMES:
+                rebuilt.append(('subsection', text))
+                cur_sub = text
+                i += 1
+                continue
+
+            # Under "Deployment": body/section items → bullets
+            if cur_sub == "Deployment" and kind in ('body', 'section'):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # Track current subsection for other subsections
+            if kind == 'subsection':
+                cur_sub = text
+
+            # Body items right after Methodology that describe the process → bullets
+            if cur_sub == "Methodology" and kind == 'body' and not text.endswith('.'):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     return post
 
 
