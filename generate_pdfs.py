@@ -1087,6 +1087,72 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
             i += 1
         post = rebuilt
 
+    # Project-specific cleanup for Synthetic Image Generation.
+    if title == "Synthetic Image Generation":
+        rebuilt = []
+        i = 0
+        while i < len(post):
+            kind, text = post[i]
+
+            # 1. "End-to-end pipeline explanation (...)" → section heading,
+            #    strip the parenthetical coaching note.
+            if 'End-to-end pipeline explanation' in text:
+                import re as _re
+                clean = _re.sub(r'\s*\([^)]*\)\s*$', '', text).strip()
+                rebuilt.append(('section', clean))
+                i += 1
+                continue
+
+            # 2. "Why synthetic data?" → section heading
+            if text == 'Why synthetic data?':
+                rebuilt.append(('section', text))
+                i += 1
+                continue
+
+            # 3. Under "Two paths": "Or auto-annotate..." body → bullet
+            if kind == 'body' and text.startswith('Or auto-annotate'):
+                rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # 4. "Two strategies" subsection: the merged body line with two
+            #    strategies separated by arrow text → split into 2 bullets.
+            if kind == 'body' and 'Spread-out placement' in text and 'Clustered placement' in text:
+                # Split on "Clustered" since the two strategies were merged
+                idx_split = text.find('Clustered placement')
+                if idx_split > 0:
+                    part1 = text[:idx_split].strip()
+                    part2 = text[idx_split:].strip()
+                    rebuilt.append(('bullet', part1))
+                    rebuilt.append(('bullet', part2))
+                else:
+                    rebuilt.append(('bullet', text))
+                i += 1
+                continue
+
+            # 5. "This increases" / "This helps" / "This step simplifies" →
+            #    body text (not subsection heading) so it reads naturally.
+            if kind == 'subsection' and text in {'This increases', 'This helps', 'This step simplifies'}:
+                rebuilt.append(('body', text + ':'))
+                i += 1
+                continue
+
+            # 6. Remove coaching notes: "If interviewer asks...",
+            #    "You can say", and the response body after it.
+            if 'interviewer asks' in text.lower():
+                i += 1
+                continue
+            if text == 'You can say':
+                # Also skip the body line that follows
+                i += 1
+                if i < len(post) and post[i][0] == 'body':
+                    i += 1
+                continue
+
+            rebuilt.append((kind, text))
+            i += 1
+        post = rebuilt
+
     return post
 
 
@@ -1316,6 +1382,10 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
             elif kind == 'body':
                 # A body line (e.g. "The system has 5 main modules") resets step context
                 under_step = False
+                # If the body text introduces a list (ends with ':'), reset the
+                # bullet counter so the following bullets restart at i).
+                if content.endswith(':'):
+                    num = 1
                 w.text(content, indent=0.4 * cm)
             elif kind == 'bullet':
                 m = re.match(r'^(\d+\))\s+(.*)$', content)
