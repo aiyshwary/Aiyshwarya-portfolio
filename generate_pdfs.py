@@ -542,8 +542,10 @@ def parse_source_pdf(title: str, base_dir: str) -> list:
                 and not text.endswith('Centrality')  # real headings, e.g. "Closeness Centrality"
             ):
                 # Long section items (>=7 words) signal end of list → body
-                # (but not in findings_mode, where items can be longer)
-                if len(text.split()) >= 7 and not findings_mode:
+                # Exception: items starting with Wh-words (Who/What/How…) are
+                # clearly list continuations, and findings_mode allows longer items.
+                _is_wh = bool(re.match(r'^(?:Who|What|How|When|Where|Why|Which)\b', text))
+                if len(text.split()) >= 7 and not findings_mode and not _is_wh:
                     list_mode = False
                     post.append(('body', text))
                 else:
