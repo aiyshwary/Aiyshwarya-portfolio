@@ -1433,7 +1433,7 @@ class Writer:
         self.c.line(ML, self.y, PW - MR, self.y)
         self.y -= 0.55 * cm
 
-    def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0, align="left"):
+    def text(self, content: str, font=F, size=S_BODY, color=None, indent=0.0, center=False):
         if color is None:
             color = C_BODY
         lines = simpleSplit(content, font, size, CW - indent)
@@ -1442,7 +1442,7 @@ class Writer:
         self.c.setFillColor(color)
         for line in lines:
             self._need(LH)
-            if align == "center":
+            if center:
                 self.c.drawCentredString(ML + CW / 2, self.y, line)
             else:
                 self.c.drawString(ML + indent, self.y, line)
@@ -1556,10 +1556,10 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # OVERVIEW
     w.section_label("Overview")
-    # Center-align the summary/one-liner if it starts with a quote (likely the one-liner)
+    # Center-align the summary if it starts with a quote (One-liner summary)
     summary_text = _normalize_ws(project["summary"])
-    if summary_text.strip().startswith("“") or summary_text.strip().startswith('"'):
-        w.text(summary_text, align="center")
+    if summary_text.startswith('"') or summary_text.startswith('“'):
+        w.text(summary_text, center=True)
     else:
         w.text(summary_text)
     w.gap()
@@ -1608,23 +1608,20 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
         w.section_label("Technical Walkthrough")
         num = 1
         under_step = False
-        in_one_line_summary = False
         for kind, content in filtered_items:
             if kind in ('section', 'subsection'):
                 w.gap(0.15 * cm)
                 w.heading(content)
                 num = 1
                 under_step = bool(_STEP_HDG.match(content))
-                in_one_line_summary = (kind == 'section' and content.strip().lower() == 'one-line summary')
             elif kind == 'body':
+                # A body line (e.g. "The system has 5 main modules") resets step context
                 under_step = False
+                # If the body text introduces a list (ends with ':'), reset the
+                # bullet counter so the following bullets restart at i).
                 if content.endswith(':'):
                     num = 1
-                # Center-align if in 'One-line summary' section
-                if in_one_line_summary:
-                    w.text(content, align="center")
-                else:
-                    w.text(content, indent=0.4 * cm)
+                w.text(content, indent=0.4 * cm)
             elif kind == 'bullet':
                 m = re.match(r'^(\d+\))\s+(.*)$', content)
                 if m:
@@ -1635,6 +1632,7 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
                     w.bullet_card(content, prefix=f"{_to_roman(num)})")
                     num += 1
             elif kind == 'equation':
+                # Draw equations without wrapping
                 w.equation(content)
             else:
                 w.text(content)
