@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         <p class="lead-card">${impact}</p>
 
         <div class="actions">
-          <a class="btn-ghost" href="${p.pdf}" target="_blank" rel="noopener">Open PDF</a>
+
           <button class="btn-ghost btn-discuss">Discuss</button>
           ${p.github ? `<a class="btn-ghost" href="${p.github}" target="_blank" rel="noopener">GitHub</a>` : ''}
         </div>
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalTitle = document.getElementById('modal-title');
     const modalBody = document.getElementById('modal-body');
     const modalTechs = document.getElementById('modal-techs');
-    const modalPdf = document.getElementById('modal-pdf');
+
     const modalClose = document.querySelector('.modal-close');
     if(modalClose) modalClose.addEventListener('click', closeModal);
     if(modal) modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const bullets = (p.bullets && p.bullets.length) ? `<ul class="project-bullets">${p.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>` : `<pre class="project-full">${cleanText(p.summary)}</pre>`;
 
       modalBody.innerHTML = imgHtml + bullets + `<div style="margin-top:12px;color:var(--muted)">${cleanText(p.summary)}</div>`;
-      modalPdf.href = p.pdf;
+
       modal.classList.add('open');
       modal.setAttribute('aria-hidden','false');
     }

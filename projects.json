@@ -2,8 +2,6 @@
   {
     "title": "Annotation Transfer Tool",
     "summary": "A smart auto-annotation pipeline that leverages deep image similarity to transfer labels from previously human-annotated images to new unannotated ones, significantly reducing manual labeling effort in computer vision workflows.",
-    "pdf": "assets/projects/annotation-transfer-tool.pdf",
-    "original_filename": "Annotation Transfer Tool.pdf",
     "impact": "Reduced manual annotation effort by automatically transferring labels from existing human-labeled images to new images using deep feature similarity and a modular 8-step pipeline integrated with CVAT and AWS S3.",
     "bullets": [
       "Downloads labeled images from AWS S3 and extracts annotations from Datamaro JSON format.",
@@ -29,8 +27,6 @@
   {
     "title": "Bus Reservation And Ticketing System",
     "summary": "A Java-based console application that simulates a complete bus ticket reservation and billing workflow, supporting multi-passenger booking, seat management, and discount-based billing operations.",
-    "pdf": "assets/projects/bus-reservation-and-ticketing-system.pdf",
-    "original_filename": "Bus Reservation and Ticketing System.pdf",
     "impact": "Built a fully functional console-based Bus Reservation and Ticketing System in Java with structured input validation, in-memory seat management, and automated billing with passenger-type discounts.",
     "bullets": [
       "Implements user authentication, seat selection, and multi-passenger booking in a single session.",
@@ -53,8 +49,6 @@
   {
     "title": "Facial Emotion Recognition",
     "summary": "A comparative study of machine learning and deep learning approaches for recognizing facial emotions from grayscale images, benchmarking CNN, SVM, Random Forest, and Decision Tree models across multiple datasets.",
-    "pdf": "assets/projects/facial-emotion-recognition.pdf",
-    "original_filename": "Facial Emotion Recognition.pdf",
     "impact": "Implemented and benchmarked four ML/DL models for 7-class facial emotion classification. CNN achieved the best generalization at approximately 75.5% accuracy, outperforming all traditional models on unseen data.",
     "bullets": [
       "Trained on icml_face_data and Kaggle FER datasets with 7 emotion classes (happy, sad, angry, fear, surprise, disgust, neutral).",
@@ -81,8 +75,6 @@
   {
     "title": "Hybrid Search & Retrieval POC",
     "summary": "A production-style multilingual hybrid search engine for Indian-language documents, combining BM25 lexical search and FAISS semantic retrieval to rank documents with snippet-level evidence across Tamil, Hindi, Telugu and more.",
-    "pdf": "assets/projects/hybrid-search--retrieval-poc.pdf",
-    "original_filename": "Hybrid Search & Retrieval POC.pdf",
     "impact": "Built a multilingual hybrid search pipeline supporting Indian-language PDFs and DOCX files, combining BM25 (OpenSearch) and FAISS IVF-PQ for accurate document retrieval with chunk-level evidence and best-snippet selection.",
     "bullets": [
       "Ingests PDF and DOCX files with digital text extraction and Tesseract OCR fallback for scanned documents.",
@@ -109,8 +101,6 @@
   {
     "title": "Image Classification Extension",
     "summary": "A RapidMiner Studio extension enabling no-code transfer learning for image classification, supporting fine-tuning of popular CNN architectures on custom datasets and ONNX-based inference without writing a single line of code.",
-    "pdf": "assets/projects/image-classification-extension.pdf",
-    "original_filename": "Image Classification Extension.pdf",
     "impact": "Developed a RapidMiner extension with two custom operators — Fine Tuning and Inference — enabling practitioners to apply transfer learning with ResNet, VGGNet, DenseNet, Inception and more using a drag-and-drop interface.",
     "bullets": [
       "Fine Tuning operator accepts an image directory and hyperparameters; outputs a fine-tuned model in ONNX format.",
@@ -135,8 +125,6 @@
   {
     "title": "Mammalia Raccoon Proximity Network Analysis",
     "summary": "A graph-based epidemiological study modelling rabies transmission risk in urban raccoon populations through proximity network analysis and centrality measures, supporting public health and wildlife management decisions.",
-    "pdf": "assets/projects/mammalia-raccoon-proximity-network-analysis.pdf",
-    "original_filename": "Mammalia Raccoon Proximity Network Analysis.pdf",
     "impact": "Constructed and analyzed a raccoon proximity network using real-world contact data, applying centrality measures to identify high-risk individuals and quantify potential rabies spread pathways within urban populations.",
     "bullets": [
       "Built a weighted proximity network from the mammalia-raccoon-proximity dataset using Python and NetworkX.",
@@ -162,8 +150,6 @@
   {
     "title": "Object Detection Extension",
     "summary": "A RapidMiner Studio extension that brings transfer learning-based object detection into a no-code environment, supporting fine-tuning and inference with Faster R-CNN, FCOS, SSD, SSDLite, and RetinaNet models.",
-    "pdf": "assets/projects/object-detection-extension.pdf",
-    "original_filename": "Object Detection Extension.pdf",
     "impact": "Developed two RapidMiner operators for object detection — FineTuneObjectDetectionModel and ObjectDetectionModelInference — enabling users to train and deploy detection models within a visual workflow without writing code.",
     "bullets": [
       "FineTuneObjectDetectionModel accepts image and annotation directories (YOLO/Pascal VOC) and outputs model weights and class list CSV.",
@@ -188,8 +174,6 @@
   {
     "title": "Online Event Management System",
     "summary": "A database-driven system for managing events end-to-end, allowing customers to register, browse and book events with discounts, while giving administrators full control over event listings, users, payments and preferences.",
-    "pdf": "assets/projects/online-event-management-system.pdf",
-    "original_filename": "Online Event Management System.pdf",
     "impact": "Designed and implemented a normalized relational database and NoSQL schema for an Online Event Management System, covering customer registration, booking workflows, discount management, and payment processing.",
     "bullets": [
       "Designed a fully normalized relational schema (up to 3NF) with entities for Users, Events, Bookings, Payments, and Discounts.",
@@ -211,8 +195,6 @@
   {
     "title": "Sentiment Analysis Extension",
     "summary": "A multimodal sentiment analysis project that independently extracts and analyses sentiment from both the video (visual) and audio streams of a recording, combining insights from two separate NLP and signal processing pipelines.",
-    "pdf": "assets/projects/sentiment-analysis-extension.pdf",
-    "original_filename": "Sentiment Analysis Extension.pdf",
     "impact": "Built a dual-stream sentiment analysis pipeline that separates video and audio from a recording and independently classifies sentiment from each modality, enabling richer multimodal emotional understanding.",
     "bullets": [
       "Extracts audio track from video files and applies speech-to-text followed by NLP-based sentiment classification.",
@@ -235,8 +217,6 @@
   {
     "title": "Synthetic Image Generation",
     "summary": "An automated pipeline for generating high-quality synthetic training images for object detection, addressing class-imbalanced datasets by compositing annotated object crops onto varied backgrounds with randomized augmentations.",
-    "pdf": "assets/projects/synthetic-image-generation.pdf",
-    "original_filename": "Synthetic Image Generation.pdf",
     "impact": "Built an end-to-end synthetic image generation pipeline that composites real object crops onto diverse backgrounds with randomized augmentations, producing annotated training data that reduces dependency on costly manual data collection.",
     "bullets": [
       "Extracts foreground object crops from existing annotated datasets using bounding box and mask information.",
@@ -261,8 +241,6 @@
   {
     "title": "Multi-Agent Architecture",
     "summary": "A production-grade agentic pipeline that combines LLM-driven planning with deterministic Python analytics to perform revenue analysis and churn prediction, featuring an Orchestrator-Executor-Reflection loop with memory management and Docker deployment.",
-    "pdf": "assets/projects/multi-agent-architecture.pdf",
-    "original_filename": "Multi-Agent Architecture.pdf",
     "impact": "Designed and implemented a multi-agent revenue and churn analysis system where an LLM Planner coordinates an Executor, Validator, and Reflection agent, keeping LLMs focused on reasoning while Python handles all numeric computation.",
     "bullets": [
       "Planner emits an executable plan (list or graph of nodes) from a high-level task description.",
@@ -354,8 +332,6 @@
   {
     "title": "Traffic Monitoring System",
     "summary": "A PHP and SQL-based web application that supports traffic controllers with real-time violator tracking, periodic traffic status notifications, daily reports, and transport department recommendations for infrastructure improvements.",
-    "pdf": "assets/projects/traffic-monitoring-system.pdf",
-    "original_filename": "Traffic Monitoring System.pdf",
     "impact": "Developed a multi-role Traffic Monitoring System web application with separate portals for admins, officers, and citizens, enabling automated violator tracking, fine management, road signalling status, and daily traffic reporting.",
     "bullets": [
       "Admin portal manages user accounts, officer assignments, road data, and signalling configurations.",
@@ -381,8 +357,6 @@
   {
     "title": "Bengaluru House Rent Prediction",
     "summary": "A supervised machine learning project that predicts rental prices of houses in Bengaluru using structured property data, applying extensive feature engineering, multi-stage outlier removal, and benchmarking six regression models with and without PCA-based dimensionality reduction.",
-    "pdf": "assets/projects/bengaluru-house-rent-prediction.pdf",
-    "original_filename": "Bengaluru House Rent Prediction.pdf",
     "impact": "Built and benchmarked six regression models on the Bengaluru House Data dataset, finding that Linear Regression with PCA achieved the highest accuracy and Decision Tree Regressor performed best without dimensionality reduction, providing a deployable price prediction pipeline.",
     "bullets": [
       "Loaded and cleaned the Bengaluru_House_Data.csv dataset: dropped irrelevant columns (area_type, society, balcony, availability) and removed null rows.",
@@ -405,8 +379,6 @@
   {
     "title": "Flower Classification",
     "summary": "A CNN-based image classification project that identifies five flower types (Daisy, Dandelion, Rose, Sunflower, Tulip) using the Kaggle Flowers Recognition dataset and a custom TensorFlow/Keras model pipeline.",
-    "pdf": "assets/projects/flower-classification.pdf",
-    "original_filename": "Flower Classification.pdf",
     "impact": "Built an end-to-end notebook workflow that prepares the dataset, trains a custom CNN, and evaluates multi-class accuracy to classify flower species from images.",
     "bullets": [
       "Organized the Kaggle Flowers Recognition dataset into class-specific folders for five flower categories.",
@@ -445,8 +417,6 @@
   {
     "title": "Real Estate Price Prediction",
     "summary": "A supervised regression case study that predicts house prices using the kc_house_data dataset, benchmarking multiple models and comparing performance with R2 and MSE metrics.",
-    "pdf": "assets/projects/real-estate-price-prediction.pdf",
-    "original_filename": "Real Estate Price Prediction.pdf",
     "impact": "Benchmarked six regression models with bagging/boosting and hyperparameter tuning to identify the most accurate predictor for house prices.",
     "bullets": [
       "Loaded and explored kc_house_data.csv, performing basic cleaning and feature analysis for regression modeling.",

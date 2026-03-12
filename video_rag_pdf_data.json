@@ -2,6 +2,7 @@
   "title": "Video RAG Retrieval Project",
   "summary": "A semantic video search system that extracts frames, generates scene captions via ViT-GPT2, and embeds them using MiniLM and OpenCLIP. Queries are matched against a dual FAISS index using cosine similarity, returning the most relevant video scenes with timestamps and frame references.",
   "pdf": "assets/projects/video-rag-retrieval-project.pdf",
+
   "impact": "Enables semantic search over unstructured video content by leveraging vision-language models and vector similarity search, making video scenes retrievable by natural language queries.",
   "bullets": [
     "Extracts frames and scene descriptions from videos using open-source models (ViT-GPT2 for captions).",
