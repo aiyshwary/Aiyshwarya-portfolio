@@ -1556,10 +1556,19 @@ def generate_pdf(project: dict, source_items: list, out_path: str):
 
     # OVERVIEW
     w.section_label("Overview")
-    # Center-align the summary/one-liner if it starts with a quote (likely the one-liner)
     summary_text = _normalize_ws(project["summary"])
-    if summary_text.strip().startswith("“") or summary_text.strip().startswith('"'):
-        w.text(summary_text, align="center")
+    # For Video RAG, also check walkthrough for a 'One-line summary' section and center-align it
+    if project["title"] == "Video RAG Retrieval Project" and project.get("walkthrough"):
+        for idx, item in enumerate(project["walkthrough"]):
+            if item["kind"] == "section" and "one-line summary" in item["text"].lower():
+                # Find the next body after this section
+                if idx + 1 < len(project["walkthrough"]):
+                    next_item = project["walkthrough"][idx + 1]
+                    if next_item["kind"] == "body":
+                        w.text(_normalize_ws(next_item["text"]), align="center")
+                        break
+        else:
+            w.text(summary_text)
     else:
         w.text(summary_text)
     w.gap()
