@@ -37,7 +37,7 @@
     "techs": ["Python", "CNN", "SVM"],
     "bullets": ["Facial emotion recognition", "Multiple ML models"],
     "pdf": "assets/projects/facial-emotion-detection.pdf",
-    "thumbnail": "assets/images/facial-emotion-recognition.svg"
+    "thumbnail": "assets/images/thumbnail.png"
   },
   {
     "title": "Hybrid Search & Retrieval POC",
